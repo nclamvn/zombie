@@ -33,6 +33,10 @@ files = [
     "chardet>=5.0.0",
 ]
 
+# Database
+database = ["sqlalchemy>=2.0.0"]
+postgres = ["sqlalchemy>=2.0.0", "psycopg2-binary>=2.9.0"]
+
 # API frameworks
 flask = ["flask>=3.0.0", "flask-cors>=6.0.0"]
 fastapi = ["fastapi>=0.100.0", "uvicorn>=0.20.0"]

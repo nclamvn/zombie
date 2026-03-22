@@ -117,6 +117,37 @@ def _unsubscribe(project_id: str, q: asyncio.Queue):
             del _event_queues[project_id]
 
 
+# ─── Repositories ──────────────────────────────────────────────
+
+from core.storage.database import init_db
+from core.storage.repository import (
+    ProjectRepository, OntologyRepository, GraphRepository,
+    SimulationRepository, AgentRepository, ReportRepository, ChatRepository,
+)
+
+project_repo = ProjectRepository()
+ontology_repo = OntologyRepository()
+graph_repo = GraphRepository()
+sim_repo = SimulationRepository()
+agent_repo = AgentRepository()
+report_repo = ReportRepository()
+chat_repo = ChatRepository()
+
+
+def _persist_project(state: ProjectState):
+    """Write-through: persist current project state to DB."""
+    proj = state.project
+    project_repo.save({
+        "project_id": proj.project_id,
+        "name": proj.name,
+        "phase": proj.phase.value if hasattr(proj.phase, 'value') else proj.phase,
+        "status": proj.status.value if hasattr(proj.status, 'value') else proj.status,
+        "requirement": proj.requirement,
+        "raw_text": proj.raw_text or "",
+        "created_at": proj.created_at,
+    })
+
+
 # ─── App Setup ─────────────────────────────────────────────────
 
 pipeline: Optional[PipelineOrchestrator] = None
@@ -133,6 +164,78 @@ def _get_state(project_id: str) -> ProjectState:
     if project_id not in project_states:
         raise HTTPException(404, f"Project {project_id} not found")
     return project_states[project_id]
+
+
+def _recover_projects():
+    """Load all projects from DB into memory on startup."""
+    rows = project_repo.list_all()
+    for row in rows:
+        pid = row["project_id"]
+        # Rebuild minimal Project object
+        from core.models.project import Project, ProjectPhase, ProjectStatus
+        try:
+            phase = ProjectPhase(row.get("phase", "created"))
+        except ValueError:
+            phase = ProjectPhase.CREATED
+        try:
+            status_val = ProjectStatus(row.get("status", "active"))
+        except ValueError:
+            status_val = ProjectStatus.ACTIVE
+
+        project = Project(
+            project_id=pid,
+            name=row.get("name", ""),
+            phase=phase,
+            status=status_val,
+            raw_text=row.get("raw_text", ""),
+            requirement=row.get("requirement", ""),
+            created_at=row.get("created_at", ""),
+            updated_at=row.get("updated_at", ""),
+        )
+
+        state = ProjectState(project=project)
+
+        # Restore ontology
+        ont = ontology_repo.get(pid)
+        if ont:
+            project.ontology = ont
+
+        # Restore graph info
+        graph = graph_repo.get(pid)
+        if graph:
+            project.graph_id = graph.get("graph_id")
+            project.graph_info = {
+                "graph_id": graph.get("graph_id"),
+                "node_count": graph.get("node_count", 0),
+                "edge_count": graph.get("edge_count", 0),
+                "entity_types": graph.get("entity_types", []),
+            }
+
+        # Restore simulation summary
+        sim = sim_repo.get_simulation(pid)
+        if sim:
+            state.sim_summary = sim.get("summary")
+            project.simulation_config = sim.get("config")
+            project.simulation_summary = sim.get("summary")
+
+        # Restore agent profiles
+        profiles_data = agent_repo.get_profiles(pid)
+        if profiles_data:
+            state.profiles = profiles_data  # stored as list of dicts
+
+        # Restore report
+        report_data = report_repo.get(pid)
+        if report_data:
+            state.report = report_data.get("content")
+            project.report_content = report_data.get("content")
+
+        # Restore seed_result stub (we have raw_text)
+        if project.raw_text:
+            state.seed_result = {"raw_text": project.raw_text, "chunks": [], "stats": {}, "requirement": project.requirement}
+
+        project_states[pid] = state
+
+    logger.info(f"Recovered {len(rows)} projects from database")
 
 
 @asynccontextmanager
@@ -178,6 +281,10 @@ async def lifespan(app: FastAPI):
         simulation_engine=MockSimulationEngine(),
         memory_store=LocalMemoryStore(),
     )
+
+    # Initialize database and recover state
+    init_db()
+    _recover_projects()
 
     logger.info(f"API started — LLM: {llm_provider}, Graph: {'zep' if zep_key else 'none'}")
     yield
@@ -229,6 +336,7 @@ async def create_project(req: CreateProjectRequest):
 
     state = ProjectState(project=project, seed_result=seed_result)
     project_states[project.project_id] = state
+    _persist_project(state)
 
     return ApiResponse(data={
         "project_id": project.project_id,
@@ -304,6 +412,8 @@ async def design_ontology(project_id: str):
         state.ontology = ontology
         state.project.ontology = ontology.to_dict()
         state.project.advance_to(ProjectPhase.ONTOLOGY_DESIGNED)
+        _persist_project(state)
+        ontology_repo.save(project_id, ontology.to_dict())
 
         return ApiResponse(data={
             "entity_types": [et.to_dict() for et in ontology.entity_types],
@@ -339,6 +449,8 @@ async def build_graph(project_id: str):
         state.project.graph_id = graph_result.graph_id
         state.project.graph_info = graph_result.graph_info.to_dict()
         state.project.advance_to(ProjectPhase.GRAPH_COMPLETED)
+        _persist_project(state)
+        graph_repo.save(project_id, graph_result.graph_id, graph_result.graph_info.to_dict())
 
         return ApiResponse(data={
             "graph_id": graph_result.graph_id,
@@ -424,6 +536,22 @@ async def start_simulation(project_id: str):
             state.sim_summary = p._build_mock_summary(profiles)
             state.project.simulation_summary = state.sim_summary
 
+        _persist_project(state)
+        sim_repo.save_simulation(project_id, {
+            "sim_id": sim_config.sim_id or "",
+            "config": sim_config.to_dict(),
+            "summary": state.sim_summary,
+            "status": "completed",
+            "total_rounds": state.sim_summary.get("total_rounds", 0),
+            "total_actions": state.sim_summary.get("total_actions", 0),
+        })
+        # Persist rounds
+        if state.sim_state:
+            for r in state.sim_state.rounds:
+                sim_repo.save_round(project_id, r.to_dict())
+        # Persist agent profiles
+        agent_repo.save_profiles(project_id, [pr.to_dict() for pr in profiles])
+
         return ApiResponse(data={
             "agent_count": len(profiles),
             "agents": [pr.to_dict() for pr in profiles[:20]],
@@ -502,6 +630,8 @@ async def generate_report(project_id: str):
         state.report = report
         state.project.report_content = report
         state.project.advance_to(ProjectPhase.REPORT_COMPLETED)
+        _persist_project(state)
+        report_repo.save(project_id, report)
 
         return ApiResponse(data={
             "report": report,
@@ -543,6 +673,8 @@ async def chat_with_report(project_id: str, req: ChatRequest):
             report_content=state.report,
             graph_id=state.project.graph_id,
         )
+        chat_repo.save_message(project_id, "user", req.message)
+        chat_repo.save_message(project_id, "agent", response)
         return ApiResponse(data={"response": response, "message": req.message})
     except Exception as e:
         logger.error(f"Chat failed: {e}")
@@ -552,6 +684,13 @@ async def chat_with_report(project_id: str, req: ChatRequest):
 # ═══════════════════════════════════════════════════════════════
 # 4. FULL PIPELINE (one-shot)
 # ═══════════════════════════════════════════════════════════════
+
+@app.get("/api/projects/{project_id}/chat")
+async def get_chat_history(project_id: str):
+    """Get chat history for a project (recovered from DB)."""
+    history = chat_repo.get_history(project_id)
+    return ApiResponse(data={"messages": history, "total": len(history)})
+
 
 @app.post("/api/predict")
 async def predict(req: RunPipelineRequest):
@@ -664,6 +803,8 @@ async def run_pipeline_with_stream(project_id: str):
             state.ontology = ontology
             state.project.ontology = ontology.to_dict()
             state.project.advance_to(ProjectPhase.ONTOLOGY_DESIGNED)
+            _persist_project(state)
+            ontology_repo.save(project_id, ontology.to_dict())
             emit("stage_complete", {"stage": "ontology", "entity_types": len(ontology.entity_types), "edge_types": len(ontology.edge_types)})
 
             # Stage 2: Graph
@@ -685,6 +826,8 @@ async def run_pipeline_with_stream(project_id: str):
             state.project.graph_id = graph_result.graph_id
             state.project.graph_info = graph_result.graph_info.to_dict()
             state.project.advance_to(ProjectPhase.GRAPH_COMPLETED)
+            _persist_project(state)
+            graph_repo.save(project_id, graph_result.graph_id, graph_result.graph_info.to_dict())
             emit("stage_complete", {"stage": "graph", "graph_id": graph_result.graph_id, "nodes": graph_result.graph_info.node_count, "edges": graph_result.graph_info.edge_count})
 
             # Stage 3: Config + Profiles
@@ -727,6 +870,17 @@ async def run_pipeline_with_stream(project_id: str):
 
             state.project.simulation_summary = state.sim_summary
             state.project.advance_to(ProjectPhase.SIMULATION_COMPLETED)
+            _persist_project(state)
+            sim_repo.save_simulation(project_id, {
+                "sim_id": sim_config.sim_id or "", "config": sim_config.to_dict(),
+                "summary": state.sim_summary, "status": "completed",
+                "total_rounds": state.sim_summary.get("total_rounds", 0),
+                "total_actions": state.sim_summary.get("total_actions", 0),
+            })
+            if state.sim_state:
+                for r in state.sim_state.rounds:
+                    sim_repo.save_round(project_id, r.to_dict())
+            agent_repo.save_profiles(project_id, [pr.to_dict() for pr in profiles])
             emit("stage_complete", {"stage": "simulation", "agents": len(profiles), "rounds": state.sim_summary.get("total_rounds", 0)})
 
             # Stage 5: Report
@@ -744,6 +898,8 @@ async def run_pipeline_with_stream(project_id: str):
             state.report = report
             state.project.report_content = report
             state.project.advance_to(ProjectPhase.REPORT_COMPLETED)
+            _persist_project(state)
+            report_repo.save(project_id, report)
             emit("stage_complete", {"stage": "report", "length": len(report)})
 
             # Done
