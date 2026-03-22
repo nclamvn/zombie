@@ -198,6 +198,26 @@ class DecisionTraceModel(Base):
     )
 
 
+class AuditLogModel(Base):
+    """Immutable audit trail for compliance."""
+    __tablename__ = "audit_logs"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    audit_id = Column(String(64), unique=True, nullable=False)
+    event_type = Column(String(64), nullable=False)
+    project_id = Column(String(64), default="")
+    actor = Column(String(128), default="system")
+    details_json = Column(JSON, default=dict)
+    source_ip = Column(String(64), default="")
+    entry_hash = Column(String(64), default="")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        Index("ix_audit_project", "project_id", "created_at"),
+        Index("ix_audit_type", "event_type"),
+    )
+
+
 class JobModel(Base):
     __tablename__ = "jobs"
 

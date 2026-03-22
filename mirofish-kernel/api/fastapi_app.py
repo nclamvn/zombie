@@ -1043,6 +1043,55 @@ async def fork_project(project_id: str, name: str = "Forked Scenario"):
 
 
 # ═══════════════════════════════════════════════════════════════
+# TEMPLATES (TIP-14)
+# ═══════════════════════════════════════════════════════════════
+
+@app.get("/api/templates")
+async def list_templates():
+    """List all available domain templates."""
+    from templates.registry import TemplateRegistry
+    return ApiResponse(data={"templates": TemplateRegistry().list_all()})
+
+
+@app.get("/api/templates/{template_id}")
+async def get_template(template_id: str):
+    """Get a specific template with full details."""
+    from templates.registry import TemplateRegistry
+    t = TemplateRegistry().get(template_id)
+    if not t:
+        raise HTTPException(404, f"Template {template_id} not found")
+    data = t.to_dict()
+    data["ontology_prompt"] = t.ontology_prompt
+    data["sample_seed_text"] = t.sample_seed_text
+    return ApiResponse(data=data)
+
+
+# ═══════════════════════════════════════════════════════════════
+# AUDIT (TIP-15)
+# ═══════════════════════════════════════════════════════════════
+
+@app.get("/api/projects/{project_id}/audit")
+async def get_audit_trail(project_id: str, limit: int = 100):
+    """Get audit trail for a project."""
+    from core.tools.audit import audit_trail
+    trail = audit_trail.get_trail(project_id, limit)
+    return ApiResponse(data={"trail": trail, "total": len(trail)})
+
+
+@app.get("/api/projects/{project_id}/audit/export")
+async def export_audit_package(project_id: str):
+    """Export compliance package as ZIP."""
+    from core.tools.audit import audit_trail
+    from fastapi.responses import Response
+    zip_bytes = audit_trail.export_package(project_id)
+    return Response(
+        content=zip_bytes,
+        media_type="application/zip",
+        headers={"Content-Disposition": f"attachment; filename=audit_{project_id}.zip"},
+    )
+
+
+# ═══════════════════════════════════════════════════════════════
 # 7. WEBSOCKET SIMULATION STREAM (TIP-07)
 # ═══════════════════════════════════════════════════════════════
 
