@@ -131,10 +131,26 @@ class AnthropicAdapter:
             async for text in stream.text_stream:
                 yield text
     
+    def ping(self, timeout: float = 5.0) -> dict:
+        """Quick health check."""
+        import time
+        t0 = time.time()
+        try:
+            self._client.messages.create(
+                model=self._model,
+                messages=[{"role": "user", "content": "ping"}],
+                max_tokens=1,
+            )
+            return {"status": "ok", "latency_ms": int((time.time() - t0) * 1000)}
+        except Exception as e:
+            err_str = str(e).lower()
+            error_type = "auth_failed" if "auth" in err_str else "timeout" if "timeout" in err_str else str(e)[:100]
+            return {"status": "error", "error": error_type, "latency_ms": int((time.time() - t0) * 1000)}
+
     @property
     def model_name(self) -> str:
         return self._model
-    
+
     @property
     def provider_name(self) -> str:
         return "anthropic"

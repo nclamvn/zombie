@@ -50,6 +50,17 @@ const Sparkline = ({ data, color = C.green, w = 80, h = 20 }) => {
   return <svg width={w} height={h} style={{ display: "block" }}><polyline points={points} fill="none" stroke={color} strokeWidth={1.2} /></svg>;
 };
 
+const HealthDot = ({ label, check, extra }) => {
+  if (!check) return null;
+  const color = check.status === "ok" ? C.green : check.status === "degraded" || check.status === "not_configured" ? C.amber : C.red;
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+      <span style={{ width: 5, height: 5, borderRadius: "50%", background: color, display: "inline-block" }} />
+      {label}{extra ? `: ${extra}` : ""}
+    </span>
+  );
+};
+
 const Loader = ({ text = "Loading..." }) => (
   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: C.text2, fontSize: 10, gap: 8 }}>
     <span style={{ display: "inline-block", width: 8, height: 8, border: `2px solid ${C.amber}`, borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
@@ -230,6 +241,7 @@ export default function MiroFishDashboard() {
   ]);
   const [chatLoading, setChatLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [healthData, setHealthData] = useState(null);
   const chatEndRef = useRef(null);
 
   // ── Derived ──
@@ -250,10 +262,22 @@ export default function MiroFishDashboard() {
   // ── Chat scroll ──
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chatMsgs]);
 
-  // ── Load projects on mount ──
+  // ── Load projects on mount + health polling ──
   useEffect(() => {
     loadProjects();
-    api.checkHealth().then(r => setConnected(r.status === "ok")).catch(() => setConnected(false));
+    const pollHealth = () => {
+      api.checkHealth().then(r => {
+        if (r.status === "ok") {
+          setConnected(true);
+          setHealthData(r.data?.checks ? r.data : r);
+        } else {
+          setConnected(false);
+        }
+      }).catch(() => setConnected(false));
+    };
+    pollHealth();
+    const hInterval = setInterval(pollHealth, 30000);
+    return () => clearInterval(hInterval);
   }, []);
 
   // ── Poll active project if running ──
@@ -793,10 +817,15 @@ export default function MiroFishDashboard() {
       {/* ═══ STATUS BAR ═══ */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "4px 12px", background: C.bg1, borderTop: `1px solid ${C.border}`, flexShrink: 0 }}>
-        <div style={{ display: "flex", gap: 16, color: C.text2, fontSize: 9 }}>
-          <span>KERNEL v1.2</span>
-          <span>PIPELINE: 7-STAGE</span>
-          <span>API: {connected ? "CONNECTED" : "DISCONNECTED"}</span>
+        <div style={{ display: "flex", gap: 12, color: C.text2, fontSize: 9, alignItems: "center" }}>
+          <span>v1.2</span>
+          {healthData?.checks ? <>
+            <HealthDot label="DB" check={healthData.checks.database} />
+            <HealthDot label="LLM" check={healthData.checks.llm} />
+            <HealthDot label="JOBS" check={healthData.checks.job_queue} extra={healthData.checks.job_queue?.active_jobs != null ? `${healthData.checks.job_queue.active_jobs}/${healthData.checks.job_queue.max_workers}` : null} />
+            {healthData.checks.memory?.rss_mb > 0 && <span>MEM: {healthData.checks.memory.rss_mb}MB</span>}
+          </> : <span>API: {connected ? "CONNECTED" : "DISCONNECTED"}</span>}
+          {healthData?.uptime_seconds > 0 && <span>UP: {Math.floor(healthData.uptime_seconds / 3600)}h{Math.floor((healthData.uptime_seconds % 3600) / 60)}m</span>}
         </div>
         <div style={{ color: C.text2, fontSize: 9 }}>
           <span style={{ color: C.amber }}>MiroFish Kernel — Swarm Intelligence Engine</span>

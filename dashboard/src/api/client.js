@@ -52,7 +52,7 @@ function sleep(ms) {
 // ─── Health ──────────────────────────────────────────────────
 
 export async function checkHealth() {
-  return apiCall("GET", "/health");
+  return apiCall("GET", "/health", null, 0); // no retry for health
 }
 
 // ─── Project CRUD ────────────────────────────────────────────

@@ -13,9 +13,16 @@ import os
 import json
 import asyncio
 import threading
+import time as _time_mod
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
+
+try:
+    import psutil as _psutil_mod
+except ImportError:
+    _psutil_mod = None
 
 try:
     from fastapi import FastAPI, HTTPException
@@ -36,7 +43,9 @@ from core.pipeline.retrieval_tools import RetrievalTools
 from core.pipeline.simulation_orchestrator import SimulationOrchestrator
 from core.models.project import Project, ProjectPhase
 from core.tools.logger import get_logger
+from core.tools.structured_logger import setup_structured_logging
 
+setup_structured_logging()
 logger = get_logger("mirofish.api")
 
 
@@ -318,15 +327,90 @@ app.add_middleware(
 
 # ─── Health ────────────────────────────────────────────────────
 
+_startup_time = _time_mod.time()
+_health_cache = {"data": None, "ts": 0}
+
+
 @app.get("/health")
 def health():
+    """Deep health check with dependency status, latency, and resource usage."""
+    now = _time_mod.time()
+
+    # Cache for 10s to avoid hammering LLM
+    if _health_cache["data"] and (now - _health_cache["ts"]) < 10:
+        return _health_cache["data"]
+
+    checks = {}
+    overall = "ok"
+
+    # Database check
+    try:
+        from core.storage.database import get_session
+        from sqlalchemy import text as sa_text
+        t0 = _time_mod.time()
+        with get_session() as s:
+            s.execute(sa_text("SELECT 1"))
+        checks["database"] = {"status": "ok", "latency_ms": int((_time_mod.time() - t0) * 1000)}
+    except Exception as e:
+        checks["database"] = {"status": "error", "error": str(e)[:100]}
+        overall = "error"
+
+    # LLM check
     p = pipeline
-    return {
-        "status": "ok",
-        "service": "MiroFish Kernel API",
-        "pipeline": "ready" if p else "not initialized",
-        "projects": len(project_states),
+    if p and hasattr(p.llm, "ping"):
+        llm_result = p.llm.ping(timeout=5.0)
+        checks["llm"] = {
+            **llm_result,
+            "provider": p.llm.provider_name,
+            "model": p.llm.model_name,
+        }
+        if llm_result["status"] != "ok" and overall == "ok":
+            overall = "degraded"
+    elif p:
+        checks["llm"] = {"status": "ok", "provider": getattr(p.llm, "provider_name", "unknown"), "model": getattr(p.llm, "model_name", "unknown")}
+    else:
+        checks["llm"] = {"status": "error", "error": "pipeline not initialized"}
+        overall = "degraded"
+
+    # Graph store check
+    if p and p.graph_store:
+        checks["graph_store"] = {"status": "ok", "type": "zep"}
+    else:
+        checks["graph_store"] = {"status": "not_configured", "type": "none"}
+
+    # Job queue check
+    jm = job_manager
+    if jm:
+        checks["job_queue"] = {
+            "status": "ok",
+            "active_jobs": jm.active_count,
+            "max_workers": jm._max_workers,
+        }
+    else:
+        checks["job_queue"] = {"status": "error", "error": "not initialized"}
+        if overall == "ok":
+            overall = "degraded"
+
+    # Memory check
+    rss = 0
+    if _psutil_mod:
+        try:
+            rss = _psutil_mod.Process().memory_info().rss // (1024 * 1024)
+        except Exception:
+            pass
+    checks["memory"] = {"rss_mb": rss, "projects_cached": len(project_states)}
+
+    result = {
+        "status": overall,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "uptime_seconds": int(now - _startup_time),
+        "checks": checks,
+        "version": "1.2.0",
     }
+
+    _health_cache["data"] = result
+    _health_cache["ts"] = now
+    return result
 
 
 # ═══════════════════════════════════════════════════════════════
