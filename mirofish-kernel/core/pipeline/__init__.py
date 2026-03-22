@@ -13,6 +13,7 @@ from .profile_generator import ProfileGenerator
 from .simulation_orchestrator import SimulationOrchestrator
 from .report_agent import ReportAgent
 from .retrieval_tools import RetrievalTools, SearchResult, InsightForgeResult
+from .scenario_engine import ScenarioEngine
 
 __all__ = [
     "PipelineOrchestrator",
@@ -26,4 +27,5 @@ __all__ = [
     "RetrievalTools",
     "SearchResult",
     "InsightForgeResult",
+    "ScenarioEngine",
 ]

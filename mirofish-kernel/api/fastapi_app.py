@@ -964,6 +964,70 @@ async def get_agent_memories(project_id: str, agent_id: str, query: str = None, 
 
 
 # ═══════════════════════════════════════════════════════════════
+# SCENARIO COMPARISON (TIP-11)
+# ═══════════════════════════════════════════════════════════════
+
+class CompareRequest(BaseModel):
+    project_ids: List[str]
+    scenario_names: Optional[List[str]] = None
+
+@app.post("/api/compare")
+async def compare_scenarios(req: CompareRequest):
+    """Compare 2+ project simulations side-by-side."""
+    p = _get_pipeline()
+    from core.pipeline.scenario_engine import ScenarioEngine
+
+    engine = ScenarioEngine(p.llm)
+    scenarios = []
+
+    for i, pid in enumerate(req.project_ids):
+        state = project_states.get(pid)
+        if not state or not state.sim_summary:
+            raise HTTPException(400, f"Project {pid} has no simulation data")
+
+        name = (req.scenario_names[i] if req.scenario_names and i < len(req.scenario_names)
+                else state.project.name)
+        scn = engine.create_result(name, pid, state.sim_summary)
+        scenarios.append(scn)
+
+    requirement = project_states[req.project_ids[0]].project.requirement
+    result = engine.compare(scenarios, requirement)
+
+    return ApiResponse(data=result.to_dict())
+
+
+@app.post("/api/projects/{project_id}/fork")
+async def fork_project(project_id: str, name: str = "Forked Scenario"):
+    """Fork a project to create a variant scenario (shares graph, new simulation)."""
+    p = _get_pipeline()
+    state = _get_state(project_id)
+
+    new_project = p.create_project(name, state.project.raw_text or "", state.project.requirement)
+    new_state = ProjectState(project=new_project, seed_result=state.seed_result)
+
+    # Copy ontology and graph references
+    if state.ontology:
+        new_state.ontology = state.ontology
+        new_project.ontology = state.project.ontology
+        new_project.advance_to(ProjectPhase.ONTOLOGY_DESIGNED)
+    if state.project.graph_id:
+        new_project.graph_id = state.project.graph_id
+        new_project.graph_info = state.project.graph_info
+        new_state.graph_result = state.graph_result
+        new_project.advance_to(ProjectPhase.GRAPH_COMPLETED)
+
+    project_states[new_project.project_id] = new_state
+    _persist_project(new_state)
+
+    return ApiResponse(data={
+        "project_id": new_project.project_id,
+        "name": new_project.name,
+        "forked_from": project_id,
+        "phase": new_project.phase.value,
+    })
+
+
+# ═══════════════════════════════════════════════════════════════
 # 7. WEBSOCKET SIMULATION STREAM (TIP-07)
 # ═══════════════════════════════════════════════════════════════
 
