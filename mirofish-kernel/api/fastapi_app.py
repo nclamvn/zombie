@@ -288,13 +288,13 @@ async def lifespan(app: FastAPI):
         graph_store = None
 
     from adapters.simulation.mock_engine import MockSimulationEngine
-    from adapters.memory.local_memory import LocalMemoryStore
+    from adapters.memory.tiered_memory import TieredMemoryStore
 
     pipeline = PipelineOrchestrator(
         llm=llm,
         graph_store=graph_store,
         simulation_engine=MockSimulationEngine(),
-        memory_store=LocalMemoryStore(),
+        memory_store=TieredMemoryStore(project_id="global"),
     )
 
     # Initialize database, recover state, start job manager
@@ -934,6 +934,33 @@ async def list_jobs(project_id: str = None):
     else:
         jobs = job_repo.get_active()
     return ApiResponse(data={"jobs": jobs, "total": len(jobs)})
+
+
+# ═══════════════════════════════════════════════════════════════
+# DECISION TRACE (TIP-09)
+# ═══════════════════════════════════════════════════════════════
+
+@app.get("/api/projects/{project_id}/decisions")
+async def get_decision_trace(project_id: str, agent_id: str = None, round_num: int = None):
+    """Get decision trace for debugging agent behavior."""
+    from adapters.memory.tiered_memory import DecisionTrace
+    trace = DecisionTrace()
+    if agent_id:
+        chain = trace.get_chain(project_id, agent_id, round_num)
+    else:
+        chain = trace.get_chain(project_id, "", round_num) if round_num else []
+    stats = trace.get_project_stats(project_id)
+    return ApiResponse(data={"decisions": chain, "stats": stats})
+
+
+@app.get("/api/projects/{project_id}/memories")
+async def get_agent_memories(project_id: str, agent_id: str, query: str = None, limit: int = 20):
+    """Get agent memories from tiered memory system."""
+    from adapters.memory.tiered_memory import TieredMemoryStore
+    mem = TieredMemoryStore(project_id=project_id)
+    memories = mem.retrieve_agent_memories(agent_id, query=query, limit=limit)
+    summary = mem.get_agent_summary(agent_id)
+    return ApiResponse(data={"memories": memories, "summary": summary, "total": len(memories)})
 
 
 # ═══════════════════════════════════════════════════════════════

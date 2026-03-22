@@ -149,6 +149,55 @@ class ChatMessageModel(Base):
     )
 
 
+class AgentMemoryModel(Base):
+    """Tier 2: Persistent agent memories with keyword search."""
+    __tablename__ = "agent_memories"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    agent_id = Column(String(128), nullable=False)
+    project_id = Column(String(64), nullable=False)
+    content = Column(Text, nullable=False)
+    metadata_json = Column(JSON, default=dict)
+    round_num = Column(Integer, nullable=True)
+    importance = Column(Float, default=0.5)  # 0.0-1.0, for retrieval ranking
+    timestamp = Column(String(64), default="")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        Index("ix_agent_mem_agent", "agent_id", "project_id"),
+        Index("ix_agent_mem_round", "project_id", "round_num"),
+    )
+
+
+class DecisionTraceModel(Base):
+    """Tier 3: Full reasoning trace for every LLM-driven agent decision."""
+    __tablename__ = "decision_traces"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    project_id = Column(String(64), nullable=False)
+    agent_id = Column(String(128), nullable=False)
+    agent_name = Column(String(256), default="")
+    round_num = Column(Integer, nullable=False)
+    # Decision context
+    context_json = Column(JSON, default=dict)    # what the agent knew
+    prompt_hash = Column(String(64), default="")  # hash of LLM prompt
+    # LLM interaction
+    llm_model = Column(String(128), default="")
+    prompt_tokens = Column(Integer, default=0)
+    completion_tokens = Column(Integer, default=0)
+    latency_ms = Column(Integer, default=0)
+    # Decision result
+    action_type = Column(String(64), default="")
+    action_result = Column(Text, default="")
+    reasoning = Column(Text, default="")  # agent's reasoning if available
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    __table_args__ = (
+        Index("ix_trace_project_round", "project_id", "round_num"),
+        Index("ix_trace_agent", "agent_id", "project_id"),
+    )
+
+
 class JobModel(Base):
     __tablename__ = "jobs"
 
