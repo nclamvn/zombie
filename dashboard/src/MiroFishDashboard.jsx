@@ -66,7 +66,11 @@ const Loader = ({ text = "Loading..." }) => (
   <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: C.text2, fontSize: 10, gap: 8 }}>
     <span style={{ display: "inline-block", width: 8, height: 8, border: `2px solid ${C.amber}`, borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
     {text}
-    <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+    <style>{`
+      @keyframes spin { to { transform: rotate(360deg) } }
+      @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    `}</style>
   </div>
 );
 
@@ -243,6 +247,10 @@ export default function MiroFishDashboard() {
   const [chatLoading, setChatLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
   const [healthData, setHealthData] = useState(null);
+  const [simSpeed, setSimSpeed] = useState(1);
+  const [showInjectModal, setShowInjectModal] = useState(false);
+  const [liveRound, setLiveRound] = useState(0);
+  const [recentAgentIds, setRecentAgentIds] = useState(new Set());
   const chatEndRef = useRef(null);
 
   // ── WebSocket for live simulation ──
@@ -266,6 +274,27 @@ export default function MiroFishDashboard() {
 
   // ── Chat scroll ──
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chatMsgs]);
+
+  // ── Track live round + recent agents from WS ──
+  useEffect(() => {
+    if (!ws.events.length) return;
+    const last = ws.events[ws.events.length - 1];
+    if (last?.event === "round_start" || last?.event === "round_end") {
+      setLiveRound(last.data?.round_num || liveRound);
+    }
+    if (last?.event === "agent_action") {
+      const aid = last.data?.agent_name;
+      if (aid) {
+        setRecentAgentIds(prev => {
+          const next = new Set(prev);
+          next.add(aid);
+          // Clear after 3s
+          setTimeout(() => setRecentAgentIds(p => { const n = new Set(p); n.delete(aid); return n; }), 3000);
+          return next;
+        });
+      }
+    }
+  }, [ws.events.length]);
 
   // ── Load projects on mount + health polling ──
   useEffect(() => {
@@ -402,15 +431,22 @@ export default function MiroFishDashboard() {
     return events.slice(0, 20);
   }, [simData, ws.events]);
 
-  // ── Timeline from rounds ──
+  // ── Timeline from rounds + live WS round_end events ──
   const timelineData = useMemo(() => {
-    if (!simData?.rounds) return [];
-    return (simData.rounds || []).map(r => ({
+    const stored = (simData?.rounds || []).map(r => ({
       round: r.round_num,
       actions: r.actions_count || (r.actions || []).length,
       activeAgents: (r.active_agent_ids || []).length,
     }));
-  }, [simData]);
+    // Append live rounds from WS
+    const liveRounds = ws.events
+      .filter(e => e.event === "round_end")
+      .map(e => ({ round: e.data.round_num, actions: e.data.actions_count || 0, activeAgents: 0 }));
+    // Merge: stored first, then any live rounds not in stored
+    const storedNums = new Set(stored.map(r => r.round));
+    const merged = [...stored, ...liveRounds.filter(r => !storedNums.has(r.round))];
+    return merged.sort((a, b) => a.round - b.round);
+  }, [simData, ws.events]);
 
   // ── Entity distribution from graph ──
   const entityDist = useMemo(() => {
@@ -499,7 +535,7 @@ export default function MiroFishDashboard() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ textAlign: "right" }}>
             <div style={{ fontSize: 10, color: C.text2 }}>ROUND</div>
-            <div style={{ fontSize: 16, fontWeight: 700, color: C.amber }}>{totalRounds}<span style={{ color: C.text2, fontSize: 11 }}>/{maxRounds}</span></div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: C.amber }}>{liveRound || totalRounds}<span style={{ color: C.text2, fontSize: 11 }}>/{maxRounds}</span></div>
           </div>
           <div style={{ width: 120, height: 6, background: C.bg0, borderRadius: 3, overflow: "hidden" }}>
             <div style={{ width: `${maxRounds > 0 ? (totalRounds / maxRounds) * 100 : 0}%`,
@@ -510,17 +546,28 @@ export default function MiroFishDashboard() {
             {ws.simStatus || status}
           </Badge>
           {/* Simulation controls */}
-          {status === "running" && ws.connected && <>
-            <button onClick={() => ws.sendCommand("pause")}
-              style={{ background: C.amber, color: C.bg0, border: "none", borderRadius: 2, padding: "3px 8px", fontFamily: "inherit", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>
-              PAUSE
-            </button>
-          </>}
-          {ws.simStatus === "paused" && ws.connected && (
-            <button onClick={() => ws.sendCommand("resume")}
-              style={{ background: C.green, color: C.bg0, border: "none", borderRadius: 2, padding: "3px 8px", fontFamily: "inherit", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>
-              RESUME
-            </button>
+          {ws.connected && (status === "running" || ws.simStatus === "paused") && (
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              {ws.simStatus === "paused" ? (
+                <button onClick={() => ws.sendCommand("resume")}
+                  style={{ background: C.green, color: C.bg0, border: "none", borderRadius: 2, padding: "3px 8px", fontFamily: "inherit", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>
+                  RESUME
+                </button>
+              ) : (
+                <button onClick={() => ws.sendCommand("pause")}
+                  style={{ background: C.amber, color: C.bg0, border: "none", borderRadius: 2, padding: "3px 8px", fontFamily: "inherit", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>
+                  PAUSE
+                </button>
+              )}
+              <select value={simSpeed} onChange={e => { const v = Number(e.target.value); setSimSpeed(v); ws.sendCommand("set_speed", { multiplier: v }); }}
+                style={{ background: C.bg0, color: C.text1, border: `1px solid ${C.border}`, borderRadius: 2, padding: "2px 4px", fontFamily: "inherit", fontSize: 9 }}>
+                <option value={1}>1x</option><option value={2}>2x</option><option value={5}>5x</option><option value={10}>10x</option>
+              </select>
+              <button onClick={() => setShowInjectModal(true)}
+                style={{ background: C.bg2, color: C.cyan, border: `1px solid ${C.border}`, borderRadius: 2, padding: "3px 8px", fontFamily: "inherit", fontSize: 9, fontWeight: 600, cursor: "pointer" }}>
+                INJECT
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -585,15 +632,19 @@ export default function MiroFishDashboard() {
           </Panel>
 
           {/* ── Event Feed ── */}
-          <Panel title="EVENT FEED" badge={`${eventFeed.length}`} style={{ gridColumn: "2", gridRow: "1" }} noPad>
+          <Panel title="EVENT FEED" badge={ws.connected ? "LIVE" : `${eventFeed.length}`}
+            style={{ gridColumn: "2", gridRow: "1" }} noPad>
             {eventFeed.length > 0 ? eventFeed.map((evt, i) => {
               const typeColors = { EVENT: C.amber, ACTION: C.blue, SYSTEM: C.text2, ALERT: C.red };
               return (
                 <div key={i} style={{ padding: "5px 10px", borderBottom: `1px solid ${C.border}`,
-                  display: "flex", gap: 8, alignItems: "flex-start", fontSize: 10 }}>
+                  display: "flex", gap: 8, alignItems: "flex-start", fontSize: 10,
+                  animation: evt.live && i < 3 ? "slideIn 0.3s ease-out" : "none",
+                  background: evt.live && i === 0 ? C.bg2 : "transparent" }}>
                   <span style={{ color: C.text2, flexShrink: 0, width: 36 }}>{evt.time}</span>
                   <span style={{ color: typeColors[evt.type] || C.text2, fontWeight: 600, flexShrink: 0, width: 50 }}>{evt.type}</span>
                   <span style={{ color: C.text1, lineHeight: 1.4 }}>{evt.msg}</span>
+                  {evt.live && i === 0 && <span style={{ color: C.green, fontSize: 8, animation: "pulse 1s infinite" }}>LIVE</span>}
                 </div>
               );
             }) : <div style={{ padding: 16, color: C.text2, fontSize: 10 }}>No events yet — run a simulation</div>}
@@ -693,6 +744,9 @@ export default function MiroFishDashboard() {
                           cursor: "pointer", transition: "background 0.15s" }}>
                         <td style={{ padding: "8px 10px", color: C.text2, borderBottom: `1px solid ${C.border}` }}>{agent.agent_id}</td>
                         <td style={{ padding: "8px 10px", color: C.text0, fontWeight: 600, borderBottom: `1px solid ${C.border}` }}>
+                          {recentAgentIds.has(agent.name) && (
+                            <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: C.green, marginRight: 4, boxShadow: `0 0 6px ${C.green}`, animation: "pulse 1s infinite" }} />
+                          )}
                           <span style={{ color: C.amber }}>@</span>{agent.name}
                         </td>
                         <td style={{ padding: "8px 10px", borderBottom: `1px solid ${C.border}` }}>
@@ -866,6 +920,71 @@ export default function MiroFishDashboard() {
 
       {/* ═══ NEW SIMULATION MODAL ═══ */}
       {showNewSim && <NewSimModal onClose={() => setShowNewSim(false)} onComplete={handleNewSimComplete} />}
+
+      {/* ═══ EVENT INJECTION MODAL ═══ */}
+      {showInjectModal && (
+        <InjectEventModal
+          onClose={() => setShowInjectModal(false)}
+          onInject={(name, content) => {
+            ws.sendCommand("inject_event", { name, content });
+            setShowInjectModal(false);
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+// ─── Event Injection Modal ────────────────────────────────────
+function InjectEventModal({ onClose, onInject }) {
+  const [eventName, setEventName] = useState("");
+  const [eventContent, setEventContent] = useState("");
+
+  const presets = [
+    { icon: "!", title: "Breaking News", desc: "Major announcement or leak", content: "A major policy announcement has been made, causing widespread reaction across all sectors." },
+    { icon: "$", title: "Market Shock", desc: "Economic indicator shift", content: "A sudden shift in economic indicators has rattled market confidence and triggered uncertainty." },
+    { icon: "~", title: "Narrative Shift", desc: "Counter-narrative emerges", content: "A credible counter-narrative has emerged, challenging the dominant viewpoint with new evidence." },
+    { icon: "+", title: "Coalition Forms", desc: "Group alignment event", content: "Multiple key stakeholders have announced a formal coalition to coordinate their response." },
+    { icon: "#", title: "Viral Content", desc: "High-impact post", content: "A post has gone viral, rapidly spreading and influencing public opinion across platforms." },
+    { icon: "*", title: "Deadline Event", desc: "Time-pressure trigger", content: "A critical deadline is approaching, forcing stakeholders to accelerate their decision-making." },
+  ];
+
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}
+      onClick={e => e.target === e.currentTarget && onClose()}>
+      <div style={{ background: C.bg1, border: `1px solid ${C.border}`, borderRadius: 4, width: 520 }}>
+        <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: C.cyan, letterSpacing: 1 }}>INJECT EVENT</span>
+          <span style={{ color: C.text2, cursor: "pointer", fontSize: 14 }} onClick={onClose}>x</span>
+        </div>
+        <div style={{ padding: 16 }}>
+          <div style={{ fontSize: 9, color: C.text2, letterSpacing: 1, marginBottom: 8 }}>QUICK PRESETS</div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6, marginBottom: 16 }}>
+            {presets.map((p, i) => (
+              <div key={i} onClick={() => { setEventName(p.title); setEventContent(p.content); }}
+                style={{ background: C.bg0, border: `1px solid ${eventName === p.title ? C.cyan : C.border}`, borderRadius: 3,
+                  padding: "8px 10px", cursor: "pointer", borderLeft: `3px solid ${eventName === p.title ? C.cyan : C.border}` }}>
+                <div style={{ fontSize: 11, color: C.cyan, marginBottom: 2 }}>{p.icon} {p.title}</div>
+                <div style={{ fontSize: 9, color: C.text2 }}>{p.desc}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginBottom: 8 }}>
+            <div style={{ fontSize: 9, color: C.text2, letterSpacing: 1, marginBottom: 4 }}>EVENT NAME</div>
+            <input value={eventName} onChange={e => setEventName(e.target.value)} placeholder="Event name"
+              style={{ width: "100%", background: C.bg0, border: `1px solid ${C.border}`, borderRadius: 2, padding: "6px 8px", color: C.text0, fontFamily: "inherit", fontSize: 11 }} />
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 9, color: C.text2, letterSpacing: 1, marginBottom: 4 }}>EVENT CONTENT</div>
+            <textarea value={eventContent} onChange={e => setEventContent(e.target.value)} rows={3} placeholder="Describe what happens..."
+              style={{ width: "100%", background: C.bg0, border: `1px solid ${C.border}`, borderRadius: 2, padding: "6px 8px", color: C.text0, fontFamily: "inherit", fontSize: 11, resize: "vertical" }} />
+          </div>
+          <button onClick={() => eventName && onInject(eventName, eventContent)} disabled={!eventName}
+            style={{ background: C.cyan, color: C.bg0, border: "none", borderRadius: 2, padding: "8px 16px", fontFamily: "inherit", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1, opacity: eventName ? 1 : 0.4 }}>
+            INJECT EVENT
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
