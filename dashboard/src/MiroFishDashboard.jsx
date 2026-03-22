@@ -79,20 +79,46 @@ function NewSimModal({ onClose, onComplete }) {
   const [requirement, setRequirement] = useState("");
   const [text, setText] = useState("");
   const [running, setRunning] = useState(false);
-  const [stage, setStage] = useState(0);
-  const [total] = useState(5);
+  const [progress, setProgress] = useState(0);
   const [stageLabel, setStageLabel] = useState("");
+  const [stageName, setStageName] = useState("");
+  const [events, setEvents] = useState([]);
   const [error, setError] = useState(null);
+  const closeRef = useRef(null);
 
   const handleSubmit = async () => {
     if (!requirement.trim() || !text.trim()) return;
-    setRunning(true); setError(null);
-    const result = await api.runPipelineSteps(name, requirement, text, (s, t, label) => {
-      setStage(s); setStageLabel(label);
+    setRunning(true); setError(null); setEvents([]);
+
+    const result = await api.runPipelineStreaming(name, requirement, text, (type, data) => {
+      if (type === "progress") {
+        setProgress(data.progress || 0);
+        setStageLabel(data.message || "");
+        setStageName(data.stage || "");
+      } else if (type === "stage_complete") {
+        setEvents(prev => [...prev, { type: "done", msg: `${data.stage} complete` }]);
+      } else if (type === "round") {
+        setEvents(prev => {
+          const next = [...prev, { type: "round", msg: `Round ${data.round_num}: ${data.actions_count} actions` }];
+          return next.slice(-8);
+        });
+      } else if (type === "complete") {
+        setProgress(1);
+        setStageLabel("Pipeline complete!");
+        setTimeout(() => onComplete(data.project_id), 600);
+      } else if (type === "error") {
+        setError(data.message);
+        setRunning(false);
+      }
     });
-    if (result.error) { setError(result.error); setRunning(false); return; }
-    onComplete(result.projectId);
+
+    closeRef.current = result.close;
+    if (result.error && !error) { setError(result.error); setRunning(false); }
   };
+
+  useEffect(() => {
+    return () => { closeRef.current?.(); };
+  }, []);
 
   return (
     <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}
@@ -125,12 +151,28 @@ function NewSimModal({ onClose, onComplete }) {
               RUN SIMULATION
             </button>
           </> : <>
-            <div style={{ textAlign: "center", padding: "20px 0" }}>
-              <div style={{ fontSize: 12, color: C.text0, marginBottom: 12 }}>{stageLabel}</div>
-              <div style={{ width: "100%", height: 6, background: C.bg0, borderRadius: 3, overflow: "hidden", marginBottom: 8 }}>
-                <div style={{ width: `${(stage / total) * 100}%`, height: "100%", background: C.amber, borderRadius: 3, transition: "width 0.5s" }} />
+            <div style={{ padding: "12px 0" }}>
+              {/* Stage indicator */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                <span style={{ display: "inline-block", width: 8, height: 8, border: `2px solid ${C.amber}`, borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+                <span style={{ fontSize: 12, color: C.text0 }}>{stageLabel}</span>
+                <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
               </div>
-              <div style={{ fontSize: 10, color: C.text2 }}>Stage {stage}/{total}</div>
+              {/* Progress bar */}
+              <div style={{ width: "100%", height: 6, background: C.bg0, borderRadius: 3, overflow: "hidden", marginBottom: 8 }}>
+                <div style={{ width: `${progress * 100}%`, height: "100%", background: `linear-gradient(90deg, ${C.green}, ${C.amber})`, borderRadius: 3, transition: "width 0.3s" }} />
+              </div>
+              <div style={{ fontSize: 10, color: C.text2, marginBottom: 12 }}>{Math.round(progress * 100)}% — {stageName || "initializing"}</div>
+              {/* Live event feed */}
+              {events.length > 0 && (
+                <div style={{ background: C.bg0, borderRadius: 2, padding: "6px 8px", maxHeight: 120, overflow: "auto" }}>
+                  {events.map((evt, i) => (
+                    <div key={i} style={{ fontSize: 9, color: evt.type === "done" ? C.green : C.text2, lineHeight: 1.8 }}>
+                      {evt.type === "done" ? "+" : ">"} {evt.msg}
+                    </div>
+                  ))}
+                </div>
+              )}
               {error && <div style={{ color: C.red, fontSize: 10, marginTop: 12, padding: "6px 8px", background: C.redDim, borderRadius: 2 }}>{error}</div>}
             </div>
           </>}

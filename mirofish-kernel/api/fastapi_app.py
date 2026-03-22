@@ -1,7 +1,7 @@
 """
-MiroFish Kernel — Full REST API (TIP-01)
+MiroFish Kernel — Full REST API (TIP-01 + TIP-03 SSE)
 
-12 endpoints covering the complete pipeline lifecycle.
+14 endpoints + SSE stream covering the complete pipeline lifecycle.
 Thin adapter: all logic lives in the kernel, API is just HTTP mapping.
 
 Usage:
@@ -10,6 +10,8 @@ Usage:
 """
 
 import os
+import json
+import asyncio
 import threading
 from typing import Optional, Dict, Any, List
 from contextlib import asynccontextmanager
@@ -18,6 +20,7 @@ from dataclasses import dataclass, field
 try:
     from fastapi import FastAPI, HTTPException
     from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.responses import StreamingResponse
     from pydantic import BaseModel
 except ImportError:
     raise ImportError("FastAPI required: pip install mirofish-kernel[fastapi]")
@@ -73,6 +76,45 @@ class ProjectState:
     sim_state: Optional[Any] = None
     sim_summary: Optional[Dict[str, Any]] = None
     report: Optional[str] = None
+
+
+# ─── SSE Event Bus ─────────────────────────────────────────────
+
+# Per-project event queues for SSE streaming
+_event_queues: Dict[str, List[asyncio.Queue]] = {}
+
+
+def _emit_sse(project_id: str, event_type: str, data: Dict[str, Any]):
+    """Push an SSE event to all subscribers of a project."""
+    if project_id not in _event_queues:
+        return
+    msg = f"event: {event_type}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+    dead = []
+    for i, q in enumerate(_event_queues[project_id]):
+        try:
+            q.put_nowait(msg)
+        except asyncio.QueueFull:
+            dead.append(i)
+    for i in reversed(dead):
+        _event_queues[project_id].pop(i)
+
+
+def _subscribe(project_id: str) -> asyncio.Queue:
+    """Subscribe to SSE events for a project."""
+    q = asyncio.Queue(maxsize=200)
+    _event_queues.setdefault(project_id, []).append(q)
+    return q
+
+
+def _unsubscribe(project_id: str, q: asyncio.Queue):
+    """Remove a subscriber."""
+    if project_id in _event_queues:
+        try:
+            _event_queues[project_id].remove(q)
+        except ValueError:
+            pass
+        if not _event_queues[project_id]:
+            del _event_queues[project_id]
 
 
 # ─── App Setup ─────────────────────────────────────────────────
@@ -535,3 +577,185 @@ async def predict(req: RunPipelineRequest):
     except Exception as e:
         logger.error(f"Pipeline failed: {e}")
         raise HTTPException(500, f"Pipeline failed: {e}")
+
+
+# ═══════════════════════════════════════════════════════════════
+# 5. SSE STREAMING (TIP-03)
+# ═══════════════════════════════════════════════════════════════
+
+@app.get("/api/projects/{project_id}/stream")
+async def stream_events(project_id: str):
+    """
+    SSE stream for real-time pipeline progress.
+
+    Events:
+      progress      — { stage, step, total_steps, progress, message }
+      stage_complete — { stage, result_keys }
+      round         — { round_num, actions_count, active_agents }
+      complete      — { project_id, report_available }
+      error         — { message, stage }
+      ping          — {}
+    """
+    q = _subscribe(project_id)
+
+    async def event_generator():
+        try:
+            # Send initial connection event
+            yield f"event: connected\ndata: {json.dumps({'project_id': project_id})}\n\n"
+
+            while True:
+                try:
+                    msg = await asyncio.wait_for(q.get(), timeout=15.0)
+                    yield msg
+                except asyncio.TimeoutError:
+                    # Send keepalive ping every 15s
+                    yield f"event: ping\ndata: {json.dumps({'ts': int(asyncio.get_event_loop().time())})}\n\n"
+        except asyncio.CancelledError:
+            pass
+        finally:
+            _unsubscribe(project_id, q)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@app.post("/api/projects/{project_id}/run-stream")
+async def run_pipeline_with_stream(project_id: str):
+    """
+    Start the full pipeline for a project, streaming progress via SSE.
+
+    Prerequisites: project must exist (POST /api/projects first).
+    Subscribe to GET /api/projects/{id}/stream to receive progress events.
+    Returns immediately with 202 Accepted.
+    """
+    p = _get_pipeline()
+    state = _get_state(project_id)
+
+    if not state.seed_result:
+        raise HTTPException(400, "Seed not processed — create project first")
+
+    # Run pipeline in background thread
+    def run_in_thread():
+        loop = asyncio.new_event_loop()
+
+        def emit(event_type, data):
+            """Thread-safe SSE emit."""
+            try:
+                # Use call_soon_threadsafe if we had the main loop, but since
+                # _emit_sse just does put_nowait on queues, it's safe from any thread
+                _emit_sse(project_id, event_type, data)
+            except Exception as e:
+                logger.warning(f"SSE emit failed: {e}")
+
+        try:
+            # Stage 1: Ontology
+            emit("progress", {"stage": "ontology", "step": 1, "total_steps": 5, "progress": 0.0, "message": "Designing ontology..."})
+            ontology = p.ontology_designer.design(
+                document_texts=[state.seed_result["raw_text"]],
+                requirement=state.project.requirement,
+            )
+            state.ontology = ontology
+            state.project.ontology = ontology.to_dict()
+            state.project.advance_to(ProjectPhase.ONTOLOGY_DESIGNED)
+            emit("stage_complete", {"stage": "ontology", "entity_types": len(ontology.entity_types), "edge_types": len(ontology.edge_types)})
+
+            # Stage 2: Graph
+            emit("progress", {"stage": "graph", "step": 2, "total_steps": 5, "progress": 0.2, "message": "Building knowledge graph..."})
+
+            def graph_progress(msg, pct):
+                emit("progress", {"stage": "graph", "step": 2, "total_steps": 5, "progress": 0.2 + pct * 0.2, "message": msg})
+
+            graph_result = p.graph_builder.build(
+                chunks=state.seed_result["chunks"],
+                ontology=ontology,
+                progress_callback=graph_progress,
+            )
+            if not graph_result.success:
+                emit("error", {"message": f"Graph build failed: {graph_result.error}", "stage": "graph"})
+                return
+
+            state.graph_result = graph_result
+            state.project.graph_id = graph_result.graph_id
+            state.project.graph_info = graph_result.graph_info.to_dict()
+            state.project.advance_to(ProjectPhase.GRAPH_COMPLETED)
+            emit("stage_complete", {"stage": "graph", "graph_id": graph_result.graph_id, "nodes": graph_result.graph_info.node_count, "edges": graph_result.graph_info.edge_count})
+
+            # Stage 3: Config + Profiles
+            emit("progress", {"stage": "simulation", "step": 3, "total_steps": 5, "progress": 0.4, "message": "Generating simulation config..."})
+            graph_id = graph_result.graph_id
+            requirement = state.project.requirement
+
+            sim_config = p.config_generator.generate(graph_id=graph_id, requirement=requirement)
+            state.sim_config = sim_config
+            state.project.simulation_config = sim_config.to_dict()
+            state.project.advance_to(ProjectPhase.CONFIG_GENERATED)
+
+            emit("progress", {"stage": "simulation", "step": 3, "total_steps": 5, "progress": 0.5, "message": "Generating agent profiles..."})
+            agent_configs = sim_config.domain_config.get("agent_configs", [])
+            profiles = p.profile_generator.generate_profiles(
+                graph_id=graph_id, requirement=requirement,
+                agent_configs=agent_configs if agent_configs else None,
+            )
+            state.profiles = profiles
+
+            # Stage 4: Simulation
+            emit("progress", {"stage": "simulation", "step": 4, "total_steps": 5, "progress": 0.6, "message": f"Running simulation with {len(profiles)} agents..."})
+            if p.sim_orchestrator:
+                def round_callback(round_data):
+                    emit("round", {
+                        "round_num": round_data.round_num,
+                        "actions_count": len(round_data.actions),
+                        "active_agents": len(round_data.active_agent_ids),
+                        "simulated_hour": round_data.simulated_hour,
+                    })
+
+                sim_state = p.sim_orchestrator.run_simulation(
+                    config=sim_config, agents=profiles, graph_id=graph_id,
+                    round_callback=round_callback,
+                )
+                state.sim_state = sim_state
+                state.sim_summary = p.sim_orchestrator.get_simulation_summary(sim_state)
+            else:
+                state.sim_summary = p._build_mock_summary(profiles)
+
+            state.project.simulation_summary = state.sim_summary
+            state.project.advance_to(ProjectPhase.SIMULATION_COMPLETED)
+            emit("stage_complete", {"stage": "simulation", "agents": len(profiles), "rounds": state.sim_summary.get("total_rounds", 0)})
+
+            # Stage 5: Report
+            emit("progress", {"stage": "report", "step": 5, "total_steps": 5, "progress": 0.8, "message": "Generating prediction report..."})
+
+            def report_progress(msg, pct):
+                emit("progress", {"stage": "report", "step": 5, "total_steps": 5, "progress": 0.8 + pct * 0.2, "message": msg})
+
+            report = p.report_agent.generate_full_report(
+                requirement=requirement,
+                graph_id=graph_id,
+                simulation_summary=state.sim_summary,
+                progress_callback=report_progress,
+            )
+            state.report = report
+            state.project.report_content = report
+            state.project.advance_to(ProjectPhase.REPORT_COMPLETED)
+            emit("stage_complete", {"stage": "report", "length": len(report)})
+
+            # Done
+            emit("complete", {"project_id": project_id, "report_available": True})
+
+        except Exception as e:
+            logger.error(f"Streaming pipeline failed: {e}")
+            emit("error", {"message": str(e), "stage": "unknown"})
+
+        loop.close()
+
+    thread = threading.Thread(target=run_in_thread, daemon=True)
+    thread.start()
+
+    return ApiResponse(data={"project_id": project_id, "message": "Pipeline started — subscribe to /stream for progress"})

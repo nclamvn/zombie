@@ -115,47 +115,102 @@ export async function runFullPipeline(name, requirement, text) {
   return apiCall("POST", "/api/predict", { name, requirement, text });
 }
 
-// ─── Step-by-step pipeline runner ────────────────────────────
+// ─── Streaming Pipeline (SSE) ────────────────────────────────
 
 /**
- * Run pipeline stages sequentially, calling onProgress after each.
- * Returns { projectId, error? }
+ * Start pipeline via SSE streaming endpoint.
+ * 1. Create project
+ * 2. POST /run-stream to start pipeline in background
+ * 3. Subscribe to GET /stream for real-time progress
+ *
+ * onEvent(type, data) called for every SSE event.
+ * Returns { projectId, close() }
  */
-export async function runPipelineSteps(name, requirement, text, onProgress) {
-  const stages = [
-    { label: "Creating project...", fn: () => createProject(name, requirement, text) },
-    { label: "Designing ontology...", fn: null }, // set after createProject
-    { label: "Building knowledge graph...", fn: null },
-    { label: "Running simulation...", fn: null },
-    { label: "Generating report...", fn: null },
-  ];
-
-  // Stage 1: Create project
-  onProgress?.(0, 5, stages[0].label);
-  const r1 = await stages[0].fn();
-  if (r1.status !== "ok") return { error: r1.error };
+export async function runPipelineStreaming(name, requirement, text, onEvent) {
+  // Step 1: Create project
+  onEvent?.("progress", { stage: "seed", step: 0, total_steps: 5, progress: 0, message: "Creating project..." });
+  const r1 = await createProject(name, requirement, text);
+  if (r1.status !== "ok") {
+    onEvent?.("error", { message: r1.error, stage: "seed" });
+    return { error: r1.error };
+  }
   const projectId = r1.data.project_id;
 
-  // Stage 2: Ontology
-  onProgress?.(1, 5, stages[1].label);
-  const r2 = await triggerOntology(projectId);
-  if (r2.status !== "ok") return { projectId, error: r2.error };
+  // Step 2: Subscribe to SSE stream
+  const streamUrl = `${BASE_URL}/api/projects/${projectId}/stream`;
+  let es = null;
 
-  // Stage 3: Graph
-  onProgress?.(2, 5, stages[2].label);
-  const r3 = await triggerGraph(projectId);
-  if (r3.status !== "ok") return { projectId, error: r3.error };
+  try {
+    es = new EventSource(streamUrl);
+  } catch (err) {
+    // EventSource not supported or URL issue — fall back to sequential
+    return runPipelineStepsFallback(projectId, onEvent);
+  }
 
-  // Stage 4: Simulation
-  onProgress?.(3, 5, stages[3].label);
-  const r4 = await triggerSimulation(projectId);
-  if (r4.status !== "ok") return { projectId, error: r4.error };
+  const closeStream = () => {
+    if (es) { es.close(); es = null; }
+  };
 
-  // Stage 5: Report
-  onProgress?.(4, 5, stages[4].label);
-  const r5 = await triggerReport(projectId);
-  if (r5.status !== "ok") return { projectId, error: r5.error };
+  // Set up SSE event listeners
+  const eventTypes = ["progress", "stage_complete", "round", "complete", "error", "connected", "ping"];
+  for (const type of eventTypes) {
+    es.addEventListener(type, (e) => {
+      try {
+        const data = JSON.parse(e.data);
+        onEvent?.(type, data);
+      } catch {}
+    });
+  }
+  es.onerror = () => {
+    // EventSource auto-reconnects, but notify UI
+    onEvent?.("error", { message: "Stream connection lost — reconnecting...", stage: "stream" });
+  };
 
-  onProgress?.(5, 5, "Complete!");
-  return { projectId };
+  // Step 3: Trigger the streaming pipeline
+  const r2 = await apiCall("POST", `/api/projects/${projectId}/run-stream`);
+  if (r2.status !== "ok") {
+    closeStream();
+    onEvent?.("error", { message: r2.error, stage: "start" });
+    return { projectId, error: r2.error, close: closeStream };
+  }
+
+  return { projectId, close: closeStream };
+}
+
+/**
+ * Fallback: run pipeline stages sequentially (no SSE).
+ * Used when EventSource is not available.
+ */
+async function runPipelineStepsFallback(projectId, onEvent) {
+  const stages = [
+    { label: "Designing ontology...", fn: () => triggerOntology(projectId) },
+    { label: "Building knowledge graph...", fn: () => triggerGraph(projectId) },
+    { label: "Running simulation...", fn: () => triggerSimulation(projectId) },
+    { label: "Generating report...", fn: () => triggerReport(projectId) },
+  ];
+
+  for (let i = 0; i < stages.length; i++) {
+    onEvent?.("progress", { stage: stages[i].label, step: i + 1, total_steps: 5, progress: (i + 1) / 5, message: stages[i].label });
+    const r = await stages[i].fn();
+    if (r.status !== "ok") {
+      onEvent?.("error", { message: r.error, stage: stages[i].label });
+      return { projectId, error: r.error };
+    }
+    onEvent?.("stage_complete", { stage: stages[i].label });
+  }
+
+  onEvent?.("complete", { project_id: projectId, report_available: true });
+  return { projectId, close: () => {} };
+}
+
+// ─── Legacy step-by-step (kept for backward compat) ──────────
+
+export async function runPipelineSteps(name, requirement, text, onProgress) {
+  return runPipelineStreaming(name, requirement, text, (type, data) => {
+    if (type === "progress") {
+      onProgress?.(data.step || 0, data.total_steps || 5, data.message || "");
+    } else if (type === "complete") {
+      onProgress?.(5, 5, "Complete!");
+    }
+  });
 }
