@@ -11,7 +11,7 @@ from .database import get_session
 from .models import (
     ProjectModel, OntologyModel, GraphModel,
     SimulationModel, SimulationRoundModel, AgentProfileModel,
-    ReportModel, ChatMessageModel,
+    ReportModel, ChatMessageModel, JobModel,
 )
 
 
@@ -322,3 +322,71 @@ class ChatRepository:
                 {"role": m.role, "content": m.content, "created_at": m.created_at.isoformat() if m.created_at else None}
                 for m in msgs
             ]
+
+
+# ═══════════════════════════════════════════════════════════════
+# JobRepository
+# ═══════════════════════════════════════════════════════════════
+
+class JobRepository:
+
+    def create(self, job_id: str, project_id: str, job_type: str) -> None:
+        with get_session() as s:
+            s.add(JobModel(
+                id=job_id,
+                project_id=project_id,
+                job_type=job_type,
+                status="queued",
+            ))
+
+    def update(self, job_id: str, **fields) -> None:
+        with get_session() as s:
+            job = s.query(JobModel).filter_by(id=job_id).first()
+            if not job:
+                return
+            for k, v in fields.items():
+                if hasattr(job, k):
+                    setattr(job, k, v)
+
+    def get(self, job_id: str) -> Optional[Dict[str, Any]]:
+        with get_session() as s:
+            j = s.query(JobModel).filter_by(id=job_id).first()
+            if not j:
+                return None
+            return _job_to_dict(j)
+
+    def get_by_project(self, project_id: str) -> List[Dict[str, Any]]:
+        with get_session() as s:
+            jobs = s.query(JobModel).filter_by(project_id=project_id).order_by(JobModel.submitted_at.desc()).all()
+            return [_job_to_dict(j) for j in jobs]
+
+    def get_active(self) -> List[Dict[str, Any]]:
+        with get_session() as s:
+            jobs = s.query(JobModel).filter(JobModel.status.in_(["queued", "running"])).all()
+            return [_job_to_dict(j) for j in jobs]
+
+    def mark_stale_running_as_failed(self) -> int:
+        """On startup, mark any 'running' jobs as failed (they didn't finish before shutdown)."""
+        with get_session() as s:
+            stale = s.query(JobModel).filter_by(status="running").all()
+            for j in stale:
+                j.status = "failed"
+                j.error = "Server restarted while job was running"
+                j.completed_at = _now()
+            return len(stale)
+
+
+def _job_to_dict(j: JobModel) -> Dict[str, Any]:
+    return {
+        "job_id": j.id,
+        "project_id": j.project_id,
+        "job_type": j.job_type,
+        "status": j.status,
+        "progress": j.progress,
+        "stage": j.stage,
+        "message": j.message,
+        "error": j.error,
+        "submitted_at": j.submitted_at.isoformat() if j.submitted_at else None,
+        "started_at": j.started_at.isoformat() if j.started_at else None,
+        "completed_at": j.completed_at.isoformat() if j.completed_at else None,
+    }

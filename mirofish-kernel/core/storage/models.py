@@ -147,3 +147,24 @@ class ChatMessageModel(Base):
     __table_args__ = (
         Index("ix_chat_project", "project_id", "created_at"),
     )
+
+
+class JobModel(Base):
+    __tablename__ = "jobs"
+
+    id = Column(String(64), primary_key=True)
+    project_id = Column(String(64), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    job_type = Column(String(32), nullable=False)  # full_pipeline, simulate_only, report_only
+    status = Column(String(16), nullable=False, default="queued")  # queued, running, completed, failed, cancelled
+    progress = Column(Float, default=0.0)
+    stage = Column(String(64), default="")
+    message = Column(String(512), default="")
+    error = Column(Text, nullable=True)
+    submitted_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    started_at = Column(DateTime, nullable=True)
+    completed_at = Column(DateTime, nullable=True)
+
+    __table_args__ = (
+        Index("ix_jobs_project", "project_id"),
+        Index("ix_jobs_status", "status"),
+    )

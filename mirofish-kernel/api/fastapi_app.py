@@ -123,7 +123,10 @@ from core.storage.database import init_db
 from core.storage.repository import (
     ProjectRepository, OntologyRepository, GraphRepository,
     SimulationRepository, AgentRepository, ReportRepository, ChatRepository,
+    JobRepository,
 )
+from workers.job_manager import JobManager
+from workers.pipeline_worker import run_full_pipeline
 
 project_repo = ProjectRepository()
 ontology_repo = OntologyRepository()
@@ -132,6 +135,8 @@ sim_repo = SimulationRepository()
 agent_repo = AgentRepository()
 report_repo = ReportRepository()
 chat_repo = ChatRepository()
+job_repo = JobRepository()
+job_manager: Optional[JobManager] = None
 
 
 def _persist_project(state: ProjectState):
@@ -282,12 +287,17 @@ async def lifespan(app: FastAPI):
         memory_store=LocalMemoryStore(),
     )
 
-    # Initialize database and recover state
+    # Initialize database, recover state, start job manager
     init_db()
     _recover_projects()
+    global job_manager
+    job_manager = JobManager()
 
     logger.info(f"API started — LLM: {llm_provider}, Graph: {'zep' if zep_key else 'none'}")
     yield
+    if job_manager:
+        job_manager.shutdown(wait=False)
+        job_manager = None
     pipeline = None
 
 
@@ -768,150 +778,72 @@ async def stream_events(project_id: str):
 @app.post("/api/projects/{project_id}/run-stream")
 async def run_pipeline_with_stream(project_id: str):
     """
-    Start the full pipeline for a project, streaming progress via SSE.
+    Start the full pipeline as a background job, streaming progress via SSE.
 
     Prerequisites: project must exist (POST /api/projects first).
     Subscribe to GET /api/projects/{id}/stream to receive progress events.
-    Returns immediately with 202 Accepted.
+    Returns immediately with 202 Accepted + job_id.
     """
     p = _get_pipeline()
     state = _get_state(project_id)
 
     if not state.seed_result:
         raise HTTPException(400, "Seed not processed — create project first")
+    if not job_manager:
+        raise HTTPException(503, "Job manager not initialized")
 
-    # Run pipeline in background thread
-    def run_in_thread():
-        loop = asyncio.new_event_loop()
+    def run_fn(pid, jid, progress_cb):
+        run_full_pipeline(
+            project_id=pid,
+            job_id=jid,
+            progress_callback=progress_cb,
+            pipeline=p,
+            project_states=project_states,
+            emit_sse=_emit_sse,
+        )
 
-        def emit(event_type, data):
-            """Thread-safe SSE emit."""
-            try:
-                # Use call_soon_threadsafe if we had the main loop, but since
-                # _emit_sse just does put_nowait on queues, it's safe from any thread
-                _emit_sse(project_id, event_type, data)
-            except Exception as e:
-                logger.warning(f"SSE emit failed: {e}")
+    job_id = job_manager.submit(project_id, "full_pipeline", run_fn)
 
-        try:
-            # Stage 1: Ontology
-            emit("progress", {"stage": "ontology", "step": 1, "total_steps": 5, "progress": 0.0, "message": "Designing ontology..."})
-            ontology = p.ontology_designer.design(
-                document_texts=[state.seed_result["raw_text"]],
-                requirement=state.project.requirement,
-            )
-            state.ontology = ontology
-            state.project.ontology = ontology.to_dict()
-            state.project.advance_to(ProjectPhase.ONTOLOGY_DESIGNED)
-            _persist_project(state)
-            ontology_repo.save(project_id, ontology.to_dict())
-            emit("stage_complete", {"stage": "ontology", "entity_types": len(ontology.entity_types), "edge_types": len(ontology.edge_types)})
+    return ApiResponse(data={
+        "project_id": project_id,
+        "job_id": job_id,
+        "message": "Pipeline started — subscribe to /stream for progress",
+    })
 
-            # Stage 2: Graph
-            emit("progress", {"stage": "graph", "step": 2, "total_steps": 5, "progress": 0.2, "message": "Building knowledge graph..."})
 
-            def graph_progress(msg, pct):
-                emit("progress", {"stage": "graph", "step": 2, "total_steps": 5, "progress": 0.2 + pct * 0.2, "message": msg})
+# ═══════════════════════════════════════════════════════════════
+# 6. JOB MANAGEMENT (TIP-05)
+# ═══════════════════════════════════════════════════════════════
 
-            graph_result = p.graph_builder.build(
-                chunks=state.seed_result["chunks"],
-                ontology=ontology,
-                progress_callback=graph_progress,
-            )
-            if not graph_result.success:
-                emit("error", {"message": f"Graph build failed: {graph_result.error}", "stage": "graph"})
-                return
+@app.get("/api/jobs/{job_id}")
+async def get_job(job_id: str):
+    """Get job status and progress."""
+    if not job_manager:
+        raise HTTPException(503, "Job manager not initialized")
+    job = job_manager.get_status(job_id)
+    if not job:
+        raise HTTPException(404, f"Job {job_id} not found")
+    return ApiResponse(data=job)
 
-            state.graph_result = graph_result
-            state.project.graph_id = graph_result.graph_id
-            state.project.graph_info = graph_result.graph_info.to_dict()
-            state.project.advance_to(ProjectPhase.GRAPH_COMPLETED)
-            _persist_project(state)
-            graph_repo.save(project_id, graph_result.graph_id, graph_result.graph_info.to_dict())
-            emit("stage_complete", {"stage": "graph", "graph_id": graph_result.graph_id, "nodes": graph_result.graph_info.node_count, "edges": graph_result.graph_info.edge_count})
 
-            # Stage 3: Config + Profiles
-            emit("progress", {"stage": "simulation", "step": 3, "total_steps": 5, "progress": 0.4, "message": "Generating simulation config..."})
-            graph_id = graph_result.graph_id
-            requirement = state.project.requirement
+@app.delete("/api/jobs/{job_id}")
+async def cancel_job(job_id: str):
+    """Cancel a queued or running job."""
+    if not job_manager:
+        raise HTTPException(503, "Job manager not initialized")
+    success = job_manager.cancel(job_id)
+    if not success:
+        raise HTTPException(400, "Job cannot be cancelled (already completed or not found)")
+    return ApiResponse(data={"job_id": job_id, "status": "cancelled"})
 
-            sim_config = p.config_generator.generate(graph_id=graph_id, requirement=requirement)
-            state.sim_config = sim_config
-            state.project.simulation_config = sim_config.to_dict()
-            state.project.advance_to(ProjectPhase.CONFIG_GENERATED)
 
-            emit("progress", {"stage": "simulation", "step": 3, "total_steps": 5, "progress": 0.5, "message": "Generating agent profiles..."})
-            agent_configs = sim_config.domain_config.get("agent_configs", [])
-            profiles = p.profile_generator.generate_profiles(
-                graph_id=graph_id, requirement=requirement,
-                agent_configs=agent_configs if agent_configs else None,
-            )
-            state.profiles = profiles
-
-            # Stage 4: Simulation
-            emit("progress", {"stage": "simulation", "step": 4, "total_steps": 5, "progress": 0.6, "message": f"Running simulation with {len(profiles)} agents..."})
-            if p.sim_orchestrator:
-                def round_callback(round_data):
-                    emit("round", {
-                        "round_num": round_data.round_num,
-                        "actions_count": len(round_data.actions),
-                        "active_agents": len(round_data.active_agent_ids),
-                        "simulated_hour": round_data.simulated_hour,
-                    })
-
-                sim_state = p.sim_orchestrator.run_simulation(
-                    config=sim_config, agents=profiles, graph_id=graph_id,
-                    round_callback=round_callback,
-                )
-                state.sim_state = sim_state
-                state.sim_summary = p.sim_orchestrator.get_simulation_summary(sim_state)
-            else:
-                state.sim_summary = p._build_mock_summary(profiles)
-
-            state.project.simulation_summary = state.sim_summary
-            state.project.advance_to(ProjectPhase.SIMULATION_COMPLETED)
-            _persist_project(state)
-            sim_repo.save_simulation(project_id, {
-                "sim_id": sim_config.sim_id or "", "config": sim_config.to_dict(),
-                "summary": state.sim_summary, "status": "completed",
-                "total_rounds": state.sim_summary.get("total_rounds", 0),
-                "total_actions": state.sim_summary.get("total_actions", 0),
-            })
-            if state.sim_state:
-                for r in state.sim_state.rounds:
-                    sim_repo.save_round(project_id, r.to_dict())
-            agent_repo.save_profiles(project_id, [pr.to_dict() for pr in profiles])
-            emit("stage_complete", {"stage": "simulation", "agents": len(profiles), "rounds": state.sim_summary.get("total_rounds", 0)})
-
-            # Stage 5: Report
-            emit("progress", {"stage": "report", "step": 5, "total_steps": 5, "progress": 0.8, "message": "Generating prediction report..."})
-
-            def report_progress(msg, pct):
-                emit("progress", {"stage": "report", "step": 5, "total_steps": 5, "progress": 0.8 + pct * 0.2, "message": msg})
-
-            report = p.report_agent.generate_full_report(
-                requirement=requirement,
-                graph_id=graph_id,
-                simulation_summary=state.sim_summary,
-                progress_callback=report_progress,
-            )
-            state.report = report
-            state.project.report_content = report
-            state.project.advance_to(ProjectPhase.REPORT_COMPLETED)
-            _persist_project(state)
-            report_repo.save(project_id, report)
-            emit("stage_complete", {"stage": "report", "length": len(report)})
-
-            # Done
-            emit("complete", {"project_id": project_id, "report_available": True})
-
-        except Exception as e:
-            logger.error(f"Streaming pipeline failed: {e}")
-            emit("error", {"message": str(e), "stage": "unknown"})
-
-        loop.close()
-
-    thread = threading.Thread(target=run_in_thread, daemon=True)
-    thread.start()
-
-    return ApiResponse(data={"project_id": project_id, "message": "Pipeline started — subscribe to /stream for progress"})
+@app.get("/api/jobs")
+async def list_jobs(project_id: str = None):
+    """List jobs, optionally filtered by project."""
+    if not job_manager:
+        raise HTTPException(503, "Job manager not initialized")
+    if project_id:
+        jobs = job_manager.get_project_jobs(project_id)
+    else:
+        jobs = job_repo.get_active()
+    return ApiResponse(data={"jobs": jobs, "total": len(jobs)})
