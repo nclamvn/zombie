@@ -25,6 +25,7 @@ zep = ["zep-cloud==3.13.0"]
 
 # Simulation adapters
 oasis = ["camel-oasis==0.2.5", "camel-ai==0.2.78"]
+ray = ["ray>=2.9.0"]
 
 # File parsing
 files = [

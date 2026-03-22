@@ -996,6 +996,21 @@ async def compare_scenarios(req: CompareRequest):
     return ApiResponse(data=result.to_dict())
 
 
+@app.get("/api/projects/{project_id}/costs")
+async def get_project_costs(project_id: str):
+    """Get LLM token usage and cost estimates for a project."""
+    from core.tools.cost_tracker import cost_tracker
+    stats = cost_tracker.get_project_stats(project_id)
+    return ApiResponse(data=stats)
+
+
+@app.get("/api/costs")
+async def get_global_costs():
+    """Get global LLM usage stats across all projects."""
+    from core.tools.cost_tracker import cost_tracker
+    return ApiResponse(data=cost_tracker.get_global_stats())
+
+
 @app.post("/api/projects/{project_id}/fork")
 async def fork_project(project_id: str, name: str = "Forked Scenario"):
     """Fork a project to create a variant scenario (shares graph, new simulation)."""
