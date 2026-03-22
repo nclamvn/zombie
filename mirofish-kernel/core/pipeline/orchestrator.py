@@ -197,6 +197,7 @@ class PipelineOrchestrator:
             sim_summary = self._build_mock_summary(profiles)
         
         # Step 7: Generate report
+        self.report_agent.set_agent_profiles([p.to_dict() for p in profiles])
         _progress("Generating prediction report...", 0.80)
         report = self.report_agent.generate_full_report(
             requirement=requirement,

@@ -194,6 +194,8 @@ def run_full_pipeline(
     progress_callback("simulation", 0.8, "Simulation complete")
 
     # ── Stage 5: Report ──
+    # Pass agent profiles to report agent for interview capability
+    p.report_agent.set_agent_profiles([pr.to_dict() for pr in profiles])
     progress("report", 0.8, "Generating prediction report...")
 
     def report_progress(msg, pct):
