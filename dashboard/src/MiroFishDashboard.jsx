@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import * as api from "./api/client.js";
+import useSimulationWS from "./api/useSimulationWS.js";
 
 // ─── Bloomberg-inspired color system ──────────────────────────
 const C = {
@@ -244,6 +245,10 @@ export default function MiroFishDashboard() {
   const [healthData, setHealthData] = useState(null);
   const chatEndRef = useRef(null);
 
+  // ── WebSocket for live simulation ──
+  const wsEnabled = status === "running" && !!activeProjectId;
+  const ws = useSimulationWS(activeProjectId, wsEnabled);
+
   // ── Derived ──
   const status = projectData ? (PHASE_STATUS[projectData.phase] || projectData.status || "queued") : "queued";
   const simSummary = simData?.summary || projectData?.simulation_summary || {};
@@ -371,18 +376,31 @@ export default function MiroFishDashboard() {
   const graphNodes = useMemo(() => layoutNodes(graphData?.nodes || []), [graphData?.nodes]);
   const graphEdges = useMemo(() => buildEdgeLines(graphData?.nodes, graphData?.edges, graphNodes), [graphData, graphNodes]);
 
-  // ── Event feed from simulation rounds ──
+  // ── Event feed from simulation rounds + live WS events ──
   const eventFeed = useMemo(() => {
-    if (!simData?.rounds) return [];
     const events = [];
-    for (const round of (simData.rounds || []).slice(-10).reverse()) {
-      events.push({ time: `R${round.round_num}`, type: "SYSTEM", msg: `Round ${round.round_num}: ${round.actions_count || 0} actions` });
-      for (const a of (round.actions || []).slice(0, 3)) {
-        events.push({ time: `R${round.round_num}`, type: "ACTION", msg: `${a.agent_name} → ${a.action_type}${a.result ? ': ' + a.result.slice(0, 60) : ''}` });
+    // Live WS events first (newest on top)
+    for (const wsEvt of [...ws.events].reverse().slice(0, 20)) {
+      const d = wsEvt.data || {};
+      if (wsEvt.event === "agent_action") {
+        events.push({ time: `R${d.round_num || "?"}`, type: "ACTION", msg: `${d.agent_name} → ${d.action_type}${d.content ? ": " + d.content.slice(0, 60) : ""}`, live: true });
+      } else if (wsEvt.event === "round_end") {
+        events.push({ time: `R${d.round_num}`, type: "SYSTEM", msg: `Round ${d.round_num}: ${d.actions_count || 0} actions`, live: true });
+      } else if (wsEvt.event === "event_fired") {
+        events.push({ time: "INJ", type: "EVENT", msg: d.name || "Event injected", live: true });
       }
     }
-    return events.slice(0, 15);
-  }, [simData]);
+    // Fallback to stored rounds if no live events
+    if (events.length === 0 && simData?.rounds) {
+      for (const round of (simData.rounds || []).slice(-10).reverse()) {
+        events.push({ time: `R${round.round_num}`, type: "SYSTEM", msg: `Round ${round.round_num}: ${round.actions_count || 0} actions` });
+        for (const a of (round.actions || []).slice(0, 3)) {
+          events.push({ time: `R${round.round_num}`, type: "ACTION", msg: `${a.agent_name} → ${a.action_type}${a.result ? ": " + a.result.slice(0, 60) : ""}` });
+        }
+      }
+    }
+    return events.slice(0, 20);
+  }, [simData, ws.events]);
 
   // ── Timeline from rounds ──
   const timelineData = useMemo(() => {
@@ -489,8 +507,21 @@ export default function MiroFishDashboard() {
               borderRadius: 3, transition: "width 0.5s" }} />
           </div>
           <Badge color={status === "running" ? C.green : status === "completed" ? C.blue : status === "failed" ? C.red : C.amber}>
-            {status}
+            {ws.simStatus || status}
           </Badge>
+          {/* Simulation controls */}
+          {status === "running" && ws.connected && <>
+            <button onClick={() => ws.sendCommand("pause")}
+              style={{ background: C.amber, color: C.bg0, border: "none", borderRadius: 2, padding: "3px 8px", fontFamily: "inherit", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>
+              PAUSE
+            </button>
+          </>}
+          {ws.simStatus === "paused" && ws.connected && (
+            <button onClick={() => ws.sendCommand("resume")}
+              style={{ background: C.green, color: C.bg0, border: "none", borderRadius: 2, padding: "3px 8px", fontFamily: "inherit", fontSize: 9, fontWeight: 700, cursor: "pointer" }}>
+              RESUME
+            </button>
+          )}
         </div>
       </div>
 
@@ -824,6 +855,7 @@ export default function MiroFishDashboard() {
             <HealthDot label="LLM" check={healthData.checks.llm} />
             <HealthDot label="JOBS" check={healthData.checks.job_queue} extra={healthData.checks.job_queue?.active_jobs != null ? `${healthData.checks.job_queue.active_jobs}/${healthData.checks.job_queue.max_workers}` : null} />
             {healthData.checks.memory?.rss_mb > 0 && <span>MEM: {healthData.checks.memory.rss_mb}MB</span>}
+            {wsEnabled && <span style={{ color: ws.connected ? C.green : C.amber }}>WS: {ws.connected ? "LIVE" : "..."}</span>}
           </> : <span>API: {connected ? "CONNECTED" : "DISCONNECTED"}</span>}
           {healthData?.uptime_seconds > 0 && <span>UP: {Math.floor(healthData.uptime_seconds / 3600)}h{Math.floor((healthData.uptime_seconds % 3600) / 60)}m</span>}
         </div>

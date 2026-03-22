@@ -25,7 +25,7 @@ except ImportError:
     _psutil_mod = None
 
 try:
-    from fastapi import FastAPI, HTTPException
+    from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.responses import StreamingResponse
     from pydantic import BaseModel
@@ -136,6 +136,7 @@ from core.storage.repository import (
 )
 from workers.job_manager import JobManager
 from workers.pipeline_worker import run_full_pipeline
+from api.ws_manager import ws_manager
 
 project_repo = ProjectRepository()
 ontology_repo = OntologyRepository()
@@ -884,6 +885,8 @@ async def run_pipeline_with_stream(project_id: str):
             pipeline=p,
             project_states=project_states,
             emit_sse=_emit_sse,
+            ws_broadcast=ws_manager.broadcast_sync,
+            ws_flags=ws_manager.get_flag,
         )
 
     job_id = job_manager.submit(project_id, "full_pipeline", run_fn)
@@ -931,3 +934,134 @@ async def list_jobs(project_id: str = None):
     else:
         jobs = job_repo.get_active()
     return ApiResponse(data={"jobs": jobs, "total": len(jobs)})
+
+
+# ═══════════════════════════════════════════════════════════════
+# 7. WEBSOCKET SIMULATION STREAM (TIP-07)
+# ═══════════════════════════════════════════════════════════════
+
+@app.websocket("/ws/simulation/{project_id}")
+async def simulation_ws(websocket: WebSocket, project_id: str):
+    """
+    Bidirectional WebSocket for live simulation monitoring + control.
+
+    Server → Client events: agent_action, round_start, round_end,
+        event_fired, simulation_status, graph_update
+    Client → Server commands: pause, resume, inject_event, set_speed, replay
+    """
+    # Validate project
+    if project_id not in project_states:
+        await websocket.close(code=4004, reason="Project not found")
+        return
+
+    await ws_manager.connect(project_id, websocket)
+
+    # Attach async send queue for thread-safe broadcasting
+    send_queue = asyncio.Queue(maxsize=500)
+    websocket._send_queue = send_queue
+
+    try:
+        # Send initial status
+        state = project_states.get(project_id)
+        sim_summary = state.sim_summary if state else {}
+        await websocket.send_json({
+            "event": "connected",
+            "data": {
+                "project_id": project_id,
+                "clients": ws_manager.client_count(project_id),
+                "simulation_status": state.project.phase.value if state else "unknown",
+                "paused": ws_manager.get_flag(project_id, "paused", False),
+            },
+            "ts": datetime.now(timezone.utc).isoformat(),
+        })
+
+        # Two concurrent tasks: receive commands + send events
+        async def receiver():
+            """Handle incoming commands from client."""
+            while True:
+                try:
+                    raw = await websocket.receive_json()
+                    cmd = raw.get("command", "")
+                    await _handle_ws_command(project_id, cmd, raw, websocket)
+                except WebSocketDisconnect:
+                    break
+                except Exception as e:
+                    logger.warning(f"WS receive error: {e}")
+                    break
+
+        async def sender():
+            """Forward queued events to client."""
+            while True:
+                try:
+                    msg = await asyncio.wait_for(send_queue.get(), timeout=15.0)
+                    await websocket.send_json(msg)
+                except asyncio.TimeoutError:
+                    # Heartbeat ping
+                    try:
+                        await websocket.send_json({
+                            "event": "ping",
+                            "data": {},
+                            "ts": datetime.now(timezone.utc).isoformat(),
+                        })
+                    except Exception:
+                        break
+                except Exception:
+                    break
+
+        # Run both tasks, cancel when either finishes
+        recv_task = asyncio.create_task(receiver())
+        send_task = asyncio.create_task(sender())
+        done, pending = await asyncio.wait(
+            [recv_task, send_task],
+            return_when=asyncio.FIRST_COMPLETED,
+        )
+        for task in pending:
+            task.cancel()
+
+    except WebSocketDisconnect:
+        pass
+    except Exception as e:
+        logger.warning(f"WS error for {project_id}: {e}")
+    finally:
+        ws_manager.disconnect(project_id, websocket)
+
+
+async def _handle_ws_command(project_id: str, cmd: str, data: dict, ws: WebSocket):
+    """Process a client command."""
+    if cmd == "pause":
+        ws_manager.set_flag(project_id, "paused", True)
+        await ws_manager.broadcast(project_id, "simulation_status", {"status": "paused"})
+        logger.info(f"Simulation paused: {project_id}")
+
+    elif cmd == "resume":
+        ws_manager.set_flag(project_id, "paused", False)
+        await ws_manager.broadcast(project_id, "simulation_status", {"status": "running"})
+        logger.info(f"Simulation resumed: {project_id}")
+
+    elif cmd == "inject_event":
+        event_data = {
+            "event_id": f"inj_{_time_mod.time_ns() % 100000}",
+            "name": data.get("name", "Injected Event"),
+            "content": data.get("content", ""),
+            "affected_agent_ids": data.get("affected_agent_ids", []),
+        }
+        # Store for worker to pick up
+        pending = ws_manager.get_flag(project_id, "pending_events") or []
+        pending.append(event_data)
+        ws_manager.set_flag(project_id, "pending_events", pending)
+        await ws_manager.broadcast(project_id, "event_fired", event_data)
+        logger.info(f"Event injected: {event_data['name']} into {project_id}")
+
+    elif cmd == "set_speed":
+        multiplier = data.get("multiplier", 1)
+        ws_manager.set_flag(project_id, "speed", multiplier)
+        await ws_manager.broadcast(project_id, "speed_changed", {"multiplier": multiplier})
+
+    elif cmd == "replay":
+        since = data.get("since_event_id", 0)
+        events = ws_manager.get_replay(project_id, since)
+        for evt in events:
+            await ws.send_json(evt)
+
+    else:
+        await ws.send_json({"event": "error", "data": {"message": f"Unknown command: {cmd}"}})

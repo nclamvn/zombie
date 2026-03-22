@@ -31,6 +31,8 @@ def run_full_pipeline(
     pipeline,  # PipelineOrchestrator instance
     project_states: dict,  # shared in-memory state
     emit_sse: Optional[Callable] = None,
+    ws_broadcast: Optional[Callable] = None,  # WebSocket broadcast function
+    ws_flags: Optional[Callable] = None,  # Get WS control flags
 ):
     """
     Run complete pipeline: seed → ontology → graph → config → profiles → sim → report.
@@ -46,6 +48,8 @@ def run_full_pipeline(
     def emit(event_type: str, data: dict):
         if emit_sse:
             emit_sse(project_id, event_type, data)
+        if ws_broadcast:
+            ws_broadcast(project_id, event_type, data)
 
     def progress(stage: str, pct: float, msg: str):
         progress_callback(stage, pct, msg)
@@ -119,13 +123,49 @@ def run_full_pipeline(
     # ── Stage 4: Simulation ──
     progress("simulation", 0.6, f"Running simulation with {len(profiles)} agents...")
     if p.sim_orchestrator:
+        import time as _time
+
         def round_callback(round_data):
+            # Emit round start
+            emit("round_start", {
+                "round_num": round_data.round_num,
+                "simulated_hour": round_data.simulated_hour,
+                "active_agents_count": len(round_data.active_agent_ids),
+            })
+            # Emit individual agent actions
+            for action in round_data.actions:
+                emit("agent_action", {
+                    "agent_id": action.agent_id,
+                    "agent_name": action.agent_name,
+                    "action_type": action.action_type,
+                    "content": (action.result or "")[:200],
+                    "platform": action.platform,
+                    "round_num": round_data.round_num,
+                    "timestamp": action.timestamp,
+                })
+            # Emit round end
+            emit("round_end", {
+                "round_num": round_data.round_num,
+                "stats": round_data.platform_stats,
+                "actions_count": len(round_data.actions),
+            })
+            # Also emit as "round" for SSE compat
             emit("round", {
                 "round_num": round_data.round_num,
                 "actions_count": len(round_data.actions),
                 "active_agents": len(round_data.active_agent_ids),
                 "simulated_hour": round_data.simulated_hour,
             })
+
+            # Check pause/speed flags
+            if ws_flags:
+                # Pause check
+                while ws_flags(project_id, "paused", False):
+                    _time.sleep(0.5)
+                # Speed delay
+                speed = ws_flags(project_id, "speed", 1)
+                if speed and speed < 5:
+                    _time.sleep(max(0, 1.0 / speed - 0.1))
 
         sim_state = p.sim_orchestrator.run_simulation(
             config=sim_config, agents=profiles, graph_id=graph_id,
