@@ -87,7 +87,7 @@ const Panel = ({ title, badge, children, style, headerRight, noPad }) => (
 
 // ─── New Simulation Modal ─────────────────────────────────────
 function NewSimModal({ onClose, onComplete }) {
-  const [name, setName] = useState("MiroFish Analysis");
+  const [name, setName] = useState("RTR Analysis");
   const [requirement, setRequirement] = useState("");
   const [text, setText] = useState("");
   const [running, setRunning] = useState(false);
@@ -244,7 +244,7 @@ export default function MiroFishDashboard() {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [cmdInput, setCmdInput] = useState("");
   const [chatMsgs, setChatMsgs] = useState([
-    { role: "system", text: "MiroFish ReportAgent ready. Ask about simulation results, agent behavior, or predictions." },
+    { role: "system", text: "RTR ReportAgent ready. Ask about simulation results, agent behavior, or predictions." },
   ]);
   const [chatLoading, setChatLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
@@ -613,7 +613,7 @@ export default function MiroFishDashboard() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "6px 12px", background: C.bg1, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: C.amber, letterSpacing: 2 }}>MIROFISH</span>
+          <span style={{ fontSize: 14, fontWeight: 700, color: C.amber, letterSpacing: 2 }}>RTR SIMULATOR</span>
           <span style={{ color: C.text2, fontSize: 10 }}>{L.title}</span>
           <span style={{ color: C.text2 }}>|</span>
           <span style={{ color: connected ? C.green : C.red, fontSize: 10 }}>{connected ? L.connected : L.disconnected}</span>

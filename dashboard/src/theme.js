@@ -45,7 +45,7 @@ export const THEMES = {
 export const LANG = {
   vi: {
     // Top bar
-    title: "TRUNG TÂM TÌNH BÁO BẦY ĐÀN",
+    title: "TRUNG TÂM MÔ PHỎNG THỰC TẾ",
     connected: "KẾT NỐI", disconnected: "MẤT KẾT NỐI",
     agents: "ĐƠN VỊ", projects: "DỰ ÁN",
     newProject: "+ MỚI",
@@ -96,7 +96,7 @@ export const LANG = {
     environmental: "MÔI TRƯỜNG", operational: "VẬN HÀNH",
 
     // Status bar
-    version: "v1.2", engine: "MiroFish — Trung tâm Tình báo Bầy đàn",
+    version: "v1.2", engine: "RTR Simulator — Trung tâm Mô phỏng Thực tế",
 
     // Controls
     pause: "TẠM DỪNG", resume: "TIẾP TỤC", inject: "TIÊM SỰ KIỆN",
@@ -106,7 +106,7 @@ export const LANG = {
     eventContent: "NỘI DUNG SỰ KIỆN",
   },
   en: {
-    title: "SWARM INTELLIGENCE TERMINAL",
+    title: "REAL-TIME SIMULATION CENTER",
     connected: "CONNECTED", disconnected: "DISCONNECTED",
     agents: "AGENTS", projects: "PROJECTS",
     newProject: "+ NEW",
@@ -147,7 +147,7 @@ export const LANG = {
     crowd_safety: "CROWD", medical: "MEDICAL", security: "SECURITY",
     environmental: "ENV", operational: "OPS",
 
-    version: "v1.2", engine: "MiroFish Kernel — Swarm Intelligence Engine",
+    version: "v1.2", engine: "RTR Simulator — Real-Time Simulation Center",
 
     pause: "PAUSE", resume: "RESUME", inject: "INJECT",
 

@@ -712,7 +712,7 @@ export default function StadiumSimGraph({ comparisonData, themeId = "dark" }) {
 
       {/* Footer */}
       <div style={{ padding: "3px 12px", borderTop: `1px solid ${C.border}`, display: "flex", justifyContent: "space-between", fontSize: 8, color: C.textDim, flexShrink: 0 }}>
-        <span>MiroFish × RTR — FIFA Stadium Ops · 12 scenarios · scroll to zoom · drag to pan</span>
+        <span>RTR Simulator — FIFA Stadium Ops · 12 scenarios · scroll to zoom · drag to pan</span>
         <span style={{ color: isPlaying ? C.green : C.textDim }}>{isPlaying ? "● LIVE" : "○ STANDBY"}</span>
       </div>
     </div>

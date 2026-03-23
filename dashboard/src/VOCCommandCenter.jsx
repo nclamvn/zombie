@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 /* ═══════════════════════════════════════════════════════════════
-   MIROFISH — VOC COMMAND CENTER v2
+   RTR SIMULATOR — VOC COMMAND CENTER v2
    Light/Dark theme + Vietnamese/English toggle (default: VI + Light)
    ═══════════════════════════════════════════════════════════════ */
 
@@ -265,7 +265,7 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
       {/* TOP */}
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"6px 12px",borderBottom:`1px solid ${T.border}`,background:T.bgPanel,flexShrink:0,transition:"background .3s"}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <span style={{color:T.amber,fontWeight:800,fontSize:12,letterSpacing:3}}>MIROFISH</span>
+          <span style={{color:T.amber,fontWeight:800,fontSize:12,letterSpacing:3}}>RTR SIMULATOR</span>
           <span style={{color:T.dim,fontSize:8,letterSpacing:1}}>{L.title}</span>
           <div style={{width:1,height:14,background:T.border}}/>
           <span style={{color:isRun?T.green:T.dim,fontSize:8,fontWeight:700,animation:isRun?"blink 1s infinite":"none"}}>{isRun?L.live:autoPlay?`${L.auto} ${scDone}/${SC_META.length}`:L.standby}</span>
