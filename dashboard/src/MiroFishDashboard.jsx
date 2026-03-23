@@ -713,7 +713,7 @@ export default function MiroFishDashboard() {
       {/* ═══ MAIN CONTENT ═══ */}
       <div style={{ flex: 1, display: "grid",
         gridTemplateColumns: (activeTab === "agents" || activeTab === "fifa") ? "1fr" : "1fr 320px",
-        gridTemplateRows: "1fr 1fr",
+        gridTemplateRows: "1fr 1fr", minHeight: 0,
         gap: 1, padding: 1, minHeight: 0, overflow: "hidden" }}>
 
         {activeTab === "overview" && <>
@@ -1025,7 +1025,7 @@ export default function MiroFishDashboard() {
 
         {/* ═══ FIFA TAB — TIP-17 ═══ */}
         {activeTab === "fifa" && (
-          <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+          <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", display: "flex", flexDirection: "column", overflow: "hidden", minHeight: 0 }}>
             {/* View toggle bar */}
             <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
               {[{ id: "command", label: L.commandCenter }, { id: "data", label: L.kpiData }, { id: "sim", label: L.liveSim }].map(v => (
@@ -1039,7 +1039,7 @@ export default function MiroFishDashboard() {
               ))}
             </div>
             {/* Content */}
-            <div style={{ flex: 1, overflow: "hidden" }}>
+            <div style={{ flex: 1, overflow: "hidden", minHeight: 0 }}>
               {fifaView === "command" ? (
                 <VOCCommandCenter embedded defaultTheme={themeId} defaultLang={langId} />
               ) : fifaView === "data" ? (
