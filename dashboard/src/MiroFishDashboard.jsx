@@ -311,7 +311,7 @@ export default function MiroFishDashboard() {
     }
   }, [ws.events.length]);
 
-  // ── Load projects on mount + health polling ──
+  // ── Load projects on mount + health polling (silent when no backend) ──
   useEffect(() => {
     loadProjects();
     const pollHealth = () => {
@@ -319,13 +319,11 @@ export default function MiroFishDashboard() {
         if (r.status === "ok") {
           setConnected(true);
           setHealthData(r.data?.checks ? r.data : r);
-        } else {
-          setConnected(false);
         }
-      }).catch(() => setConnected(false));
+      }).catch(() => {});
     };
     pollHealth();
-    const hInterval = setInterval(pollHealth, 30000);
+    const hInterval = setInterval(pollHealth, 60000); // 60s instead of 30s
     return () => clearInterval(hInterval);
   }, []);
 
@@ -602,12 +600,7 @@ export default function MiroFishDashboard() {
     <div style={{ background: C.bg0, color: C.text0, fontFamily: "'JetBrains Mono', 'SF Mono', 'Fira Code', monospace",
       fontSize: 11, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
 
-      {/* Connection banner */}
-      {!connected && (
-        <div style={{ background: C.redDim, color: C.red, padding: "4px 12px", fontSize: 10, textAlign: "center", flexShrink: 0 }}>
-          {L.backendDown}
-        </div>
-      )}
+      {/* Connection banner — hidden in demo mode (no backend needed) */}
 
       {/* ═══ TOP BAR ═══ */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
