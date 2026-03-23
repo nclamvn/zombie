@@ -13,8 +13,8 @@ html, body, #root {
 }
 
 body {
-  background: #0a0e17;
-  color: #e8ecf1;
+  background: #010409;
+  color: #f0f6fc;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -24,12 +24,12 @@ body {
   height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0e17;
+  background: #010409;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e2a42;
+  background: #30363d;
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a3a5c;
+  background: #484f58;
 }

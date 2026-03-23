@@ -1,0 +1,831 @@
+{
+  "nodes": [
+    {
+      "uuid": "1005738614134b91",
+      "name": "My Dinh National Stadium",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Stadium located in Hanoi, Vietnam with a capacity of 40,192.",
+      "attributes": {}
+    },
+    {
+      "uuid": "d35a87d311a74a3e",
+      "name": "Venue Operations Centre (VOC)",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Operational center located at Level 3, West Stand of the stadium.",
+      "attributes": {}
+    },
+    {
+      "uuid": "dfb9e7f7c00444b0",
+      "name": "CCTV monitors",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Equipment used in the Venue Operations Centre for surveillance.",
+      "attributes": {}
+    },
+    {
+      "uuid": "0bbb1c7ff1de4e7f",
+      "name": "radio base station",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Communication equipment used in the Venue Operations Centre.",
+      "attributes": {}
+    },
+    {
+      "uuid": "42254274ac824649",
+      "name": "PA system control",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Public address system control equipment in the Venue Operations Centre.",
+      "attributes": {}
+    },
+    {
+      "uuid": "c6c8c9e428794e91",
+      "name": "fire detection panel",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Safety equipment in the Venue Operations Centre for fire detection.",
+      "attributes": {}
+    },
+    {
+      "uuid": "7487a860b1034b4b",
+      "name": "access control system",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Security equipment in the Venue Operations Centre for access management.",
+      "attributes": {}
+    },
+    {
+      "uuid": "abdb7ef3e2a44d94",
+      "name": "weather monitoring",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Equipment in the Venue Operations Centre for monitoring weather conditions.",
+      "attributes": {}
+    },
+    {
+      "uuid": "df0d8a29cc1e45c8",
+      "name": "Safety Officer",
+      "labels": [
+        "SafetyOfficer"
+      ],
+      "summary": "Overall command of safety operations.",
+      "attributes": {}
+    },
+    {
+      "uuid": "1209c13c5a1a4e77",
+      "name": "CCTV Operator",
+      "labels": [
+        "CCTVOperator"
+      ],
+      "summary": "Responsible for monitoring CCTV feeds.",
+      "attributes": {}
+    },
+    {
+      "uuid": "db8823db47b841c4",
+      "name": "Police Commander",
+      "labels": [
+        "PoliceCommander"
+      ],
+      "summary": "Leads police operations in the dedicated Police Room.",
+      "attributes": {}
+    },
+    {
+      "uuid": "1d541b2b7a8a4b9a",
+      "name": "Radio Dispatcher",
+      "labels": [
+        "Person"
+      ],
+      "summary": "Handles radio communications.",
+      "attributes": {}
+    },
+    {
+      "uuid": "2c69c4b17e5341d1",
+      "name": "IT Support",
+      "labels": [
+        "Person"
+      ],
+      "summary": "Provides technical support for operations.",
+      "attributes": {}
+    },
+    {
+      "uuid": "c9db164a4d964d92",
+      "name": "Steward Organization",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Manages 280 stewards organized in 4 sector teams.",
+      "attributes": {}
+    },
+    {
+      "uuid": "85963e83f8f04d70",
+      "name": "Police Room",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Dedicated room for police operations adjacent to VOC.",
+      "attributes": {}
+    },
+    {
+      "uuid": "a937ece5391242fd",
+      "name": "120 police officers",
+      "labels": [
+        "Person"
+      ],
+      "summary": "External officers deployed in perimeter and internal checkpoints.",
+      "attributes": {}
+    },
+    {
+      "uuid": "9af8d1bf1383430d",
+      "name": "Medical Coordinator",
+      "labels": [
+        "MedicalCoordinator"
+      ],
+      "summary": "Responsible for overseeing medical operations in the Venue Operations Center.",
+      "attributes": {}
+    },
+    {
+      "uuid": "53c8b1ad4d3a4e43",
+      "name": "VOC",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Venue Operations Center where communication and coordination occur.",
+      "attributes": {}
+    },
+    {
+      "uuid": "c0b05397fc3e4379",
+      "name": "Supervisor",
+      "labels": [
+        "StewardSupervisor"
+      ],
+      "summary": "Leads a sector team consisting of stewards.",
+      "attributes": {}
+    },
+    {
+      "uuid": "079118b2f3dc483a",
+      "name": "Stewards",
+      "labels": [
+        "Person"
+      ],
+      "summary": "Individuals responsible for spectator guidance, ticket checking, and emergency support.",
+      "attributes": {}
+    },
+    {
+      "uuid": "927f110a6a2141f5",
+      "name": "Fire Safety Commander",
+      "labels": [
+        "FireSafetyCommander"
+      ],
+      "summary": "Responsible for fire safety operations in the Venue Operations Center.",
+      "attributes": {}
+    },
+    {
+      "uuid": "3bd71620412d4cf7",
+      "name": "P2 parking zone",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Designated mass casualty staging area.",
+      "attributes": {}
+    },
+    {
+      "uuid": "01ff0d4365bb4743",
+      "name": "2× medical rooms",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Medical facilities located in the North and South concourse.",
+      "attributes": {}
+    },
+    {
+      "uuid": "6a8292f16dcc4a72",
+      "name": "1× pitch-side medical station",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Medical station located at the pitch side.",
+      "attributes": {}
+    },
+    {
+      "uuid": "83e792b7157f4220",
+      "name": "12× paramedic foot patrol teams",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Teams of paramedics assigned to patrol sectors.",
+      "attributes": {}
+    },
+    {
+      "uuid": "c8539fbf36cc41b1",
+      "name": "2× ambulances",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Ambulances staged at Gate D for emergency response.",
+      "attributes": {}
+    },
+    {
+      "uuid": "6c305bcf90b94f18",
+      "name": "8× defibrillators",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Defibrillators distributed across concourses for medical emergencies.",
+      "attributes": {}
+    },
+    {
+      "uuid": "b99835a4a19c4195",
+      "name": "fire station 4",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "External fire station located 4.2km away with a response time of approximately 8 minutes.",
+      "attributes": {}
+    },
+    {
+      "uuid": "438d69ef252c45f4",
+      "name": "Fire Station",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Fire station located 4.2km away with a response time of approximately 8 minutes.",
+      "attributes": {}
+    },
+    {
+      "uuid": "8e157af74bda4727",
+      "name": "CCTV Cameras",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Total of 128 cameras providing coverage across various zones.",
+      "attributes": {}
+    },
+    {
+      "uuid": "3f7ffad8be274ec5",
+      "name": "Match-Day Profile",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Profile detailing operations for a typical high-attendance match.",
+      "attributes": {}
+    },
+    {
+      "uuid": "87213e2dd16f4e8b",
+      "name": "Gate A",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Access point with a maximum throughput of 200 persons per minute.",
+      "attributes": {}
+    },
+    {
+      "uuid": "da65ba2be1b04074",
+      "name": "Gate B",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Access point with a maximum throughput of 180 persons per minute.",
+      "attributes": {}
+    },
+    {
+      "uuid": "f1abdb0107bc4c23",
+      "name": "Gate C",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Access point with a maximum throughput of 200 persons per minute.",
+      "attributes": {}
+    },
+    {
+      "uuid": "3ea1e7ee02b64562",
+      "name": "Gate D",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Access point with a maximum throughput of 150 persons per minute.",
+      "attributes": {}
+    },
+    {
+      "uuid": "86bc4c6facd04e11",
+      "name": "Spectators",
+      "labels": [
+        "Person"
+      ],
+      "summary": "Individuals attending the match, typically numbering between 35,000 and 38,000.",
+      "attributes": {}
+    },
+    {
+      "uuid": "176b1a199987437a",
+      "name": "Vietnam vs Thailand match",
+      "labels": [
+        "Event"
+      ],
+      "summary": "A match that had crowd congestion at Gate A.",
+      "attributes": {}
+    },
+    {
+      "uuid": "68c59884c6e44ce6",
+      "name": "Public bus",
+      "labels": [
+        "Transportation"
+      ],
+      "summary": "Transportation method used by 45% of spectators.",
+      "attributes": {}
+    },
+    {
+      "uuid": "d80c3fc5c5594e8d",
+      "name": "Private vehicle",
+      "labels": [
+        "Transportation"
+      ],
+      "summary": "Transportation method used by 35% of spectators with parking capacity of 3,200 vehicles.",
+      "attributes": {}
+    },
+    {
+      "uuid": "0d96eafa54d44d4b",
+      "name": "Motorbike",
+      "labels": [
+        "Transportation"
+      ],
+      "summary": "Transportation method used by 15% of spectators with designated parking area.",
+      "attributes": {}
+    },
+    {
+      "uuid": "50b339c99490424f",
+      "name": "Taxi/ride-hail",
+      "labels": [
+        "Transportation"
+      ],
+      "summary": "Transportation method used by 5% of spectators with a drop-off zone at South Gate.",
+      "attributes": {}
+    },
+    {
+      "uuid": "8f626fa37b1f4108",
+      "name": "elderly spectator",
+      "labels": [
+        "Person"
+      ],
+      "summary": "A spectator who experienced a cardiac event.",
+      "attributes": {}
+    },
+    {
+      "uuid": "7cb4c255d78a4daa",
+      "name": "paramedic",
+      "labels": [
+        "Person"
+      ],
+      "summary": "Medical personnel who responded to the emergency.",
+      "attributes": {}
+    },
+    {
+      "uuid": "319b7f74e55a4de6",
+      "name": "steward",
+      "labels": [
+        "Person"
+      ],
+      "summary": "A staff member responsible for monitoring and ensuring safety within the venue.",
+      "attributes": {}
+    },
+    {
+      "uuid": "b5f206388b4d4604",
+      "name": "CCTV",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Closed-circuit television system used for surveillance.",
+      "attributes": {}
+    },
+    {
+      "uuid": "7daaa03d46c1479e",
+      "name": "medical team",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Group responsible for providing medical assistance during events.",
+      "attributes": {}
+    },
+    {
+      "uuid": "5a23e8edc0394dae",
+      "name": "East perimeter fence",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "The boundary of the venue where unauthorized entry was detected.",
+      "attributes": {}
+    },
+    {
+      "uuid": "41e9408fbce94c55",
+      "name": "ticket-less fans",
+      "labels": [
+        "Person"
+      ],
+      "summary": "Individuals attempting to enter the venue without valid tickets.",
+      "attributes": {}
+    },
+    {
+      "uuid": "f469ce1fc1504325",
+      "name": "South Stand",
+      "labels": [
+        "Venue"
+      ],
+      "summary": "Location from which a pyrotechnic device was thrown during the match.",
+      "attributes": {}
+    },
+    {
+      "uuid": "35c9f2323394463f",
+      "name": "HERA-T platform",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Tethered drone platform used for surveillance and monitoring.",
+      "attributes": {}
+    },
+    {
+      "uuid": "6ae8e9d608ac43be",
+      "name": "RTR",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "The organization that provides the HERA-T drone platform.",
+      "attributes": {}
+    },
+    {
+      "uuid": "ca092c0498c14a29",
+      "name": "VOC Monitor 25",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Dedicated drone display receiving video feed from the HERA-T drone.",
+      "attributes": {}
+    },
+    {
+      "uuid": "63dddafb71644e4a",
+      "name": "Vega-R platform",
+      "labels": [
+        "DroneOperator"
+      ],
+      "summary": "Rapid-response drone with advanced capabilities.",
+      "attributes": {}
+    },
+    {
+      "uuid": "11c348e7fe6c4498",
+      "name": "North Stand service area",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "Location of the staging pad for drone deployment.",
+      "attributes": {}
+    },
+    {
+      "uuid": "365a5fb94e73495b",
+      "name": "police",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "Law enforcement agency that responds to incidents and monitors unauthorized drone activity.",
+      "attributes": {}
+    },
+    {
+      "uuid": "73cac0967e0c42b6",
+      "name": "RF scanner",
+      "labels": [
+        "DroneOperator"
+      ],
+      "summary": "Device used for detecting unauthorized drones within a 2km range.",
+      "attributes": {}
+    },
+    {
+      "uuid": "cf626a7cda4f4025",
+      "name": "RF jammer",
+      "labels": [
+        "DroneOperator"
+      ],
+      "summary": "Device operated by police to disable unauthorized drones.",
+      "attributes": {}
+    },
+    {
+      "uuid": "6eb672db22b946e6",
+      "name": "net-capture drone",
+      "labels": [
+        "DroneOperator"
+      ],
+      "summary": "Backup drone used for capturing unauthorized drones.",
+      "attributes": {}
+    },
+    {
+      "uuid": "992adc9034e44a13",
+      "name": "Bộ Quốc phòng",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "The government body overseeing UAV management in Vietnam.",
+      "attributes": {}
+    },
+    {
+      "uuid": "230d9f8838934352",
+      "name": "Tan Son Nhat airport",
+      "labels": [
+        "VenueOperationsCenter"
+      ],
+      "summary": "An airport in Vietnam where UAV intrusions were reported.",
+      "attributes": {}
+    },
+    {
+      "uuid": "5ca52848424240bd",
+      "name": "HCMC Police",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "The police department in Ho Chi Minh City that surveyed UAV use.",
+      "attributes": {}
+    },
+    {
+      "uuid": "79d967263e72486f",
+      "name": "local military command",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "The military organization responsible for coordinating security and rescue operations.",
+      "attributes": {}
+    },
+    {
+      "uuid": "f48963eaa154456f",
+      "name": "national UAV monitoring system",
+      "labels": [
+        "Organization"
+      ],
+      "summary": "The national system that monitors unmanned aerial vehicles.",
+      "attributes": {}
+    }
+  ],
+  "edges": [
+    {
+      "source_node_uuid": "df0d8a29cc1e45c8",
+      "target_node_uuid": "1209c13c5a1a4e77",
+      "relationship_type": "COMMANDS",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "db8823db47b841c4",
+      "target_node_uuid": "85963e83f8f04d70",
+      "relationship_type": "COMMANDS",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "db8823db47b841c4",
+      "target_node_uuid": "a937ece5391242fd",
+      "relationship_type": "COMMANDS",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "1d541b2b7a8a4b9a",
+      "target_node_uuid": "85963e83f8f04d70",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "2c69c4b17e5341d1",
+      "target_node_uuid": "85963e83f8f04d70",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "c9db164a4d964d92",
+      "target_node_uuid": "df0d8a29cc1e45c8",
+      "relationship_type": "COORDINATES_WITH",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "1209c13c5a1a4e77",
+      "target_node_uuid": "df0d8a29cc1e45c8",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "9af8d1bf1383430d",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "c0b05397fc3e4379",
+      "target_node_uuid": "079118b2f3dc483a",
+      "relationship_type": "COMMANDS",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "53c8b1ad4d3a4e43",
+      "target_node_uuid": "079118b2f3dc483a",
+      "relationship_type": "COORDINATES_WITH",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "9af8d1bf1383430d",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "927f110a6a2141f5",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "9af8d1bf1383430d",
+      "target_node_uuid": "3bd71620412d4cf7",
+      "relationship_type": "COORDINATES_WITH",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "927f110a6a2141f5",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "COORDINATES_WITH",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "83e792b7157f4220",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "c8539fbf36cc41b1",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "6c305bcf90b94f18",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "3f7ffad8be274ec5",
+      "target_node_uuid": "87213e2dd16f4e8b",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "3f7ffad8be274ec5",
+      "target_node_uuid": "da65ba2be1b04074",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "3f7ffad8be274ec5",
+      "target_node_uuid": "f1abdb0107bc4c23",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "3f7ffad8be274ec5",
+      "target_node_uuid": "3ea1e7ee02b64562",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "86bc4c6facd04e11",
+      "target_node_uuid": "3f7ffad8be274ec5",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "87213e2dd16f4e8b",
+      "target_node_uuid": "176b1a199987437a",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "68c59884c6e44ce6",
+      "target_node_uuid": "87213e2dd16f4e8b",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "d80c3fc5c5594e8d",
+      "target_node_uuid": "87213e2dd16f4e8b",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "0d96eafa54d44d4b",
+      "target_node_uuid": "87213e2dd16f4e8b",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "50b339c99490424f",
+      "target_node_uuid": "87213e2dd16f4e8b",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "8f626fa37b1f4108",
+      "target_node_uuid": "7cb4c255d78a4daa",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "176b1a199987437a",
+      "target_node_uuid": "8f626fa37b1f4108",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "319b7f74e55a4de6",
+      "target_node_uuid": "b5f206388b4d4604",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "b5f206388b4d4604",
+      "target_node_uuid": "5a23e8edc0394dae",
+      "relationship_type": "FEEDS_VIDEO_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "319b7f74e55a4de6",
+      "target_node_uuid": "7daaa03d46c1479e",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "41e9408fbce94c55",
+      "target_node_uuid": "5a23e8edc0394dae",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "35c9f2323394463f",
+      "target_node_uuid": "ca092c0498c14a29",
+      "relationship_type": "FEEDS_VIDEO_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "35c9f2323394463f",
+      "target_node_uuid": "6ae8e9d608ac43be",
+      "relationship_type": "REPORTS_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "63dddafb71644e4a",
+      "target_node_uuid": "ca092c0498c14a29",
+      "relationship_type": "FEEDS_VIDEO_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "63dddafb71644e4a",
+      "target_node_uuid": "11c348e7fe6c4498",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "73cac0967e0c42b6",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "FEEDS_VIDEO_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "73cac0967e0c42b6",
+      "target_node_uuid": "365a5fb94e73495b",
+      "relationship_type": "DISPATCHES_TO",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "73cac0967e0c42b6",
+      "target_node_uuid": "53c8b1ad4d3a4e43",
+      "relationship_type": "MONITORS_ZONE",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "cf626a7cda4f4025",
+      "target_node_uuid": "365a5fb94e73495b",
+      "relationship_type": "COMMANDS",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "6eb672db22b946e6",
+      "target_node_uuid": "365a5fb94e73495b",
+      "relationship_type": "COMMANDS",
+      "attributes": {}
+    },
+    {
+      "source_node_uuid": "79d967263e72486f",
+      "target_node_uuid": "f48963eaa154456f",
+      "relationship_type": "COORDINATES_WITH",
+      "attributes": {}
+    }
+  ]
+}

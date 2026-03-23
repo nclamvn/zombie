@@ -1,0 +1,91 @@
+You are generating a formal evidence report for FIFA based on multi-agent simulation results comparing stadium operations with and without drone augmentation.
+
+## Report Audience
+- FIFA Safety and Security Committee members
+- Stadium Operations Directors
+- National Football Association safety officers
+- Decision-makers who approve or reject pilot programs
+
+## Tone
+- Formal, data-driven, objective
+- Present findings, not sales pitch
+- Acknowledge limitations of simulation
+- Use FIFA terminology (VOC, contingency plan, primacy transfer, integrated command)
+
+## Data Available
+{simulation_results_json}
+
+## Report Structure
+
+### 1. Executive Summary (1 page max)
+Lead with the 3 most impactful KPI deltas:
+- "Incident verification time reduced from {baseline} to {drone_augmented} ({percent_change}%)"
+- "Medical dispatch accuracy improved from {baseline}% to {drone}%"
+- "CCTV blind spot coverage: {blind_spots_covered}/{total_blind_spots} resolved"
+
+State clearly: "These findings are based on {total_runs} simulated scenarios across {scenario_types} incident categories, comparing 3 operational configurations."
+
+### 2. Methodology
+- Explain multi-agent decision simulation (not crowd physics)
+- Each agent makes LLM-powered decisions based on available information
+- Information availability differs by configuration (BASELINE vs TETHERED vs FULL)
+- Scenarios drawn from FIFA-recognized incident categories
+- 50 randomized variations per scenario per configuration for statistical validity
+- Limitations: simulated decisions, not field-measured; calibration recommended with live pilot data
+
+### 3. Results by Incident Category
+For each category (Crowd Safety, Medical, Security, Environmental, Operational):
+
+Present as comparison table:
+| KPI | BASELINE | TETHERED ONLY | FULL (tethered + rapid) | Improvement |
+|-----|----------|---------------|-------------------------|-------------|
+| KPI-SAF-01: Verification time | 180s ± 45s | 65s ± 20s | 42s ± 12s | -77% |
+
+Include for each scenario:
+- Decision chain timeline (what happened, when, who decided what)
+- Key decision point where drone data changed the outcome
+- Edge cases where drone was NOT helpful (lightning grounding, no-fly zones)
+
+### 4. KPI Dashboard Summary
+Master table of ALL KPIs across ALL categories.
+Green: target met. Amber: partial improvement. Red: no significant improvement.
+Every number includes confidence interval (mean ± std).
+
+### 5. Decision Chain Analysis
+For the 3 most impactful scenarios, show full decision chain:
+```
+T0 (0:00)  Incident occurs: crowd density 4.2 p/m² at Gate B
+T1 (0:42)  [BASELINE] Steward radios VOC: "Possible crowding at Gate B"
+T1 (0:12)  [FULL] Tethered drone feed shows density spike — VOC auto-alert
+T2 (1:15)  [BASELINE] VOC asks CCTV to check — Camera 23 partially blocked
+T2 (0:18)  [FULL] VOC confirms via drone: 4.2 p/m², queue 800m
+T3 (3:20)  [BASELINE] VOC sends steward to verify — confirmed crowd crush risk
+T3 (0:25)  [FULL] VOC classifies RED, orders Gate C redirect + PA announcement
+...
+```
+
+### 6. Integration Recommendations
+Map findings to FIFA Stadium Guidelines:
+- Section 5.4.3: VOC — drone as additional monitoring feed
+- Section 4.7.1: Integrated command — drone operator in VOC communication chain
+- Section 5.4.2: Emergency evacuation — drone for route status assessment
+- Contingency plans: drone adds aerial verification step before escalation
+
+### 7. Limitations and Caveats
+- Simulation models decisions, not physics — complement with crowd flow modeling
+- Agent behavior calibrated from published protocols, not field observation
+- Real-world factors (noise, weather, human stress) not fully captured
+- Recommended: validate key findings with closed rehearsal (Phase 2 of pilot)
+
+### 8. Recommendation
+State clearly whether simulation evidence supports proceeding to live pilot.
+If yes: propose specific 3-phase pilot design.
+If mixed: identify which scenario categories need live validation first.
+
+## Formatting Rules
+- Tables use | column | format
+- Every numerical claim cites the source scenario(s)
+- Percentage improvements rounded to nearest whole percent
+- Time values in seconds for <300s, minutes:seconds for >300s
+- Confidence intervals as mean ± 1 standard deviation
+- Use FIFA document references (Section X.Y.Z) where applicable

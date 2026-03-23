@@ -1,0 +1,3077 @@
+[
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify the current wait time and the potential for crowd safety issues. I also need to confirm if any stewards are actively managing the situation.",
+    "decision": "I will escalate the situation to VOC as it poses a risk of crowd crush if not managed promptly. This is an amber incident requiring additional resources.",
+    "actions": [
+      {
+        "action": "report gate congestion and request additional resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "VOC, this is Sector Team Lead. We have significant gate congestion at Gate B with a queue over 800m and a density of 4.2 persons/m². Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The current situation at Gate B poses a risk to crowd safety, and immediate action is needed to prevent a potential crowd crush.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify the situation at other gates and assess if additional resources are required to manage the risk of crowd crush.",
+    "decision": "I decide to escalate the situation to VOC as it is amber (significant) due to the risk of crowd crush if not managed within 10 minutes.",
+    "actions": [
+      {
+        "action": "report gate congestion and request additional resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "This is [Your Name] at VOC. I have observed significant congestion at Gate B with a queue exceeding 800m and a density of 4.2 persons/m². Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a risk of crowd crush, necessitating immediate action and resource allocation to ensure crowd safety.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify the current wait time at Gate B and confirm if any stewards are actively managing the situation. Additionally, I need to assess the situation at other gates to determine if they are also experiencing congestion and if additional resources are required.",
+    "decision": "I will request a status update from the sector team lead at Gate B regarding the wait time and steward presence. I will also task a steward team to check the conditions at other gates to assess congestion levels.",
+    "actions": [
+      {
+        "action": "request status update on wait time and steward presence",
+        "target": "Gate B sector team lead",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch steward team to assess conditions at other gates",
+        "target": "other gates",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "sector_team_lead",
+        "channel": "radio_channel",
+        "message": "Gate B, please provide current wait time and confirm if stewards are managing the queue."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "All units, please check other gates for congestion levels and report back."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The current situation at Gate B poses a risk of crowd crush, and immediate verification is essential to ensure safety. I am confident in the need for additional resources based on the current crowd density.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify the current wait time and steward presence at Gate B, as well as assess congestion levels at other gates.",
+    "decision": "I will request a status update from the sector team lead at Gate B and task a steward team to check conditions at other gates to assess congestion levels. This is necessary to manage the risk of crowd crush.",
+    "actions": [
+      {
+        "action": "request status update on wait time and steward presence",
+        "target": "sector team lead at Gate B",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "task steward team to check other gates for congestion",
+        "target": "steward team",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "sector team lead",
+        "channel": "radio_channel",
+        "message": "Gate B status update requested. Please confirm current wait time and steward presence."
+      },
+      {
+        "to": "steward team",
+        "channel": "radio_channel",
+        "message": "Please check conditions at all other gates for congestion levels and report back."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B is critical, and verifying conditions at other gates is essential to ensure crowd safety. Immediate communication with the sector team lead and steward team is necessary to gather information and assess the need for additional resources.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Stadium safety — evacuation, crowd flow, gate management",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify the current wait time and if any stewards are actively managing the situation. Additionally, I need to check conditions at other gates to assess congestion levels.",
+    "decision": "I will request a status update from the sector team lead at Gate B and task a steward team to check conditions at other gates to assess congestion levels. This is necessary to manage the risk of crowd crush.",
+    "actions": [
+      {
+        "action": "request status update on wait time and steward management",
+        "target": "sector team lead at Gate B",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "task steward team to assess congestion at other gates",
+        "target": "steward team",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "steward supervisor",
+        "channel": "radio",
+        "message": "Gate B has significant congestion with a queue over 800m and density at 4.2 persons/m². Please provide a status update on wait time and steward management."
+      },
+      {
+        "to": "steward team",
+        "channel": "radio",
+        "message": "Please check conditions at all other gates to assess congestion levels and report back."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation requires immediate attention to prevent crowd safety issues, and I need to gather more information before escalating further.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify if additional resources are available to assist with crowd management and if there are any reports from stewards at Gate B.",
+    "decision": "I decide to escalate the situation to VOC and request additional resources to manage the crowd at Gate B to prevent a potential crowd crush.",
+    "actions": [
+      {
+        "action": "escalate incident and request resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "VOC, this is Sector Team Lead. We have significant congestion at Gate B with a queue over 800m and density at 4.2 persons/m². Requesting additional resources to manage the crowd and prevent potential crowd crush."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate action is necessary to mitigate risks to crowd safety.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if the congestion is affecting safety and if any stewards are available to assist in managing the crowd.",
+    "decision": "I decide to escalate the situation to VOC as it poses a risk of crowd crush. I will request additional resources to manage the congestion.",
+    "actions": [
+      {
+        "action": "escalate incident and request additional resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "VOC Main",
+        "message": "This is VOC monitoring. We have significant congestion at Gate B with a queue over 800m and density at 4.2 persons/m². Requesting additional steward teams to assist in crowd management."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation requires immediate attention to prevent potential crowd-related incidents, and I have enough information to escalate without needing further verification.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if additional resources are available for crowd management and if there are any reports from stewards at Gate B regarding the safety of the situation.",
+    "decision": "I will escalate this incident to VOC as an amber situation due to the risk of crowd crush. Additional resources will be requested for crowd management.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC command",
+        "estimated_seconds": 20
+      },
+      {
+        "action": "request additional stewards for crowd management",
+        "target": "steward teams",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have significant gate congestion at Gate B with a queue exceeding 800m and a density of 4.2 persons/m². Requesting additional resources for crowd management."
+      },
+      {
+        "to": "steward teams",
+        "channel": "radio_channel",
+        "message": "All units, we need additional stewards at Gate B to assist with crowd management due to significant congestion."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a risk of crowd crush, necessitating immediate action to manage the crowd effectively.",
+    "estimated_total_seconds": 50
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify the availability of additional resources and any reports from stewards at Gate B.",
+    "decision": "I decide to escalate this incident to VOC as an amber situation due to the risk of crowd crush. I will request additional resources for crowd management.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "request additional resources for crowd management",
+        "target": "steward teams and police units",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Sector Team Lead. We have significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². Escalating to amber due to risk of crowd crush. Requesting additional resources for crowd management."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a serious risk to crowd safety and requires immediate attention and resources to prevent potential crowd crush.",
+    "estimated_total_seconds": 60
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Stadium safety — evacuation, crowd flow, gate management",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if additional resources are available to assist with crowd management and if there are any reports from stewards at Gate B regarding the situation.",
+    "decision": "I decide to escalate this incident to VOC as an amber situation due to the risk of crowd crush. I will request additional resources for crowd management.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch additional steward teams to Gate B",
+        "target": "Gate B",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "This is [Your Name], Steward Supervisor. We have significant gate congestion at Gate B with a queue exceeding 800m and a density of 4.2 persons/m². Requesting additional resources for crowd management. This is an amber situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a serious risk of crowd crush, necessitating immediate action and additional resources to ensure safety.",
+    "estimated_total_seconds": 210
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify if additional resources are available to assist in crowd management and if there are any incidents reported from other gates.",
+    "decision": "I decide to escalate this situation to the VOC as an amber incident due to the significant risk of crowd crush. I will request additional resources to manage the congestion at Gate B.",
+    "actions": [
+      {
+        "action": "escalate incident report",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor crowd density and queue length",
+        "target": "Gate B",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Sector Team Lead. We have significant congestion at Gate B with a queue over 800m and density at 4.2 persons/m². Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical enough to warrant immediate escalation and resource allocation to prevent potential crowd safety issues.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe significant gate congestion at Gate B, with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if there are any additional incidents or if other gates are experiencing similar issues.",
+    "decision": "I decide to escalate the situation to VOC as an Amber incident due to the risk of crowd crush if not managed within 10 minutes.",
+    "actions": [
+      {
+        "action": "escalate incident report",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "This is VOC monitoring. We have an Amber incident at Gate B with significant congestion, queue over 800m, and density at 4.2 persons/m². Requesting additional resources to manage crowd safety."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a risk to crowd safety, and immediate action is required to prevent escalation.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe significant gate congestion at Gate B, with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify the situation at other gates and assess if additional resources are required to manage the crowd safely.",
+    "decision": "I will escalate the situation as amber due to the risk of crowd crush and request additional resources to manage the congestion.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor crowd density and behavior via drone feed",
+        "target": "tethered drone",
+        "estimated_seconds": 0
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is UAV pilot. We have significant gate congestion at Gate B, queue over 800m, density 4.2 persons/m². Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical enough to require immediate attention, but I have a clear view of the congestion and can monitor it through the drone feed.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if other gates are experiencing similar issues and if additional resources are available for crowd management.",
+    "decision": "I will escalate the situation to VOC and request additional resources for crowd management at Gate B, as this is an amber incident that needs immediate attention.",
+    "actions": [
+      {
+        "action": "request additional resources for crowd management",
+        "target": "steward teams and police units",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor other gates for congestion",
+        "target": "fixed camera feeds",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². Requesting additional resources for crowd management and verification of other gates."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B is critical, and immediate action is required to prevent a crowd crush. Additional resources will help manage the flow and ensure safety.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify if additional resources are available for crowd management and if other gates are experiencing similar issues.",
+    "decision": "I will escalate the situation to VOC as an amber incident and request additional resources for crowd management at Gate B.",
+    "actions": [
+      {
+        "action": "escalate amber incident and request resources",
+        "target": "VOC",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "This is VOC. We have significant gate congestion at Gate B with a queue exceeding 800m and a density of 4.2 persons/m². Requesting additional resources for crowd management immediately."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a significant risk, and immediate action is necessary to prevent a crowd crush. Escalating to VOC allows for resource allocation to manage the incident effectively.",
+    "estimated_total_seconds": 60
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Stadium safety — evacuation, crowd flow, gate management",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify if additional resources are available to assist in crowd management and if other gates are experiencing similar issues.",
+    "decision": "I will escalate the situation to VOC as an amber incident and request additional resources for crowd management at Gate B.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch additional steward teams to Gate B",
+        "target": "steward teams",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "VOC, this is Stadium Safety. We have an amber incident at Gate B with congestion exceeding 800m and a density of 4.2 persons/m². Requesting additional resources for crowd management."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation at Gate B poses a significant risk of crowd crush, necessitating immediate action and additional resources to ensure safety.",
+    "estimated_total_seconds": 210
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a 35-minute wait time. The crowd density at the gate approach is at 4.2 persons/m², which poses a risk of crowd crush if not managed within 10 minutes. I need to verify if other gates are experiencing similar issues and if additional resources are available for crowd management.",
+    "decision": "I will escalate the situation to the VOC as an Amber incident due to the significant crowd density and potential risk of crowd crush. I will request additional steward teams to assist in managing the congestion and suggest a review of the situation at other gates.",
+    "actions": [
+      {
+        "action": "report gate congestion and request additional steward teams",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "VOC, this is Sector Team Lead. We have significant congestion at Gate B with a queue over 800m and a density of 4.2 persons/m². Requesting additional steward teams to assist with crowd management."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The current crowd density is concerning and requires immediate attention to prevent a potential crowd crush situation.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if there are any additional incidents occurring at other gates and the status of the stewards managing the situation.",
+    "decision": "I will escalate the situation to VOC as it represents an amber incident due to the risk of crowd crush. I will request additional resources to manage the crowd and alleviate the congestion.",
+    "actions": [
+      {
+        "action": "escalate situation to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor Gate B congestion via CCTV",
+        "target": "CCTV feed",
+        "estimated_seconds": 20
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "VOC, this is Fixed Camera Monitoring. We have significant gate congestion at Gate B, queue exceeds 800m with 4.2 persons/m² density. Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical enough to warrant immediate escalation and resource request to prevent potential crowd crush.",
+    "estimated_total_seconds": 50
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if there are any additional incidents or if the congestion is worsening.",
+    "decision": "I decide to escalate the situation to VOC as an Amber incident due to the risk of crowd crush if not managed quickly.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor crowd density and queue length via drone feed",
+        "target": "tethered drone",
+        "estimated_seconds": 0
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "This is UAV pilot. We have significant congestion at Gate B, queue over 800m, density at 4.2 persons/m². Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical enough to warrant immediate attention, and additional resources are necessary to prevent a potential crowd crush.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is significant congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify the status of other gates and if they are experiencing similar congestion issues, as well as the availability of additional resources for crowd management.",
+    "decision": "I will escalate the situation as amber due to the significant risk of crowd crush and request a status update on other gates and available resources.",
+    "actions": [
+      {
+        "action": "check status of other gates for congestion",
+        "target": "CCTV operators and sector stewards",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor crowd density and queue length at Gate B",
+        "target": "tethered drone feed",
+        "estimated_seconds": 15
+      }
+    ],
+    "communications": [
+      {
+        "to": "CCTV operators",
+        "channel": "radio_channel",
+        "message": "Requesting status updates on congestion at all gates. Please report any significant issues."
+      },
+      {
+        "to": "sector stewards",
+        "channel": "radio_channel",
+        "message": "Steward teams, please confirm if other gates are experiencing congestion similar to Gate B. Report back immediately."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Given the current crowd density and queue length at Gate B, it is crucial to verify the situation at other gates and ensure we have adequate resources to manage the risk of crowd crush.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m², posing a risk of crowd crush. I need to verify the status of other gates and whether additional resources are available for crowd management.",
+    "decision": "I will escalate the situation to amber due to the risk of crowd crush and request additional resources for crowd management at Gate B.",
+    "actions": [
+      {
+        "action": "escalate situation to amber and request status update on other gates",
+        "target": "VOC",
+        "estimated_seconds": 60
+      },
+      {
+        "action": "deploy additional stewards to Gate B",
+        "target": "steward teams",
+        "estimated_seconds": 120
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². Escalating to amber and requesting status updates on other gates and additional resources for crowd management."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The current situation at Gate B is critical, and immediate action is required to prevent a potential crowd crush. Escalating to amber allows for resource mobilization while I gather further information.",
+    "estimated_total_seconds": 180
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Stadium safety — evacuation, crowd flow, gate management",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a density of 4.2 persons/m², posing a risk of crowd crush. I need to verify if other gates are experiencing similar issues and check the status of resources available for crowd management.",
+    "decision": "I will escalate the situation to amber due to the risk of crowd crush and request additional resources for crowd management at Gate B.",
+    "actions": [
+      {
+        "action": "escalate incident to amber and request additional resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch additional stewards to Gate B",
+        "target": "steward_teams",
+        "estimated_seconds": 120
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have significant congestion at Gate B with a queue exceeding 800m and density at 4.2 persons/m². Escalating to amber and requesting additional resources for crowd management."
+      },
+      {
+        "to": "steward_team_lead",
+        "channel": "radio_channel",
+        "message": "Steward team lead, please confirm the status at other gates and report any additional incidents."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation at Gate B is critical and requires immediate attention to prevent a crowd crush. Escalating to amber and requesting resources is essential for crowd safety.",
+    "estimated_total_seconds": 150
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a wait time of 35 minutes. The crowd density at the gate approach is 4.2 persons/m², indicating a risk of crowd crush. I need to verify if there are any additional incidents at other gates or if resources are being allocated to manage the congestion.",
+    "decision": "I decide to escalate the situation to VOC as an Amber incident due to the risk of crowd crush and request additional resources to manage the congestion.",
+    "actions": [
+      {
+        "action": "report incident and request resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "VOC, this is Sector Team Lead. We have significant congestion at Gate B with a queue over 800m and a density of 4.2 persons/m². Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a serious risk to crowd safety, necessitating immediate action to prevent a potential crush.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a wait time of 35 minutes. Crowd density at the gate approach is 4.2 persons/m², indicating a risk of crowd crush if not managed within 10 minutes. I need to verify the status of the crowd's behavior and any potential escalation in the situation.",
+    "decision": "I decide to escalate the situation to VOC and request additional resources to manage the crowd at Gate B, as this situation falls under Amber protocol due to the risk of crowd crush.",
+    "actions": [
+      {
+        "action": "escalate situation and request resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Supervisor",
+        "channel": "VOC Main",
+        "message": "This is VOC monitoring. We have significant gate congestion at Gate B with a queue over 800m and a wait time of 35 minutes. Crowd density is at 4.2 persons/m². Requesting additional resources to manage the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical enough to warrant immediate escalation and resource allocation to prevent potential crowd crush.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². I need to verify if this situation is affecting safety and if additional resources are required to manage the crowd effectively.",
+    "decision": "I decide to deploy a rapid-response drone to get an aerial view of Gate B and assess the crowd situation more accurately. This will help determine the need for additional resources and potential crowd management strategies.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "Gate B",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Coordinator",
+        "channel": "VOC Main",
+        "message": "Deploying rapid-response drone to Gate B for aerial assessment of crowd congestion."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation at Gate B poses a risk of crowd crush if not managed promptly. Deploying a drone will provide necessary visibility to make informed decisions on resource allocation.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a wait time of 35 minutes. Crowd density is at 4.2 persons/m², indicating a risk of crowd crush. I need to verify if there are similar incidents at other gates and if any resources are being allocated to manage the congestion.",
+    "decision": "I will escalate the situation to VOC for additional resources to manage the crowd at Gate B and verify the status of other gates.",
+    "actions": [
+      {
+        "action": "request additional resources to manage crowd congestion",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "deploy rapid-response drone to monitor Gate B and surrounding areas",
+        "target": "UAV pilot",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC Central. We have significant congestion at Gate B with an 800m queue and 4.2 persons/m² density. Requesting additional resources to manage the situation and verify status at other gates."
+      },
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "Deploy rapid-response drone to Gate B for monitoring and assessment of crowd behavior."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation at Gate B is critical and requires immediate escalation and resource allocation to prevent a potential crowd crush.",
+    "estimated_total_seconds": 75
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m², indicating a risk of crowd crush. I need to verify if there are additional incidents at other gates and if resources are being allocated to manage the congestion.",
+    "decision": "I will escalate the situation to VOC and request additional resources to manage the crowd at Gate B, as this is an amber incident requiring immediate attention.",
+    "actions": [
+      {
+        "action": "request additional steward teams and police units to Gate B",
+        "target": "steward and police units",
+        "estimated_seconds": 60
+      },
+      {
+        "action": "deploy rapid-response drone to monitor Gate B",
+        "target": "UAV pilot",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². Requesting additional steward teams and police units to manage the situation."
+      },
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "Deploy rapid-response drone to Gate B to monitor crowd behavior and assist in resource allocation."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation at Gate B poses a significant risk of crowd crush, necessitating immediate action and resource allocation to ensure safety.",
+    "estimated_total_seconds": 105
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Stadium safety — evacuation, crowd flow, gate management",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a wait time of 35 minutes. The crowd density at the gate approach is 4.2 persons/m², indicating a risk of crowd crush if not managed within 10 minutes. I need to verify if there are additional incidents at other gates and if resources are being allocated to manage the congestion.",
+    "decision": "I will escalate the situation to VOC as an amber incident and request additional resources to manage the crowd at Gate B.",
+    "actions": [
+      {
+        "action": "escalate incident and request resources",
+        "target": "VOC",
+        "estimated_seconds": 60
+      },
+      {
+        "action": "deploy rapid-response drone for aerial assessment",
+        "target": "Gate B",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "VOC, this is the Stadium Safety Coordinator. We have significant gate congestion at Gate B with a queue exceeding 800m and a density of 4.2 persons/m². Requesting additional resources to manage this amber incident."
+      },
+      {
+        "to": "drone pilot",
+        "channel": "radio",
+        "message": "Deploy rapid-response drone to Gate B for aerial assessment of crowd behavior and safety."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation poses a risk of crowd crush and requires immediate attention to ensure safety. Escalating to VOC and deploying drones will help assess and manage the situation effectively.",
+    "estimated_total_seconds": 105
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify if there are any additional incidents at other gates and the current status of the crowd management efforts.",
+    "decision": "I decide to escalate the situation to VOC as an Amber incident due to the potential risk of crowd crush, and I will request additional resources to manage the crowd effectively.",
+    "actions": [
+      {
+        "action": "report gate congestion and request additional resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "This is Sector Team Lead. We have significant gate congestion at Gate B with a queue of over 800m and a density of 4.2 persons/m². Requesting additional resources to manage the crowd. Potential risk of crowd crush."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The observed conditions at Gate B present a clear risk to crowd safety, warranting immediate escalation and resource requests.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe that Gate B has a queue exceeding 800m with a 35-minute wait time, and the crowd density at the gate approach is at 4.2 persons/m², indicating a high risk of crowd crush. I need to verify if there are any additional incidents or if other gates are experiencing similar congestion.",
+    "decision": "I decide to escalate the situation to the VOC as an Amber incident due to the significant risk of crowd crush. I will request additional resources to manage the crowd effectively.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 20
+      },
+      {
+        "action": "deploy rapid-response drones to monitor Gate B",
+        "target": "drone operator",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC monitoring. We have a significant gate congestion at Gate B with a queue exceeding 800m and a wait time of 35 minutes. Requesting additional resources to manage crowd density."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The current crowd density poses a serious risk, and immediate action is required to prevent a potential crowd crush situation.",
+    "estimated_total_seconds": 65
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe significant gate congestion at Gate B, with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify if there are any additional incidents or if other gates are experiencing similar issues.",
+    "decision": "I decide to deploy a rapid-response drone to gain an aerial view of Gate B and assess the situation further. This will help in determining the best course of action to alleviate congestion.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "Gate B",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Deploying rapid-response drone to Gate B for aerial assessment of congestion. Estimated time of arrival 45 seconds."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Deploying the drone will provide immediate visual information on the situation, allowing for informed decisions on crowd management and resource allocation.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m², indicating a high risk of crowd crush. I need to verify if there are additional incidents at other gates and the current status of crowd management efforts.",
+    "decision": "I will escalate the situation as Amber due to the significant risk of crowd crush and request additional resources to manage the situation at Gate B.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone to assess other gates for congestion",
+        "target": "UAV pilot",
+        "estimated_seconds": 45
+      },
+      {
+        "action": "coordinate with steward teams to manage crowd at Gate B",
+        "target": "steward teams",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "steward supervisor",
+        "channel": "VOC Main",
+        "message": "Gate B congestion exceeds 800m with 4.2 persons/m² density. Risk of crowd crush. Deploy additional resources to manage the crowd."
+      },
+      {
+        "to": "UAV pilot",
+        "channel": "VOC Main",
+        "message": "Deploy rapid-response drone to assess congestion at all other gates."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation at Gate B is critical, and immediate action is required to prevent a crowd crush. Verifying conditions at other gates will help assess the overall situation.",
+    "estimated_total_seconds": 105
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a high risk of crowd crush if not managed within 10 minutes. I need to verify the status of other gates and if additional incidents are occurring.",
+    "decision": "I will escalate the situation to Amber and request additional resources to manage the crowd at Gate B, including deploying rapid-response drones to monitor and assist in crowd management.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drones to Gate B for crowd monitoring and assistance",
+        "target": "rapid-response drone units",
+        "estimated_seconds": 45
+      },
+      {
+        "action": "coordinate with steward teams to increase crowd management efforts at Gate B",
+        "target": "steward teams",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "steward supervisor",
+        "channel": "radio_channel",
+        "message": "Attention all units, we have significant congestion at Gate B with a queue exceeding 800m and a density of 4.2 persons/m². Immediate crowd management required. Deploying rapid-response drones for monitoring."
+      },
+      {
+        "to": "police units",
+        "channel": "radio_channel",
+        "message": "Requesting additional support at Gate B due to high crowd density and risk of crowd crush."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation at Gate B poses a significant risk, and immediate action is necessary to prevent a potential crowd crush. Deploying drones will provide better oversight and management of the situation.",
+    "estimated_total_seconds": 105
+  },
+  {
+    "scenario_id": "CROWD-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Stadium safety — evacuation, crowd flow, gate management",
+    "assessment": "I observe significant gate congestion at Gate B with a queue exceeding 800m and a crowd density of 4.2 persons/m². There is a risk of crowd crush if not managed within 10 minutes. I need to verify if other gates are experiencing similar congestion and the status of crowd management efforts.",
+    "decision": "I will escalate the situation to Amber and request additional resources to manage the crowd at Gate B, including deploying rapid-response drones to monitor and assist in crowd management.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drones to Gate B",
+        "target": "drone operator",
+        "estimated_seconds": 45
+      },
+      {
+        "action": "coordinate with steward teams to manage crowd flow at Gate B",
+        "target": "steward teams",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "steward_supervisor",
+        "channel": "radio_channel",
+        "message": "This is VOC. Significant congestion at Gate B, queue over 800m. Deploy additional stewards to manage crowd flow immediately."
+      },
+      {
+        "to": "drone_operator",
+        "channel": "radio_channel",
+        "message": "Deploy rapid-response drones to Gate B for crowd monitoring and guidance."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation at Gate B is critical, requiring immediate attention and resource allocation to prevent crowd crush. Escalating to Amber allows for additional support while I gather more information.",
+    "estimated_total_seconds": 105
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17. Adjacent spectators are signaling for help. I need to verify the condition of the spectator and the response time of the nearest steward.",
+    "decision": "I decide to escalate the situation as amber due to the cardiac arrest and request immediate medical assistance.",
+    "actions": [
+      {
+        "action": "notify nearest steward to assist the collapsed spectator",
+        "target": "nearest steward team",
+        "estimated_seconds": 60
+      },
+      {
+        "action": "dispatch medical team to the location",
+        "target": "medical team",
+        "estimated_seconds": 300
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Emergency in East Upper, Row 34 Seat 17. Spectator collapsed, suspected cardiac arrest. Requesting immediate medical assistance."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is serious, and immediate medical intervention is required for a suspected cardiac arrest.",
+    "estimated_total_seconds": 360
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe a cardiac arrest incident in the upper tier, Section East Upper, Row 34 Seat 17. I need to verify the status of the nearest steward and the availability of the defibrillator at East Concourse level. I also need to confirm if medical teams are en route.",
+    "decision": "I will escalate the incident to the VOC and request immediate medical assistance, as this is a critical situation requiring urgent intervention.",
+    "actions": [
+      {
+        "action": "notify medical teams and escalate incident",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "send nearest steward to assist",
+        "target": "nearest steward",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Emergency at East Upper, Row 34 Seat 17. Cardiac arrest reported. Requesting immediate medical assistance."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Steward in Section East Upper, please proceed to Row 34 Seat 17 to assist with a cardiac arrest."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation is critical, and immediate medical intervention is necessary. I have communicated the urgency to the relevant teams.",
+    "estimated_total_seconds": 210
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17. I need to verify the condition of the spectator, the response time of the nearest steward, the status of the nearest defibrillator at East Concourse, and whether medical teams are en route.",
+    "decision": "I will escalate the situation to VOC and request immediate medical assistance and confirmation of the defibrillator's availability.",
+    "actions": [
+      {
+        "action": "verify condition of spectator and nearest steward response",
+        "target": "CCTV feed and radio report",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch medical team to the location",
+        "target": "medical teams",
+        "estimated_seconds": 90
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical emergency in East Upper, Row 34 Seat 17. Cardiac arrest. Immediate assistance required."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Steward in East Upper, please confirm response time to cardiac arrest at Row 34 Seat 17."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "I have observed the incident via CCTV and received initial reports, but I need further verification on the status of the spectator and the response of the nearest steward.",
+    "estimated_total_seconds": 120
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is a cardiac arrest incident in Section East Upper, Row 34 Seat 17, with adjacent spectators signaling for help. I don't know the current condition of the spectator, the response time of the nearest steward, or if medical teams are en route. I need to verify the status of the nearest steward and the availability of the defibrillator at East Concourse level.",
+    "decision": "I will escalate the situation to VOC, request immediate medical assistance, and confirm the availability of the defibrillator.",
+    "actions": [
+      {
+        "action": "escalate incident and request medical assistance",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "verify status of nearest steward and defibrillator availability",
+        "target": "CCTV monitoring",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Emergency in Section East Upper, Row 34 Seat 17. Cardiac arrest. Requesting immediate medical assistance and confirmation of defibrillator availability at East Concourse."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical assistance is required. I need to ensure the defibrillator is available while escalating the incident.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Medical operations — paramedic deployment, ambulance staging, MCI",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17. I need to verify the condition of the spectator, the response time of the nearest steward, and the availability of the defibrillator at East Concourse level. I also need to confirm if medical teams are en route.",
+    "decision": "I will escalate the situation to VOC, request immediate medical assistance, and confirm the availability of the defibrillator.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch medical team to location",
+        "target": "Section East Upper",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "verify defibrillator availability",
+        "target": "East Concourse",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Medical Operations. We have a cardiac arrest in Section East Upper, Row 34 Seat 17. Requesting immediate medical assistance and confirming defibrillator availability at East Concourse."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation is critical and requires immediate medical response. Escalation is necessary to ensure prompt action.",
+    "estimated_total_seconds": 390
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17. Spectators are waving for help, and the nearest steward is 3 sections away. I need to verify if the medical team has been alerted and if the nearest defibrillator is being retrieved.",
+    "decision": "I decide to escalate the situation to the VOC and request immediate medical assistance and a defibrillator.",
+    "actions": [
+      {
+        "action": "alert medical team and request defibrillator",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch nearest steward to assist",
+        "target": "nearest steward",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Emergency! Cardiac arrest in Section East Upper, Row 34 Seat 17. Requesting immediate medical assistance and defibrillator."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical intervention is necessary. I need to ensure that help is on the way while also getting a steward to the scene.",
+    "estimated_total_seconds": 210
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17, and adjacent spectators are signaling for help. I need to verify the condition of the individual and ensure medical assistance is dispatched promptly.",
+    "decision": "I will escalate the incident to VOC and request immediate medical assistance while ensuring the nearest steward is alerted to assist.",
+    "actions": [
+      {
+        "action": "radio report of cardiac arrest",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch nearest steward to assist",
+        "target": "nearest steward team",
+        "estimated_seconds": 120
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "Emergency alert: Cardiac arrest in Section East Upper, Row 34 Seat 17. Requesting immediate medical team dispatch."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation requires urgent medical attention, and I need to ensure that the medical team is on their way while also notifying nearby stewards for immediate assistance.",
+    "estimated_total_seconds": 150
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17 with adjacent spectators signaling for help. I need to verify if the medical team has been alerted and if the nearest defibrillator is being retrieved. Additionally, I need to confirm the condition of the individual.",
+    "decision": "I decide to escalate the situation to ensure immediate medical assistance is dispatched and to confirm the retrieval of the defibrillator.",
+    "actions": [
+      {
+        "action": "alert medical team and confirm defibrillator retrieval",
+        "target": "medical team and nearest steward",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Emergency in East Upper, Row 34 Seat 17. Cardiac arrest reported. Please confirm dispatch and retrieval of defibrillator."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Steward in East Upper, Row 34 Seat 17 needs assistance for a cardiac arrest. Please respond immediately."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "I have visual confirmation of the incident and understand the urgency. Immediate action is necessary to ensure the safety of the spectator.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17. Spectators are signaling for help. I need to verify if the medical team has been alerted and if the nearest defibrillator is being retrieved.",
+    "decision": "I decide to escalate the situation to VOC for immediate medical assistance and confirm the retrieval of the defibrillator as per Amber protocol.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch medical team to incident location",
+        "target": "medical team",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "confirm retrieval of defibrillator",
+        "target": "nearest steward",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Emergency in Section East Upper, Row 34 Seat 17. Cardiac arrest reported. Requesting immediate medical assistance and confirmation on defibrillator retrieval."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical and requires immediate action to ensure the safety of the spectator. Escalating to VOC allows for coordination of necessary resources.",
+    "estimated_total_seconds": 390
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Medical operations — paramedic deployment, ambulance staging, MCI",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17. I need to verify if the medical team has been alerted and if the nearest defibrillator is being retrieved.",
+    "decision": "I decide to escalate the situation to VOC for immediate medical assistance and confirm the retrieval of the defibrillator as per Amber protocol.",
+    "actions": [
+      {
+        "action": "dispatch medical team to incident location",
+        "target": "medical teams",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "confirm retrieval of defibrillator",
+        "target": "nearest steward",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is [Your Name], medical operations. We have a cardiac arrest in Section East Upper, Row 34 Seat 17. Requesting immediate medical assistance and confirmation on defibrillator retrieval."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation is critical, and immediate medical assistance is necessary. I have confirmed the location and need to ensure that the defibrillator is on the way.",
+    "estimated_total_seconds": 360
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17, and adjacent spectators are waving for help. I need to verify if the nearest steward is responding and if medical assistance is on the way.",
+    "decision": "I will escalate the situation to VOC as it is an Amber incident due to the cardiac arrest. I will request immediate medical assistance and a defibrillator.",
+    "actions": [
+      {
+        "action": "report incident and request medical team and defibrillator",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "This is Sector Team Lead. We have a cardiac arrest in East Upper, Row 34 Seat 17. Requesting immediate medical assistance and a defibrillator."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical intervention is necessary for a cardiac arrest. I am following protocol for significant incidents.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17. Adjacent spectators are waving for help. I need to verify the condition of the spectator and whether medical assistance is en route.",
+    "decision": "I decide to escalate the situation as an Amber incident due to the cardiac arrest and the need for immediate medical assistance.",
+    "actions": [
+      {
+        "action": "dispatch medical team",
+        "target": "East Upper Section",
+        "estimated_seconds": 90
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team, we have a cardiac arrest in East Upper, Row 34 Seat 17. Immediate assistance required."
+      },
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC, we have an Amber incident: cardiac arrest in East Upper. Requesting additional medical resources."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation is critical, and immediate medical assistance is necessary to address the cardiac arrest.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe a cardiac arrest incident in the East Upper section with adjacent spectators waving for help. I need to verify the status of the nearest steward and the availability of the defibrillator at East Concourse level.",
+    "decision": "I decide to escalate the incident as Amber due to the significant nature of a cardiac arrest and request additional resources, specifically medical teams and the nearest steward.",
+    "actions": [
+      {
+        "action": "report incident and request medical assistance",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "reposition tethered drone to monitor the situation",
+        "target": "tethered drone",
+        "estimated_seconds": 0
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "VOC, this is UAV pilot. We have a cardiac arrest in East Upper, Row 34 Seat 17. Requesting immediate medical assistance and confirmation of steward response."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical assistance is required. I have confirmed the incident visually and am taking appropriate steps to ensure help is on the way.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17, with adjacent spectators waving for help. I need to verify the condition of the collapsed spectator, the response of the nearest steward, and whether medical assistance is en route. Additionally, I need to confirm the availability of the defibrillator at East Concourse level.",
+    "decision": "I will request updates from the sector team lead on the nearest steward's response and the medical team's status, while monitoring the situation via CCTV for the spectator's condition.",
+    "actions": [
+      {
+        "action": "check status of nearest steward and medical response",
+        "target": "sector team lead",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor spectator condition via CCTV",
+        "target": "CCTV feed",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "sector team lead",
+        "channel": "radio_channel",
+        "message": "Sector lead, please confirm if the nearest steward is responding to the cardiac arrest in East Upper, Row 34 Seat 17, and if medical assistance is en route."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "I have visual confirmation of the incident and adjacent spectators seeking help, but I need to verify the response times and the condition of the spectator to ensure appropriate action is taken.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17, with adjacent spectators signaling for help. I need to verify if the nearest steward is responding and if medical assistance is en route. I also need to confirm the condition of the spectator through CCTV.",
+    "decision": "I will initiate a response to mobilize medical assistance immediately and verify the status of the nearest steward and the defibrillator's location.",
+    "actions": [
+      {
+        "action": "request status update on nearest steward and medical team",
+        "target": "sector team lead",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch medical team to East Upper Section",
+        "target": "medical teams",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "monitor spectator condition via CCTV",
+        "target": "CCTV feed",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "steward supervisor",
+        "channel": "radio_channel",
+        "message": "Cardiac arrest in East Upper, Row 34 Seat 17. Please confirm status of nearest steward and medical response."
+      },
+      {
+        "to": "medical team",
+        "channel": "radio_channel",
+        "message": "Immediate medical assistance required in East Upper, Row 34 Seat 17 for cardiac arrest."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical assistance is required. Verifying the status of the nearest steward and the defibrillator is essential for effective response.",
+    "estimated_total_seconds": 390
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Medical operations — paramedic deployment, ambulance staging, MCI",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17, with adjacent spectators waving for help. I need to verify if the nearest steward is responding and if medical assistance is on the way. I also need to confirm the condition of the spectator and the availability of the defibrillator at East Concourse level.",
+    "decision": "I will initiate a response to mobilize medical assistance immediately due to the cardiac arrest incident, which is a Red protocol situation.",
+    "actions": [
+      {
+        "action": "dispatch medical team to the incident location",
+        "target": "medical teams",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "confirm status of nearest steward and defibrillator location",
+        "target": "VOC",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team, respond to cardiac arrest in East Upper, Row 34 Seat 17. Immediate assistance required."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Steward team, verify if the nearest steward is responding to the incident in East Upper, Row 34 Seat 17."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical assistance is necessary. I need to ensure that the nearest steward is aware and that the defibrillator is accessible.",
+    "estimated_total_seconds": 360
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17. There are adjacent spectators waving for help, indicating urgency. I need to verify the status of the collapsed individual and ensure medical assistance is on the way.",
+    "decision": "I will escalate the situation as Amber due to the cardiac arrest. I will request immediate medical assistance and a defibrillator.",
+    "actions": [
+      {
+        "action": "request medical team and defibrillator",
+        "target": "medical team",
+        "estimated_seconds": 90
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "This is Sector Lead. We have a cardiac arrest in East Upper, Row 34 Seat 17. Requesting immediate medical assistance and a defibrillator."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical intervention is required for a cardiac arrest. I am following protocol to escalate and request necessary resources.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17. Adjacent spectators are signaling for help, indicating a serious situation. I need to verify if medical assistance is en route and the status of the nearest steward.",
+    "decision": "I will escalate this incident to the VOC as an Amber situation due to the cardiac arrest. I will request immediate medical assistance and the nearest defibrillator to be dispatched.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 20
+      },
+      {
+        "action": "dispatch medical team",
+        "target": "medical team",
+        "estimated_seconds": 90
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "Emergency at East Upper, Row 34 Seat 17. Spectator collapsed, possible cardiac arrest. Requesting immediate medical assistance and nearest defibrillator."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "Given the nature of the incident, immediate medical assistance is critical. The situation is serious, and I need to ensure that help is on the way quickly.",
+    "estimated_total_seconds": 110
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe a cardiac arrest incident in the upper tier with a spectator collapsed. I need to verify the status of the nearest medical team and the availability of the defibrillator. I also need to confirm the exact location of the nearest steward.",
+    "decision": "I decide to escalate the situation as Amber due to the significant nature of the cardiac arrest. I will request immediate medical assistance and the nearest defibrillator to be dispatched to the location.",
+    "actions": [
+      {
+        "action": "request medical team dispatch",
+        "target": "medical team",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "request defibrillator to be brought",
+        "target": "steward team",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Emergency at East Upper Section Row 34 Seat 17. Cardiac arrest. Requesting immediate medical team and defibrillator."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical, and immediate medical assistance is required. The response time for medical teams is a priority due to the nature of the incident.",
+    "estimated_total_seconds": 480
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17 with adjacent spectators signaling for help. I need to verify the status of the collapsed individual, ensure medical assistance is on the way, and confirm the location of the nearest steward and defibrillator.",
+    "decision": "I will escalate the situation as an Amber incident to ensure medical assistance is dispatched immediately and to verify the status of the collapsed individual.",
+    "actions": [
+      {
+        "action": "dispatch medical team",
+        "target": "medical teams",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "check status of nearest steward",
+        "target": "steward team",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team, we have a cardiac arrest in Section East Upper, Row 34 Seat 17. Please respond immediately."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Steward Supervisor, please confirm the status of the nearest steward to Section East Upper, Row 34 Seat 17."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is urgent given the cardiac arrest, and immediate medical response is critical. Verifying the status of resources will ensure a timely intervention.",
+    "estimated_total_seconds": 330
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is a cardiac arrest incident in Section East Upper, Row 34 Seat 17, with adjacent spectators signaling for help. I need to verify the status of the collapsed individual, confirm that medical assistance is en route, and ensure the nearest steward is aware of the situation.",
+    "decision": "I will escalate this incident to Amber protocol to ensure immediate medical assistance is dispatched and to verify the status of the collapsed individual.",
+    "actions": [
+      {
+        "action": "escalate incident to Amber",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch nearest medical team to East Upper",
+        "target": "medical team",
+        "estimated_seconds": 300
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have an Amber incident in Section East Upper, Row 34 Seat 17. A spectator has collapsed. Requesting immediate medical assistance and verification of the nearest steward."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation is urgent due to the cardiac arrest, and escalating to Amber ensures that all necessary resources are mobilized quickly.",
+    "estimated_total_seconds": 330
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Medical operations — paramedic deployment, ambulance staging, MCI",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17, with adjacent spectators signaling for help. I need to verify the status of the collapsed individual and ensure medical assistance is on the way.",
+    "decision": "I will escalate this incident to Amber protocol to ensure immediate medical assistance is dispatched and to verify the status of the collapsed individual.",
+    "actions": [
+      {
+        "action": "dispatch medical team to incident location",
+        "target": "medical teams",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "request nearest steward to assist and verify the situation",
+        "target": "steward team",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team, we have a cardiac arrest in Section East Upper, Row 34 Seat 17. Immediate assistance required."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Steward team, please confirm the status of the collapsed spectator in Section East Upper, Row 34 Seat 17 and provide assistance."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation is urgent and requires immediate medical response. Escalating to Amber protocol allows for necessary resources to be mobilized quickly.",
+    "estimated_total_seconds": 480
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe a cardiac arrest incident in the upper tier, specifically in Section East Upper, Row 34 Seat 17. I need to verify the status of the spectator and ensure that medical assistance is on the way. I also need to confirm the location of the nearest defibrillator and the availability of stewards to assist.",
+    "decision": "I will escalate this incident as Amber due to the significant nature of a cardiac arrest. I will request immediate medical assistance and deploy rapid-response drones to the location to assess the situation more accurately.",
+    "actions": [
+      {
+        "action": "request medical team dispatch",
+        "target": "medical teams",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "deploy rapid-response drone to location",
+        "target": "East Upper Section",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "Emergency in East Upper Section, Row 34 Seat 17. Cardiac arrest reported. Requesting medical team and deploying rapid-response drone."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation is critical, and immediate action is necessary to provide medical assistance and assess the condition of the spectator.",
+    "estimated_total_seconds": 345
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe a spectator collapsed in Section East Upper, Row 34 Seat 17, with adjacent spectators waving for help. I need to verify the condition of the individual and ensure medical assistance is dispatched promptly.",
+    "decision": "I decide to escalate the situation as amber due to the cardiac arrest. Immediate medical assistance is required, and I will request the nearest medical team to respond.",
+    "actions": [
+      {
+        "action": "dispatch medical team to the incident",
+        "target": "medical team",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "deploy rapid-response drone for aerial view",
+        "target": "drone operator",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team, we have a cardiac arrest in Section East Upper, Row 34 Seat 17. Please respond immediately."
+      },
+      {
+        "to": "drone_operator",
+        "channel": "radio_channel",
+        "message": "Deploy rapid-response drone to Section East Upper for aerial assessment of cardiac arrest situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical and requires immediate medical intervention. I am confident in the need for both ground and aerial support to assess and assist the collapsed spectator.",
+    "estimated_total_seconds": 345
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I know there is a cardiac arrest incident in the upper tier, specifically in Section East Upper, Row 34 Seat 17. I do not know the condition of the spectator or how quickly medical assistance can arrive. I need to verify the status of the nearest steward and the availability of the defibrillator at the East Concourse level.",
+    "decision": "I will deploy a rapid-response drone to the East Upper section to assess the situation and provide real-time visuals. I will also request immediate medical assistance to be dispatched to the location.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "East Upper section",
+        "estimated_seconds": 45
+      },
+      {
+        "action": "dispatch medical team",
+        "target": "East Upper section",
+        "estimated_seconds": 300
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team, we have a cardiac arrest in East Upper, Row 34 Seat 17. Please proceed immediately."
+      },
+      {
+        "to": "drone_operator",
+        "channel": "radio_channel",
+        "message": "Deploy a rapid-response drone to East Upper section for visual assessment of cardiac arrest."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "Immediate visual assessment is crucial for determining the severity of the situation and ensuring timely medical response.",
+    "estimated_total_seconds": 345
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is a cardiac arrest incident in Section East Upper, Row 34 Seat 17, and that adjacent spectators are seeking help. I need to verify the condition of the spectator, the status of the nearest steward, and the location of the nearest defibrillator at East Concourse level.",
+    "decision": "I will dispatch a medical team to the location of the cardiac arrest and request a steward to assist in reaching the spectator. I will also confirm the location of the nearest defibrillator and ensure it is brought to the scene.",
+    "actions": [
+      {
+        "action": "dispatch medical team",
+        "target": "medical_team",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "request steward assistance",
+        "target": "nearest steward",
+        "estimated_seconds": 180
+      },
+      {
+        "action": "confirm defibrillator location",
+        "target": "East Concourse",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team to Section East Upper, Row 34 Seat 17 for cardiac arrest. Immediate assistance required."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Requesting nearest steward to assist at Section East Upper, Row 34 Seat 17 for cardiac arrest incident."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "I am confident in the need for immediate medical assistance and steward support, but I need to verify the condition of the spectator and the location of the defibrillator.",
+    "estimated_total_seconds": 540
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is a cardiac arrest incident in Section East Upper, Row 34 Seat 17, with spectators signaling for help. I need to verify the condition of the spectator and ensure that medical assistance is dispatched promptly. I also need to confirm the location of the nearest defibrillator and the availability of stewards to assist.",
+    "decision": "I will dispatch a medical team to the location of the cardiac arrest and request a steward to assist in reaching the spectator. I will also confirm the location of the nearest defibrillator and ensure it is brought to the scene.",
+    "actions": [
+      {
+        "action": "dispatch medical team to cardiac arrest location",
+        "target": "medical team",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "request steward to assist in reaching spectator",
+        "target": "nearest steward",
+        "estimated_seconds": 180
+      },
+      {
+        "action": "confirm location and dispatch defibrillator from East Concourse",
+        "target": "defibrillator",
+        "estimated_seconds": 120
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team, respond to cardiac arrest in Section East Upper, Row 34 Seat 17. Immediate assistance required."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Nearest steward, assist at Section East Upper, Row 34 Seat 17 for a cardiac arrest incident."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation is critical due to the cardiac arrest, and immediate medical assistance is essential. I am confident that dispatching the medical team and requesting assistance from a steward will expedite the response.",
+    "estimated_total_seconds": 600
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Medical operations — paramedic deployment, ambulance staging, MCI",
+    "assessment": "I observe a cardiac arrest incident in Section East Upper, Row 34 Seat 17, with adjacent spectators signaling for help. I need to verify the condition of the spectator and ensure that medical assistance is dispatched promptly. I also need to confirm the location of the nearest defibrillator and the availability of stewards to assist.",
+    "decision": "I will dispatch a medical team to the location of the cardiac arrest and request a steward to assist in reaching the spectator. I will confirm the location of the nearest defibrillator and ensure it is brought to the scene, adhering to Red protocol due to the critical nature of the incident.",
+    "actions": [
+      {
+        "action": "dispatch medical team to cardiac arrest location",
+        "target": "medical team",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "request steward to assist at incident location",
+        "target": "steward teams",
+        "estimated_seconds": 180
+      },
+      {
+        "action": "confirm location and bring defibrillator to scene",
+        "target": "nearest steward",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical team to Section East Upper, Row 34 Seat 17 for cardiac arrest. Immediate response required."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Requesting steward assistance to Section East Upper, Row 34 Seat 17 for a cardiac arrest incident."
+      },
+      {
+        "to": "steward_team",
+        "channel": "radio_channel",
+        "message": "Please confirm the location of the nearest defibrillator and bring it to Section East Upper, Row 34 Seat 17."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation is critical, and immediate medical assistance is necessary. Actions are prioritized to ensure the quickest response to the cardiac arrest incident.",
+    "estimated_total_seconds": 660
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe a cardiac arrest incident in the upper tier with a spectator collapsed. I need to verify the exact condition of the spectator and the response time of the nearest steward and medical team.",
+    "decision": "I decide to escalate the situation as amber due to the cardiac arrest, requesting immediate medical assistance and a defibrillator.",
+    "actions": [
+      {
+        "action": "request medical team and defibrillator",
+        "target": "medical team",
+        "estimated_seconds": 90
+      },
+      {
+        "action": "deploy rapid-response drone to assist",
+        "target": "upper tier location",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "Attention, we have a cardiac arrest in East Upper, Row 34 Seat 17. Requesting immediate medical assistance and defibrillator. Deploying rapid-response drone."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is critical due to the cardiac arrest, and I need to ensure that medical assistance is on the way as quickly as possible while also utilizing drone support for real-time assessment.",
+    "estimated_total_seconds": 135
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17. There are adjacent spectators waving for help, indicating a possible medical emergency. I need to verify the condition of the spectator and ensure that medical assistance is on the way.",
+    "decision": "I will escalate this incident to a Red protocol due to the cardiac arrest situation, mobilizing medical teams and requesting a defibrillator.",
+    "actions": [
+      {
+        "action": "dispatch medical team",
+        "target": "medical teams",
+        "estimated_seconds": 300
+      },
+      {
+        "action": "deploy rapid-response drone for aerial view",
+        "target": "East Upper Section",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical emergency in East Upper, Row 34 Seat 17. Cardiac arrest. Immediate assistance required."
+      },
+      {
+        "to": "drone_operator",
+        "channel": "radio_channel",
+        "message": "Deploy rapid-response drone to East Upper Section for situational awareness."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The situation is critical, and immediate medical intervention is necessary. The rapid-response drone will provide additional situational awareness to assist the medical teams.",
+    "estimated_total_seconds": 345
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe a spectator has collapsed in Section East Upper, Row 34 Seat 17. There are adjacent spectators waving for help. I need to verify the condition of the spectator and if medical assistance has been alerted.",
+    "decision": "I will deploy a rapid-response drone to the location to assess the situation and provide aerial support for medical teams.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "Section East Upper, Row 34",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "medical_team",
+        "channel": "radio_channel",
+        "message": "Medical assistance needed in Section East Upper, Row 34 for a cardiac arrest. Deploying drone for assessment."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation appears critical due to the cardiac arrest. Immediate assessment and medical response are required to ensure the spectator receives timely assistance.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is a cardiac arrest incident in the upper tier with a spectator collapsed in Section East Upper, Row 34 Seat 17. There are adjacent spectators waving for help. I need to verify the condition of the spectator and the response time of the nearest steward and medical team.",
+    "decision": "I will deploy a rapid-response drone to the location to assess the condition of the spectator and confirm if medical assistance has been alerted.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone for assessment",
+        "target": "Section East Upper, Row 34 Seat 17",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "steward_team_lead",
+        "channel": "radio_channel",
+        "message": "Cardiac arrest in East Upper, Row 34 Seat 17. Deploy nearest steward to assess condition and confirm medical response."
+      },
+      {
+        "to": "medical_team_lead",
+        "channel": "radio_channel",
+        "message": "Medical team, prepare for cardiac arrest response in East Upper, Row 34 Seat 17. Awaiting assessment from rapid-response drone."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "Deploying the rapid-response drone will allow for immediate visual assessment of the situation, and I am ensuring that both steward and medical teams are alerted for a timely response.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I observe a cardiac arrest incident in the upper tier with a spectator collapsed in Section East Upper, Row 34 Seat 17. I need to verify the condition of the spectator and ensure that medical assistance is on the way.",
+    "decision": "I will deploy a rapid-response drone to assess the condition of the spectator and confirm if medical assistance has been alerted. This is necessary due to the critical nature of a cardiac arrest situation.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "Section East Upper, Row 34 Seat 17",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "UAV pilot",
+        "channel": "VOC Main",
+        "message": "Deploy rapid-response drone to Section East Upper, Row 34 Seat 17 to assess spectator's condition."
+      },
+      {
+        "to": "medical team",
+        "channel": "VOC Main",
+        "message": "Medical assistance is needed at Section East Upper, Row 34 Seat 17 for a cardiac arrest incident."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "Deploying the drone will provide immediate visual confirmation of the spectator's condition and ensure that the medical team is on their way.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "MED-001",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Medical operations — paramedic deployment, ambulance staging, MCI",
+    "assessment": "I observe a cardiac arrest incident in the upper tier with a spectator collapsed in Section East Upper, Row 34 Seat 17. I need to verify the exact condition of the spectator and confirm that medical assistance is en route.",
+    "decision": "I will deploy a rapid-response drone to assess the condition of the spectator and confirm if medical assistance has been alerted, as this is a critical situation.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone to assess condition",
+        "target": "Section East Upper, Row 34 Seat 17",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "UAV pilot",
+        "channel": "VOC Main",
+        "message": "Deploy rapid-response drone to Section East Upper, Row 34 Seat 17 for assessment of cardiac arrest situation."
+      },
+      {
+        "to": "medical team",
+        "channel": "VOC Main",
+        "message": "Cardiac arrest reported in East Upper, Row 34 Seat 17. Please confirm if you are en route."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "The rapid-response drone will provide immediate visual assessment of the situation, crucial for determining next steps in a cardiac arrest scenario.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe an unauthorized drone detected by the RF scanner at 800m northeast of the stadium. I need to verify the drone's behavior, potential threat level, and whether it poses an immediate risk to the crowd or event.",
+    "decision": "I decide to escalate the situation to the VOC and request additional resources for monitoring and potential mitigation of the unauthorized drone.",
+    "actions": [
+      {
+        "action": "report unauthorized drone detection",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor drone behavior",
+        "target": "CCTV cameras",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Sector Team Lead. We have detected an unauthorized drone signal at 800m northeast of the stadium. Requesting additional resources for monitoring and assessment."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential threat given the active FAA TFR. Immediate escalation and monitoring are necessary to assess the situation further.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast of the stadium. I do not have visual confirmation of the drone's appearance, capabilities, or potential payload. I need to verify the drone's trajectory and assess any immediate threat it poses to the stadium and attendees.",
+    "decision": "I will escalate the situation to the VOC and request additional resources to monitor the drone and prepare for potential threats, following the Amber protocol due to the unauthorized nature of the drone.",
+    "actions": [
+      {
+        "action": "escalate situation and request monitoring",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Supervisor",
+        "channel": "VOC Main",
+        "message": "Attention, we have detected an unauthorized drone signal at 800m northeast of the stadium. Requesting additional resources for monitoring and assessment."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The detection of an unauthorized drone poses a potential threat, necessitating immediate attention and resources to assess the situation further.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone signal has been detected 800m northeast of the stadium. I do not have visual confirmation of the drone's appearance or capabilities, nor do I know its trajectory or potential threat level. I need to verify the drone's behavior and assess whether it poses an immediate risk to the crowd or event.",
+    "decision": "I will request a visual confirmation of the drone's behavior using the fixed camera monitoring system. This will help assess the threat level and determine the appropriate response.",
+    "actions": [
+      {
+        "action": "request visual confirmation of drone behavior",
+        "target": "fixed camera team",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "fixed_camera_team",
+        "channel": "radio_channel",
+        "message": "Requesting visual confirmation of unauthorized drone detected 800m northeast. Assess behavior and trajectory for potential threat."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "Verifying the drone's behavior is essential to determine the threat level and decide on further actions. Immediate visual confirmation is necessary given the potential risk.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone has been detected at 800m northeast of the stadium. However, I do not have visual confirmation of the drone's appearance, capabilities, or potential payload. I need to verify the drone's trajectory and assess any immediate threat it poses to the stadium and attendees.",
+    "decision": "I will request visual confirmation of the drone's behavior using the fixed camera monitoring system to assess the threat level and determine the appropriate response.",
+    "actions": [
+      {
+        "action": "request visual confirmation of drone behavior",
+        "target": "fixed camera monitoring team",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "fixed_camera_monitoring_team",
+        "channel": "radio_channel",
+        "message": "Requesting visual confirmation of unauthorized drone detected at 800m northeast. Please assess its behavior and trajectory."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Verifying the drone's behavior is essential to assess the threat level before taking further action.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 0,
+    "agent_type": "Senior police authority — security decisions, primacy transfer",
+    "assessment": "I know that an unauthorized drone has been detected at 800m northeast of the stadium, but I do not have visual confirmation of its behavior, appearance, or potential payload. I need to verify the drone's trajectory and assess any immediate threat it poses to the crowd and event.",
+    "decision": "I will request visual confirmation of the drone's behavior using the fixed camera monitoring system to assess the threat level and determine the appropriate response.",
+    "actions": [
+      {
+        "action": "request visual confirmation of drone's behavior",
+        "target": "fixed camera monitoring team",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "fixed_camera_monitoring",
+        "channel": "radio_channel",
+        "message": "Requesting visual confirmation of unauthorized drone detected at 800m northeast. Assess trajectory and potential threat level."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "I need to gather more information about the drone's behavior before deciding on further actions, as it may pose a significant threat.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe an unauthorized drone detected at 800m northeast of the stadium. I need to verify the drone's trajectory and potential threat level, as well as confirm the status of the FAA TFR.",
+    "decision": "I will escalate the situation to the VOC and request additional resources to monitor the drone and prepare for any potential threat.",
+    "actions": [
+      {
+        "action": "radio report",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "dispatch steward teams to monitor crowd and secure perimeter",
+        "target": "steward_teams",
+        "estimated_seconds": 180
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio",
+        "message": "VOC, this is Sector Team Lead. We have detected an unauthorized drone 800m northeast of the stadium. Requesting additional resources to monitor and assess the situation."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate action is required to ensure safety and security.",
+    "estimated_total_seconds": 210
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast of the stadium, which is not registered in the authorized fleet. I need to verify the drone's trajectory and potential threat level.",
+    "decision": "I will escalate this incident to the VOC as an Amber situation due to the potential threat posed by the unauthorized drone.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC Command",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Command",
+        "channel": "VOC Main",
+        "message": "Attention, we have detected an unauthorized drone signal at 800m northeast of the stadium. This is not a registered drone. Requesting escalation and additional resources."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential risk, and immediate escalation is necessary to ensure safety and preparedness.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone has been detected at 800m northeast of the stadium, not registered in the authorized fleet. I need to verify the drone's trajectory and potential threat level, as well as confirm the status of the FAA TFR.",
+    "decision": "I will escalate the situation to VOC for further assessment and resource allocation, as this is an Amber incident.",
+    "actions": [
+      {
+        "action": "escalate incident for assessment and resource allocation",
+        "target": "VOC",
+        "estimated_seconds": 20
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Sector Team Lead. We have detected an unauthorized drone at 800m northeast of the stadium, not registered in the authorized fleet. Requesting escalation for threat assessment."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate verification and assessment are necessary to ensure the safety of the event.",
+    "estimated_total_seconds": 20
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is an unauthorized drone detected at 800m northeast of the stadium, not registered in the authorized fleet. I need to verify its trajectory and potential threat level, as well as confirm the status of the FAA TFR.",
+    "decision": "I will escalate the situation as an Amber incident to request additional resources and further assessment.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor drone trajectory via CCTV",
+        "target": "CCTV operators",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Sector Team Lead. We have an Amber incident: unauthorized drone detected at 800m northeast, not registered. Requesting additional resources and assessment."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The drone's unauthorized status and proximity to the stadium pose a potential threat, warranting immediate escalation and resource allocation.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "BASELINE",
+    "run": 1,
+    "agent_type": "Senior police authority — security decisions, primacy transfer",
+    "assessment": "I know there is an unauthorized drone detected at 800m northeast of the stadium, not registered in the authorized fleet. I need to verify its trajectory, potential threat level, and the status of the FAA TFR.",
+    "decision": "I will escalate this situation as an Amber incident to request additional resources for further assessment and monitoring.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor drone trajectory using CCTV",
+        "target": "CCTV operators",
+        "estimated_seconds": 60
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is Senior Police Authority. We have an unauthorized drone detected at 800m northeast of the stadium. Escalating to Amber incident for additional resources and assessment."
+      },
+      {
+        "to": "CCTV operators",
+        "channel": "radio_channel",
+        "message": "CCTV team, please track the trajectory of the unauthorized drone detected northeast of the stadium."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The situation is serious due to the unauthorized drone and potential threat. Escalating to Amber allows for resource mobilization while we assess the threat level.",
+    "estimated_total_seconds": 90
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast of the stadium. I need to verify the drone's trajectory and potential threat level. I do not know the drone's capabilities or intent.",
+    "decision": "I will escalate the situation to the VOC for further assessment and resource allocation, as this is an amber-level incident.",
+    "actions": [
+      {
+        "action": "report unauthorized drone detected",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Sector Team Lead. We have detected an unauthorized drone signal at 800m northeast of the stadium. Requesting escalation and additional resources."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate escalation is necessary for safety and security protocols.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast of the stadium. I need to verify the drone's trajectory, potential threat level, and confirm the status of the FAA TFR. No reports from stewards or other agents have been received yet.",
+    "decision": "I will escalate this incident to the VOC and request additional resources to monitor the situation and prepare for potential escalation if necessary.",
+    "actions": [
+      {
+        "action": "escalate incident and request monitoring resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Supervisor",
+        "channel": "VOC Main",
+        "message": "VOC, this is Fixed Camera Monitoring. We have detected an unauthorized drone signal at 800m northeast of the stadium. Requesting additional monitoring resources and verification of FAA TFR status."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate escalation is necessary to ensure all relevant parties are informed and prepared.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast, approaching the stadium. I need to verify the drone's intentions and whether it poses an immediate threat. I don't have visual confirmation of the drone's activity or its payload.",
+    "decision": "I will escalate this incident to VOC command as an Amber situation due to the potential threat posed by the unauthorized drone. I will also request additional resources to monitor and respond to the situation.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC command",
+        "estimated_seconds": 20
+      },
+      {
+        "action": "monitor drone activity via tethered drone feed",
+        "target": "tethered drone",
+        "estimated_seconds": 0
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "radio_channel",
+        "message": "VOC, this is UAV pilot. We have detected an unauthorized drone signal at 800m northeast, approaching the stadium. Requesting escalation to Amber and additional resources."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate escalation is necessary to ensure safety and preparedness for any required response.",
+    "estimated_total_seconds": 20
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone signal has been detected at 800m northeast of the stadium, but I do not have visual confirmation of its trajectory, capabilities, or intent. I need to verify the drone's trajectory and potential threat level, as well as confirm the status of the FAA TFR.",
+    "decision": "I will escalate the situation to VOC command as an Amber incident due to the potential threat posed by the unauthorized drone. I will request additional resources to monitor and assess the situation.",
+    "actions": [
+      {
+        "action": "request additional camera feeds to track drone trajectory",
+        "target": "CCTV operators",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor drone signal for changes in trajectory or behavior",
+        "target": "UAV pilot",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Command",
+        "channel": "VOC Main",
+        "message": "This is VOC. We have detected an unauthorized drone signal at 800m northeast of the stadium. Escalating to Amber incident. Requesting additional resources for monitoring."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential threat, and it is crucial to gather more information to assess the situation effectively. Escalating to Amber allows for additional resources to be mobilized while I gather more data.",
+    "estimated_total_seconds": 60
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone signal has been detected at 800m northeast of the stadium. I do not know the drone's capabilities, intent, or trajectory. I need to verify the drone's trajectory and potential threat level, as well as confirm the status of the FAA TFR.",
+    "decision": "I will escalate the situation to VOC command as an Amber incident due to the potential threat posed by the unauthorized drone. I will request additional resources to monitor and assess the situation.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC command",
+        "target": "VOC command",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "request additional resources for monitoring",
+        "target": "UAV pilot",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have an Amber incident: unauthorized drone detected 800m northeast of the stadium. Requesting additional resources to monitor and assess the situation."
+      },
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "UAV pilot, we have an unauthorized drone detected at 800m northeast. Please prepare to deploy rapid-response drones for monitoring."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "Escalating to Amber is appropriate given the potential threat level, and additional monitoring is necessary to assess the situation effectively.",
+    "estimated_total_seconds": 60
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 0,
+    "agent_type": "Senior police authority — security decisions, primacy transfer",
+    "assessment": "I know there is an unauthorized drone signal detected at 800m northeast of the stadium, but I do not have visual confirmation of its trajectory, capabilities, or intent. I need to verify the drone's trajectory and the status of the FAA TFR.",
+    "decision": "I will escalate the situation to VOC command as an Amber incident due to the potential threat posed by the unauthorized drone and request additional resources for monitoring and assessment.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC command",
+        "target": "VOC command",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "request additional surveillance resources",
+        "target": "UAV pilot",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "radio",
+        "message": "VOC, this is Senior Police Authority. We have an Amber incident: unauthorized drone detected 800m northeast of the stadium. Requesting additional resources for monitoring and assessment."
+      },
+      {
+        "to": "UAV pilot",
+        "channel": "radio",
+        "message": "UAV pilot, please prepare to deploy rapid-response drones for monitoring the unauthorized drone approaching from the northeast."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The unauthorized drone poses a potential threat, and it is essential to escalate and gather more information to ensure the safety of the event.",
+    "estimated_total_seconds": 60
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast of the stadium. I need to verify the drone's trajectory and potential threat level, as well as gather more information on its capabilities and intentions.",
+    "decision": "I decide to escalate this incident to the VOC for immediate attention due to the potential threat posed by the unauthorized drone. This falls under the Amber protocol as it requires additional resources and verification.",
+    "actions": [
+      {
+        "action": "report unauthorized drone detection",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "VOC Main",
+        "message": "VOC, this is Sector Team Lead. We have detected an unauthorized drone signal at 800m northeast of the stadium. Requesting immediate escalation and additional resources for verification."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The unauthorized drone poses a potential risk, and escalating the situation is necessary to ensure safety and security protocols are followed.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe an unauthorized drone approaching the stadium from the northeast at 800m. I need to verify the drone's intentions and confirm if it poses a threat. I do not have the capability to assess the drone's payload or behavior without additional resources.",
+    "decision": "I will escalate this incident to the VOC and request additional resources to monitor and respond to the potential threat posed by the unauthorized drone.",
+    "actions": [
+      {
+        "action": "escalate incident and request monitoring resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Supervisor",
+        "channel": "VOC Main",
+        "message": "VOC, this is Fixed Camera Monitoring. We have detected an unauthorized drone approaching from the northeast at 800m. Requesting immediate escalation and additional monitoring resources."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate escalation is necessary to ensure safety and security protocols are followed.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast, approaching the stadium. I need to verify the drone's behavior and potential threat level, as well as confirm if it poses a risk to the event or attendees.",
+    "decision": "I will escalate the situation to VOC command and request additional resources to assess the threat and monitor the drone's approach.",
+    "actions": [
+      {
+        "action": "escalate situation and request monitoring resources",
+        "target": "VOC command",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "radio_channel",
+        "message": "VOC, this is UAV pilot. We have detected an unauthorized drone signal at 800m northeast, approaching the stadium. Requesting additional monitoring resources and assessment of potential threat."
+      }
+    ],
+    "confidence": 0.7,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate escalation is necessary to ensure safety and security protocols are followed.",
+    "estimated_total_seconds": 30
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone signal has been detected at 800m northeast of the stadium, and it is approaching. I need to verify its trajectory, potential threat level, and capabilities, as well as gather more information on its intentions.",
+    "decision": "I will escalate the situation to VOC command as an Amber incident due to the potential threat posed by the unauthorized drone. I will request additional resources to monitor the drone's behavior and trajectory.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC command",
+        "target": "VOC command",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor drone trajectory and behavior using tethered drone feed",
+        "target": "tethered drone operator",
+        "estimated_seconds": 20
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "VOC Main",
+        "message": "This is VOC. We have an Amber incident: unauthorized drone detected at 800m northeast, approaching the stadium. Requesting additional resources for monitoring."
+      },
+      {
+        "to": "tethered drone operator",
+        "channel": "VOC Main",
+        "message": "Please monitor the unauthorized drone approaching from the northeast and report any behavior or trajectory changes."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The situation requires immediate attention due to the potential threat of the unauthorized drone, and I need to ensure we have adequate resources to monitor and assess the situation.",
+    "estimated_total_seconds": 50
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone is detected at 800m northeast of the stadium, potentially posing a threat. I need to verify the drone's trajectory, behavior, and any possible payload. The situation is escalating and requires immediate attention and additional resources.",
+    "decision": "I will escalate this incident to Amber status and request additional resources to monitor the unauthorized drone's behavior and trajectory, as it poses a potential threat to the event and attendees.",
+    "actions": [
+      {
+        "action": "escalate incident to Amber status",
+        "target": "VOC command",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "request monitoring of drone behavior and trajectory",
+        "target": "UAV pilot",
+        "estimated_seconds": 15
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have an Amber incident: unauthorized drone detected at 800m northeast, potential threat to the event. Requesting additional resources for monitoring."
+      },
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "UAV pilot, we need to monitor the unauthorized drone approaching from the northeast. Please verify its behavior and trajectory."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The unauthorized drone poses a significant risk, and immediate escalation and monitoring are necessary to ensure the safety of attendees.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "TETHERED",
+    "run": 1,
+    "agent_type": "Senior police authority — security decisions, primacy transfer",
+    "assessment": "I know that an unauthorized drone is detected at 800m northeast of the stadium and is approaching. I need to verify its trajectory, potential threat level, and capabilities. I also need to confirm if it poses a risk to the event or attendees.",
+    "decision": "I will escalate this incident to Amber status and request additional resources to monitor the unauthorized drone's behavior and trajectory.",
+    "actions": [
+      {
+        "action": "escalate incident to Amber status",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "monitor drone behavior using tethered drone feed",
+        "target": "tethered drone operator",
+        "estimated_seconds": 30
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "This is VOC. We have an unauthorized drone detected at 800m northeast, escalating to Amber status. Requesting additional resources for monitoring."
+      },
+      {
+        "to": "tethered drone operator",
+        "channel": "radio_channel",
+        "message": "Tethered drone operator, please monitor the unauthorized drone's behavior and trajectory. Report any changes immediately."
+      }
+    ],
+    "confidence": 0.85,
+    "reasoning": "The drone poses a potential threat, and I need to ensure we have adequate monitoring in place while escalating the situation to the appropriate level.",
+    "estimated_total_seconds": 60
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe an unauthorized drone approaching the stadium at 800m northeast. I need to verify its trajectory, potential threat level, and whether it poses any immediate danger to the crowd or event.",
+    "decision": "I will escalate this situation to VOC as it is an Amber incident due to the unauthorized drone, requesting additional resources to monitor and respond to the potential threat.",
+    "actions": [
+      {
+        "action": "report incident and request resources",
+        "target": "VOC",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "deploy rapid-response drone to assess the situation",
+        "target": "northeast area",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "VOC, this is Sector Team Lead. We have detected an unauthorized drone 800m northeast of the stadium. Requesting additional resources for monitoring and response."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The unauthorized drone presents a potential threat that requires immediate attention and escalation to ensure crowd safety.",
+    "estimated_total_seconds": 75
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe an unauthorized drone approaching the stadium at a distance of 800m. I need to verify the drone's behavior and potential threat level, as well as confirm if it poses any immediate risk to attendees or the match.",
+    "decision": "I will escalate the situation due to the potential threat posed by the unauthorized drone. I will request the rapid-response drones to be deployed to intercept and assess the situation.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast area near unauthorized drone",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "all units",
+        "channel": "VOC Main",
+        "message": "Attention all units, unauthorized drone detected at 800m northeast. Deploying rapid-response drone for assessment. Standby for further instructions."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The unauthorized drone poses a potential threat, and immediate action is necessary to assess and mitigate any risks to the event and attendees.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe an unauthorized drone approaching the stadium at 800m northeast. I need to verify its trajectory, potential threat level, and whether it poses a risk to the event or attendees.",
+    "decision": "I will deploy a rapid-response drone to intercept and gather visual data on the unauthorized drone to assess the situation further. This is necessary due to the potential hostile nature of the drone.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC Coordinator",
+        "channel": "VOC Main",
+        "message": "This is UAV pilot. Unauthorized drone detected approaching from the northeast at 800m. Deploying rapid-response drone for visual assessment."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Deploying a drone will allow for real-time assessment of the unauthorized drone, which is critical given the potential threat it poses.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I have reports from sector team leads and fixed camera monitoring confirming an unauthorized drone approaching the stadium at 800m northeast. I need to verify its trajectory, behavior, and potential threat level to assess if it poses an immediate danger to the crowd or event.",
+    "decision": "I will deploy a rapid-response drone to intercept and gather real-time data on the unauthorized drone's behavior and trajectory, as this is a potential security threat.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "all_steward_teams",
+        "channel": "VOC Main",
+        "message": "Unauthorized drone detected approaching from northeast at 800m. Deploying rapid-response drone for assessment. Standby for further instructions."
+      },
+      {
+        "to": "UAV pilot",
+        "channel": "VOC Main",
+        "message": "Deploy rapid-response drone to northeast sector to assess unauthorized drone. Confirm trajectory and behavior."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Deploying a rapid-response drone is necessary to gather critical information on the unauthorized drone's intentions and ensure the safety of the attendees.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone is approaching the stadium at 800m northeast, and it is not registered in the authorized fleet. I need to verify its trajectory, behavior, and potential threat level to determine if it poses an immediate risk to the crowd or event.",
+    "decision": "I will deploy a rapid-response drone to intercept the unauthorized drone and gather real-time data on its behavior and trajectory to assess the threat level.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "Deploy rapid-response drone to intercept unauthorized drone approaching from the northeast at 800m. Gather real-time data on its behavior and trajectory."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "Deploying a rapid-response drone is necessary to assess the potential threat posed by the unauthorized drone. This action adheres to protocol as it is categorized as a significant threat (Amber).",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 0,
+    "agent_type": "Senior police authority — security decisions, primacy transfer",
+    "assessment": "I know that an unauthorized drone is approaching the stadium at 800m northeast. I do not know its exact trajectory, potential threat level, or if it poses an immediate danger to the crowd or event. I need to verify its behavior and trajectory using the rapid-response drone.",
+    "decision": "I will deploy a rapid-response drone to intercept the unauthorized drone and gather real-time data to assess the threat level.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "Deploy rapid-response drone to intercept unauthorized drone approaching from 800m northeast. Gather real-time data on its behavior and trajectory."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "Deploying the rapid-response drone is a necessary step to assess the situation effectively and ensure the safety of attendees.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Sector team lead — first eyes on ground, crowd interface",
+    "assessment": "I observe an unauthorized drone approaching the stadium from the northeast at 800m. I need to verify the drone's trajectory, potential threat level, and if any spectators are at risk.",
+    "decision": "I will escalate the situation to VOC as an Amber incident due to the potential threat posed by the unauthorized drone. I will request additional resources for monitoring and response.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC",
+        "target": "VOC",
+        "estimated_seconds": 20
+      },
+      {
+        "action": "deploy rapid-response drone to monitor unauthorized drone",
+        "target": "drone operator",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_channel",
+        "message": "VOC, this is Sector Team Lead. We have detected an unauthorized drone approaching from the northeast at 800m. Escalating to Amber. Requesting additional resources for monitoring."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The presence of an unauthorized drone poses a significant risk, necessitating immediate escalation and monitoring to ensure spectator safety.",
+    "estimated_total_seconds": 65
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability",
+    "assessment": "I observe an unauthorized drone approaching the stadium at 800m northeast. I need to verify the drone's capabilities and intentions, as well as confirm if it poses a threat to the event or attendees.",
+    "decision": "I will escalate this incident to VOC command as an Amber-level situation due to the potential threat posed by the unauthorized drone. I will request additional resources for monitoring and response.",
+    "actions": [
+      {
+        "action": "escalate incident to VOC command",
+        "target": "VOC command",
+        "estimated_seconds": 30
+      },
+      {
+        "action": "deploy rapid-response drone for closer monitoring",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC command",
+        "channel": "VOC Main",
+        "message": "This is VOC monitoring. We have detected an unauthorized drone approaching from the northeast at 800m. Escalating to Amber-level. Requesting additional resources for monitoring."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "The presence of an unauthorized drone poses a potential risk, and immediate escalation is necessary to ensure safety and proper response.",
+    "estimated_total_seconds": 75
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "UAV pilot — controls tethered and rapid-response drone units",
+    "assessment": "I observe an unauthorized drone signal detected at 800m northeast of the stadium. I need to verify the drone's exact location, altitude, and any potential threats it may pose.",
+    "decision": "I will deploy one rapid-response drone to the northeast to gather more information about the unauthorized drone and assess the situation.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "VOC",
+        "channel": "radio_main",
+        "message": "VOC, this is UAV pilot. Unauthorized drone detected at 800m northeast. Deploying rapid-response drone to assess the situation."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Deploying a rapid-response drone will provide real-time data on the unauthorized drone, allowing for informed decision-making regarding potential threats.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know there is an unauthorized drone approaching the stadium from the northeast at 800m. I need to verify its trajectory, potential threat level, and whether any spectators are at risk. I also need to confirm the drone's capabilities and intentions.",
+    "decision": "I will deploy one rapid-response drone to verify the unauthorized drone's exact location, altitude, and potential threats it may pose. This is necessary to assess the situation accurately and determine the appropriate response.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast of stadium",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "UAV pilot",
+        "channel": "VOC Main",
+        "message": "Deploy one rapid-response drone to verify the unauthorized drone's location and altitude approaching from the northeast."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Deploying the rapid-response drone will provide real-time data on the unauthorized drone, allowing for a better assessment of the threat level and necessary actions.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Central command hub — receives all sensor feeds, coordinates all response",
+    "assessment": "I know that an unauthorized drone is approaching the stadium from the northeast at 800m. I need to verify its trajectory, capabilities, and potential threat level, as well as confirm if any spectators are at risk.",
+    "decision": "I will deploy one rapid-response drone to verify the unauthorized drone's exact location, altitude, and potential threats it may pose. This aligns with protocol for Amber incidents, as we need to assess the situation before determining further actions.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "Deploy one rapid-response drone to verify the unauthorized drone's location and altitude approaching from the northeast at 800m."
+      }
+    ],
+    "confidence": 0.8,
+    "reasoning": "Deploying a rapid-response drone will provide critical information needed to assess the threat level of the unauthorized drone and ensure the safety of attendees.",
+    "estimated_total_seconds": 45
+  },
+  {
+    "scenario_id": "SEC-003",
+    "config_id": "FULL",
+    "run": 1,
+    "agent_type": "Senior police authority — security decisions, primacy transfer",
+    "assessment": "I observe an unauthorized drone approaching the stadium from the northeast at 800m. I need to verify the drone's trajectory, potential threat level, and if any spectators are at risk. The situation is classified as Amber, requiring further assessment.",
+    "decision": "I will deploy one rapid-response drone to verify the unauthorized drone's exact location, altitude, and potential threats it may pose. This aligns with protocol for Amber incidents.",
+    "actions": [
+      {
+        "action": "deploy rapid-response drone",
+        "target": "northeast sector",
+        "estimated_seconds": 45
+      }
+    ],
+    "communications": [
+      {
+        "to": "UAV pilot",
+        "channel": "radio_channel",
+        "message": "Deploy one rapid-response drone to the northeast sector to assess unauthorized drone at 800m. Confirm location, altitude, and potential threats."
+      }
+    ],
+    "confidence": 0.9,
+    "reasoning": "Deploying the rapid-response drone is essential to gather real-time information on the unauthorized drone, which is crucial for determining the next steps and ensuring spectator safety.",
+    "estimated_total_seconds": 45
+  }
+]

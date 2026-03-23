@@ -1,0 +1,795 @@
+# ═══════════════════════════════════════════════════════════════
+# MiroFish Domain Template: Stadium Operations
+# Version: 1.0.0
+# Classification: Production — FIFA Pilot Program
+# 
+# Purpose:
+#   Simulate the command-and-control decision chain in stadium
+#   operations to measure how drone-augmented situational awareness
+#   affects response quality, decision latency, and inter-agency
+#   coordination at the Venue Operations Centre (VOC).
+#
+# Aligned with:
+#   - FIFA Football Stadiums Guidelines (2024 Edition)
+#     Section 4.7: Safety and Security Operations
+#     Section 5.4: Safety and Security Infrastructure
+#   - FIFA Stadium Safety & Security Regulations
+#   - SGSA Guide to Safety at Sports Grounds (6th Edition)
+#   - DIM-ICE Framework (Design-Information-Management /
+#     Ingress-Circulation-Egress)
+#
+# NOT a crowd physics simulation (use Vissim/Pathfinder for that).
+# This simulates DECISIONS — who sees what, who tells whom,
+# who acts, and how fast the chain resolves.
+# ═══════════════════════════════════════════════════════════════
+
+name: stadium_operations
+display_name: "Stadium Operations — Drone-Augmented Safety"
+version: "1.0.0"
+domain: safety_security
+category: critical_infrastructure
+
+description: |
+  Simulates the decision chain in stadium Venue Operations Centre (VOC)
+  during match-day incidents. Measures how drone-provided aerial awareness
+  affects response time, decision accuracy, and inter-agency coordination.
+  
+  Designed for FIFA pilot proposals: produces quantitative evidence comparing
+  baseline (CCTV + radio + stewards) vs drone-augmented operations across
+  500+ scenario runs per configuration.
+
+# ═══════════════════════════════════════════════════════════════
+# ONTOLOGY — Entity and Relationship Schema
+# ═══════════════════════════════════════════════════════════════
+# Maps directly to FIFA's integrated command structure.
+# Every entity is a DECISION-MAKER or SENSOR, not a crowd unit.
+
+ontology_prompt: |
+  You are an expert in stadium safety operations ontology design.
+  Your task: design entity types and relationship types for simulating
+  the DECISION CHAIN inside a stadium's safety/security operations,
+  NOT crowd physics.
+
+  **Context**: FIFA requires stadiums to operate an integrated command
+  structure with a Venue Operations Centre (VOC) connected to monitoring,
+  control, and communications systems. We simulate how information flows
+  from sensors (CCTV, drones, stewards) through the command chain to
+  action (dispatch, gate control, evacuation).
+
+  **You MUST output valid JSON only.**
+
+  ## Entity Types (exactly 10)
+
+  Design these specific types based on FIFA stadium operations:
+
+  1. VenueOperationsCenter — The central command hub. Receives all feeds,
+     coordinates all response. FIFA Section 5.4.3.
+  2. PoliceCommander — Senior police officer in VOC or police room.
+     Controls security primacy transfer. FIFA Section 4.7.1.
+  3. SafetyOfficer — Stadium safety officer responsible for evacuation
+     decisions, steward deployment, gate management.
+  4. StewardSupervisor — Leads a team of stewards in a stadium sector.
+     First human eyes on ground. Reports upward via radio.
+  5. MedicalCoordinator — Coordinates paramedic foot patrols, ambulance
+     staging, medical facility in stadium. FIFA Section 5.4.5.
+  6. DroneOperator — Controls tethered and/or untethered drone units.
+     Feeds live video to VOC. Receives mission priority from VOC.
+  7. FireSafetyCommander — Controls fire detection panel, sprinkler
+     systems, firefighting equipment. FIFA Section 5.4.1.
+  8. CCTVOperator — Monitors fixed camera network. FIFA Section 5.4.3
+     requires CCTV coverage of all public areas.
+  
+  Fallback types (last 2):
+  9. Person — Any individual not fitting above types (spectator
+     representative, VIP liaison, media officer, etc.)
+  10. Organization — Any organization (stadium management company,
+      emergency services HQ, broadcast partner, etc.)
+
+  ## Edge Types (8-10)
+
+  Design relationships reflecting command, data flow, and coordination:
+
+  - COMMANDS: authority relationship (PoliceCommander → StewardSupervisor)
+  - REPORTS_TO: upward reporting chain
+  - FEEDS_VIDEO_TO: sensor data flow (DroneOperator → VOC, CCTVOperator → VOC)
+  - DISPATCHES_TO: deployment order (VOC → MedicalCoordinator)
+  - MONITORS_ZONE: spatial coverage assignment
+  - ESCALATES_TO: incident escalation path
+  - COORDINATES_WITH: peer-level coordination (police ↔ fire ↔ medical)
+  - TRANSFERS_PRIMACY_TO: FIFA-defined primacy transfer in major incidents
+  - REQUESTS_SUPPORT_FROM: inter-agency support request
+  - COVERS_BLIND_SPOT_OF: drone compensating for CCTV gap
+
+  ## Attribute Design
+
+  Each entity should have attributes relevant to decision-making:
+  - response_time_baseline (seconds): typical time to act without drone
+  - radio_channel: assigned communication channel
+  - zone_assignment: which stadium sector they cover
+  - authority_level: 1-5 (1=steward, 5=police commander)
+  - situational_awareness_score: 0-1 (how much of their zone they can see)
+
+  ## Output Format
+  Standard MiroFish ontology JSON:
+  ```json
+  {
+    "entity_types": [...],
+    "edge_types": [...],
+    "analysis_summary": "..."
+  }
+  ```
+
+# ═══════════════════════════════════════════════════════════════
+# DEFAULT SIMULATION CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+default_config:
+  max_rounds: 120          # 120 rounds = 2 hours of match-day
+  hours_per_round: 1       # Each round = 1 minute of simulated time
+  start_hour: 17           # 5:00 PM — gates open 2h before kickoff (19:00)
+  
+  platforms:
+    - custom               # Not social media — custom stadium ops platform
+  
+  # ─── Match-Day Timeline (120 minutes mapped to real ops) ───
+  # Minute 0-30:   Gates open, early ingress
+  # Minute 30-60:  Peak ingress, concourse filling
+  # Minute 60-90:  Match first half (lower ground activity, high stand density)
+  # Minute 90-105: Half-time (concourse surge, food/toilet)
+  # Minute 105-115: Match second half
+  # Minute 115-120: Full-time whistle, egress begins
+
+  activity_pattern:
+    # Minute-by-minute activity multiplier (0.0 = quiet, 1.0 = peak risk)
+    # Mapped to match-day operational rhythm
+    ingress_early:     { minutes: "0-30",    multiplier: 0.4, risk_level: "moderate" }
+    ingress_peak:      { minutes: "30-60",   multiplier: 0.8, risk_level: "high" }
+    match_first_half:  { minutes: "60-90",   multiplier: 0.3, risk_level: "low" }
+    halftime_surge:    { minutes: "90-105",  multiplier: 0.9, risk_level: "very_high" }
+    match_second_half: { minutes: "105-115", multiplier: 0.3, risk_level: "low" }
+    egress:            { minutes: "115-120", multiplier: 1.0, risk_level: "critical" }
+
+  # ─── Stadium Configuration ─────────────────────────────────
+  stadium:
+    name: "Template Stadium"
+    capacity: 40000
+    sectors: ["North", "South", "East", "West"]
+    gates:
+      main: ["Gate A", "Gate B", "Gate C", "Gate D"]
+      emergency: ["Emergency Exit 1", "Emergency Exit 2", "Emergency Exit 3", "Emergency Exit 4"]
+      vip: ["VIP Gate"]
+    concourses: ["North Concourse", "South Concourse", "East Concourse", "West Concourse"]
+    parking_zones: ["P1 North", "P2 East", "P3 South"]
+    medical_facilities: ["Medical Room 1 (North)", "Medical Room 2 (South)", "Pitch-side Medical"]
+    cctv_cameras: 120
+    cctv_blind_spots: ["P1 rear area", "East Concourse stairwell B", "South Gate external queue", "Rooftop access"]
+
+  # ─── Drone Configuration ───────────────────────────────────
+  drone_config:
+    tethered:
+      count: 1
+      altitude_m: 40
+      endurance_hours: 6
+      fov_diameter_m: 200
+      position: "Center above South parking"
+      capabilities: ["continuous_overwatch", "thermal_imaging", "crowd_density_estimation", "license_plate_recognition"]
+      feed_latency_ms: 200
+      
+    rapid_response:
+      count: 2
+      max_flight_time_min: 25
+      speed_ms: 15
+      deployment_time_sec: 45    # Time from command to airborne
+      capabilities: ["close_inspection", "zoom_camera", "speaker_system", "spotlight"]
+      feed_latency_ms: 150
+      
+    integration:
+      feeds_to: "VenueOperationsCenter"
+      command_from: "VenueOperationsCenter"
+      priority_protocol: |
+        1. Life safety incidents (medical emergency, crowd crush risk)
+        2. Security incidents (intrusion, unattended object, violence)
+        3. Operational support (queue monitoring, egress flow)
+        4. Routine patrol (perimeter sweep, parking scan)
+      geofence:
+        no_fly_above_stands: true     # Never fly directly over seated spectators
+        max_altitude_m: 50
+        restricted_zones: ["pitch_area_during_play", "broadcast_compound"]
+
+  # ─── Counter-Drone Layer ────────────────────────────────────
+  counter_drone:
+    detection_systems: ["RF scanner", "radar", "acoustic sensor"]
+    response_protocol: |
+      1. Detection: RF/radar identifies unauthorized drone within 1km perimeter
+      2. Classification: Authorized (matches known fleet) or Unauthorized
+      3. Alert: VOC notified immediately, police commander informed
+      4. Response options: RF jamming, net capture drone, manual interception
+      5. Escalation: If threat persists, stadium evacuation protocol may activate
+    friendly_identification:
+      method: "transponder + geofence + pre-registered flight plan"
+      registration: "All authorized drones registered 48h before event"
+
+# ═══════════════════════════════════════════════════════════════
+# INCIDENT SCENARIOS — 12 Pre-defined Events for Simulation
+# ═══════════════════════════════════════════════════════════════
+# Each scenario is injected at a specific match-day minute.
+# Scenarios are randomized per run but drawn from this pool.
+
+scenarios:
+  # ─── Category 1: Crowd Safety ──────────────────────────────
+  - id: "CROWD-001"
+    name: "Gate congestion — peak ingress"
+    category: crowd_safety
+    severity: high
+    trigger_minute: 40
+    description: |
+      Gate B queue exceeds 800m with 35-minute wait. Crowd density
+      at gate approach reaches 4.2 persons/m². Risk of crowd crush
+      if not managed within 10 minutes.
+    expected_decisions:
+      - "VOC identifies congestion via CCTV or drone"
+      - "Safety Officer orders Gate B stewards to slow intake"
+      - "VOC redirects crowd to Gate C via PA system and signage"
+      - "Drone provides aerial density confirmation"
+    kpi_measured: ["time_to_detect", "time_to_first_action", "decision_accuracy"]
+    
+  - id: "CROWD-002"
+    name: "Halftime concourse crush risk"
+    category: crowd_safety
+    severity: critical
+    trigger_minute: 92
+    description: |
+      North Concourse density exceeds 5.0 persons/m² near food kiosks.
+      Movement stalls. Two stewards report via radio that crowd is
+      becoming agitated. Potential crush scenario.
+    expected_decisions:
+      - "VOC receives steward reports"
+      - "Drone reposition to North Concourse for overhead view"
+      - "Medical team placed on standby"
+      - "Safety Officer considers partial section lockdown"
+      - "PA announcement to redirect to South Concourse"
+    kpi_measured: ["time_to_detect", "time_to_escalate", "coordination_quality"]
+
+  - id: "CROWD-003"
+    name: "Post-match egress bottleneck"
+    category: crowd_safety
+    severity: high
+    trigger_minute: 116
+    description: |
+      South exit corridor narrows due to temporary barrier left by
+      catering vendor. 15,000 spectators funneling through reduced
+      width. External queue backing up into parking zone P3.
+    expected_decisions:
+      - "Tethered drone detects narrowing from above"
+      - "VOC dispatches steward team to remove barrier"
+      - "Police redirects vehicle traffic away from P3"
+      - "Rapid-response drone monitors P3 for vehicle-pedestrian conflict"
+    kpi_measured: ["time_to_detect", "time_to_resolve", "blind_spot_coverage"]
+
+  # ─── Category 2: Medical Emergency ─────────────────────────
+  - id: "MED-001"
+    name: "Cardiac arrest in upper tier"
+    category: medical
+    severity: critical
+    trigger_minute: 75
+    description: |
+      Spectator collapses in Section East Upper, Row 34 Seat 17.
+      Adjacent spectators wave for help. Nearest steward is 3 sections
+      away. Nearest defibrillator is at East Concourse level.
+    expected_decisions:
+      - "Steward or CCTV identifies distress signal"
+      - "Medical Coordinator dispatches paramedic foot patrol"
+      - "Drone provides precise location guidance if stairs complex"
+      - "Announce nearest defibrillator location to ground staff"
+      - "If ambulance needed: clear access route via Gate D"
+    kpi_measured: ["time_to_detect", "time_to_medical_arrival", "route_guidance_accuracy"]
+
+  - id: "MED-002"
+    name: "Multiple casualties — stand collapse"
+    category: medical
+    severity: critical
+    trigger_minute: 65
+    description: |
+      Temporary seating section shows structural distress. 12 spectators
+      fall approximately 2 meters. Mass casualty incident (MCI) protocol
+      may be required. Multiple injuries visible.
+    expected_decisions:
+      - "Immediate drone deployment for aerial assessment"
+      - "Medical Coordinator activates MCI protocol"
+      - "Safety Officer evacuates adjacent sections"
+      - "Fire Safety Commander assesses structural integrity"
+      - "Police Commander considers primacy transfer"
+      - "Ambulance staging area activated"
+    kpi_measured: ["time_to_mci_declaration", "time_to_evacuate_adjacent", "inter_agency_coordination"]
+
+  # ─── Category 3: Security Threat ────────────────────────────
+  - id: "SEC-001"
+    name: "Unauthorized perimeter breach"
+    category: security
+    severity: high
+    trigger_minute: 55
+    description: |
+      Perimeter sensor triggers at East fence line. CCTV shows 3
+      individuals climbing fence near loading dock. No tickets visible.
+      Intent unknown — could be ticket-less fans or hostile actors.
+    expected_decisions:
+      - "VOC alerts Police Commander immediately"
+      - "Rapid-response drone dispatched for close observation"
+      - "Police ground unit directed to intercept"
+      - "CCTV operator tracks movement inside perimeter"
+      - "Assess: escalate to security threat or manage as trespass"
+    kpi_measured: ["time_to_detect", "time_to_intercept", "threat_assessment_accuracy"]
+
+  - id: "SEC-002"
+    name: "Unattended package — concourse"
+    category: security
+    severity: critical
+    trigger_minute: 88
+    description: |
+      Steward reports unattended backpack near West Concourse food
+      court. Owner not identifiable. Busy area with 2000+ spectators
+      within 50m radius. Protocol requires assessment before evacuation
+      to avoid panic.
+    expected_decisions:
+      - "VOC notifies Police Commander"
+      - "Stewards establish 30m cordon discreetly"
+      - "Rapid-response drone provides overhead view without alarming crowd"
+      - "Police EOD team alerted"
+      - "Safety Officer prepares partial evacuation plan for West sector"
+      - "Decision: evacuate West sector or wait for EOD assessment"
+    kpi_measured: ["time_to_cordon", "crowd_management_quality", "escalation_decision_time"]
+
+  - id: "SEC-003"
+    name: "Unauthorized drone detected"
+    category: security
+    severity: high
+    trigger_minute: 70
+    description: |
+      Counter-drone RF scanner detects unknown drone signal at 800m
+      northeast, approaching stadium. Not registered in authorized fleet.
+      FAA TFR (or equivalent) is active. Potential hostile surveillance
+      or payload delivery.
+    expected_decisions:
+      - "Counter-drone system classifies as unauthorized"
+      - "VOC alerts Police Commander + authorized drone operator"
+      - "Authorized drones RTB (return to base) to avoid misidentification"
+      - "Police activates counter-drone response"
+      - "If drone enters stadium airspace: consider partial shelter-in-place"
+    kpi_measured: ["time_to_detect", "time_to_classify", "friendly_deconfliction_time"]
+
+  # ─── Category 4: Environmental / Infrastructure ─────────────
+  - id: "ENV-001"
+    name: "Severe weather — lightning warning"
+    category: environmental
+    severity: high
+    trigger_minute: 50
+    description: |
+      Weather service issues lightning warning within 15 minutes.
+      40,000 spectators in open-air stadium. Protocol requires
+      shelter-in-place or controlled movement to covered areas.
+      Drones must be grounded during lightning.
+    expected_decisions:
+      - "VOC receives weather alert"
+      - "Drone operator grounds all units immediately"
+      - "Safety Officer activates weather contingency plan"
+      - "PA announcement directs spectators to covered concourses"
+      - "Match referee consulted on play suspension"
+      - "Medical teams on standby for heat/rain-related incidents"
+    kpi_measured: ["time_to_ground_drones", "time_to_shelter_announcement", "crowd_compliance"]
+
+  - id: "ENV-002"
+    name: "Power failure — partial blackout"
+    category: environmental
+    severity: moderate
+    trigger_minute: 80
+    description: |
+      East sector loses power. Emergency lighting activates but CCTV
+      cameras in East sector go offline. PA system on backup power
+      (30 min battery). Spectators in East sector disoriented.
+    expected_decisions:
+      - "VOC detects CCTV loss in East sector"
+      - "Drone repositioned to cover East sector blind spots"
+      - "Steward supervisors in East deploy with flashlights"
+      - "Fire Safety Commander checks fire panel status"
+      - "Generator team dispatched to restore power"
+    kpi_measured: ["time_to_compensate_cctv_loss", "drone_reposition_time", "sector_coverage_maintained"]
+
+  # ─── Category 5: Operational ────────────────────────────────
+  - id: "OPS-001"
+    name: "VIP motorcade arrival conflict"
+    category: operational
+    severity: moderate
+    trigger_minute: 35
+    description: |
+      Unscheduled VIP arrival via South Gate during peak ingress.
+      Security detail requests gate closure for 5 minutes. 3,000
+      spectators queuing at South Gate. Risk of crowd frustration
+      and overflow to other gates.
+    expected_decisions:
+      - "VOC assesses crowd volume at South Gate"
+      - "Drone provides real-time queue length measurement"
+      - "Safety Officer negotiates: VIP via alternate route vs brief closure"
+      - "Stewards manage queue expectations"
+      - "If closure: redirect to Gate A with PA + signage"
+    kpi_measured: ["decision_quality", "crowd_impact_assessment", "alternative_route_time"]
+
+  - id: "OPS-002"
+    name: "Pre-event sweep — suspicious finding"
+    category: operational
+    severity: moderate
+    trigger_minute: 5
+    description: |
+      During pre-event drone sweep, tethered drone operator notices
+      a vehicle parked in restricted zone behind North stand loading
+      dock. Vehicle is unregistered in event logistics manifest.
+      No person visible nearby.
+    expected_decisions:
+      - "Drone operator reports to VOC with coordinates + imagery"
+      - "Police Commander dispatches ground unit to investigate"
+      - "CCTV operator reviews footage for vehicle arrival time"
+      - "If vehicle is threat: cordon + EOD"
+      - "If vehicle is logistics error: remove and log"
+    kpi_measured: ["time_to_detect", "time_to_investigate", "false_positive_handling"]
+
+# ═══════════════════════════════════════════════════════════════
+# AGENT BEHAVIOR PROFILES
+# ═══════════════════════════════════════════════════════════════
+# Defines how each agent type makes decisions.
+# Used by ProfileGenerator to create realistic personas.
+
+agent_profiles:
+  VenueOperationsCenter:
+    role: "Central command hub — receives all sensor feeds, coordinates all response"
+    decision_style: "systematic, protocol-driven, risk-prioritized"
+    communication: "Radio net primary, phone backup, video feed monitors"
+    response_baseline_sec: 30    # Time to process incoming report
+    typical_actions:
+      - "Acknowledge incident report"
+      - "Verify via available sensors (CCTV, drone)"
+      - "Classify severity (Green/Amber/Red)"
+      - "Dispatch appropriate response team"
+      - "Update all stakeholders via radio"
+      - "Log decision and timestamp"
+    drone_augmentation_effect: |
+      With drone: VOC has real-time aerial view, reducing verification
+      time from 2-5 minutes (send steward to check) to 15-30 seconds
+      (reposition drone or check tethered feed). Decision confidence
+      increases from ~60% (radio report only) to ~90% (visual confirmation).
+
+  PoliceCommander:
+    role: "Senior police authority — security decisions, primacy transfer"
+    decision_style: "authoritative, threat-assessment-focused"
+    authority_level: 5
+    response_baseline_sec: 45
+    typical_actions:
+      - "Assess security threat level"
+      - "Authorize use of force if necessary"
+      - "Request primacy transfer from Safety Officer"
+      - "Coordinate with external police units"
+      - "Authorize counter-drone response"
+    drone_augmentation_effect: |
+      With drone: Police Commander sees perimeter and approach routes
+      in real-time. Threat assessment shifts from reactive (wait for
+      ground report) to proactive (observe suspect behavior via aerial).
+
+  SafetyOfficer:
+    role: "Stadium safety — evacuation, crowd flow, gate management"
+    decision_style: "cautious, crowd-safety-prioritized, protocol-adherent"
+    authority_level: 4
+    response_baseline_sec: 20
+    typical_actions:
+      - "Assess crowd density and flow"
+      - "Order gate opening/closing"
+      - "Initiate partial or full evacuation"
+      - "Activate contingency plan"
+      - "Coordinate with Fire Safety Commander"
+    drone_augmentation_effect: |
+      With drone: Safety Officer can see ALL exit routes simultaneously,
+      not just the sector with a problem. Enables data-driven evacuation
+      routing instead of protocol-default routing.
+
+  StewardSupervisor:
+    role: "Sector team lead — first eyes on ground, crowd interface"
+    decision_style: "reactive, observation-based, radio-dependent"
+    authority_level: 2
+    response_baseline_sec: 10
+    typical_actions:
+      - "Observe and report anomalies"
+      - "Direct spectators"
+      - "Assist medical team with access"
+      - "Manage gate queue"
+      - "Execute evacuation instructions from VOC"
+    drone_augmentation_effect: |
+      Indirect benefit: steward reports verified faster by VOC via drone,
+      so steward gets instructions back sooner. Also: drone can guide
+      steward to exact location of incident in complex stadium layout.
+
+  MedicalCoordinator:
+    role: "Medical operations — paramedic deployment, ambulance staging, MCI"
+    decision_style: "clinical, triage-focused, time-critical"
+    authority_level: 3
+    response_baseline_sec: 15
+    typical_actions:
+      - "Dispatch paramedic foot patrol to incident"
+      - "Activate MCI protocol if multiple casualties"
+      - "Coordinate ambulance access route"
+      - "Request helicopter MEDEVAC if available"
+      - "Report casualty status to VOC"
+    drone_augmentation_effect: |
+      With drone: Medical Coordinator sees exact incident location from
+      above, identifies optimal access route (which stairwell is clear),
+      and can pre-position ambulance at correct gate before ground team
+      even arrives at patient.
+
+  DroneOperator:
+    role: "UAV pilot — controls tethered and rapid-response drone units"
+    decision_style: "mission-focused, prioritizes VOC tasking"
+    authority_level: 2
+    response_baseline_sec: 5
+    typical_actions:
+      - "Maintain tethered drone overwatch on assigned zone"
+      - "Deploy rapid-response drone on VOC command"
+      - "Provide live video feed to VOC monitors"
+      - "Call out observations (crowd density, obstruction, smoke)"
+      - "Return drone for battery swap"
+      - "Ground all drones on lightning/counter-drone alert"
+    unique_constraints:
+      - "Must ground during lightning within 30 seconds"
+      - "Never fly over seated spectators"
+      - "Maintain geofence compliance at all times"
+      - "Battery management: RTB at 20% charge"
+
+  FireSafetyCommander:
+    role: "Fire safety — detection panels, evacuation support, structural assessment"
+    decision_style: "technical, code-adherent, worst-case-planning"
+    authority_level: 3
+    response_baseline_sec: 20
+    typical_actions:
+      - "Monitor fire detection panel"
+      - "Assess structural safety after incident"
+      - "Coordinate with external fire service"
+      - "Advise on evacuation routing (fire-safe routes)"
+      - "Control smoke extraction systems"
+
+  CCTVOperator:
+    role: "Fixed camera monitoring — 120+ cameras, pan-tilt-zoom capability"
+    decision_style: "observational, alert-driven, systematic scanning"
+    authority_level: 1
+    response_baseline_sec: 8
+    typical_actions:
+      - "Systematic camera rotation scan"
+      - "Respond to VOC request to focus specific area"
+      - "Alert VOC to observed anomalies"
+      - "Record and timestamp incidents for after-action review"
+    limitations:
+      - "Cannot see blind spots (listed in stadium config)"
+      - "Limited peripheral and overhead view"
+      - "Weather/lighting affects image quality"
+    drone_augmentation_effect: |
+      CCTV + drone is complementary, not competitive. CCTV provides
+      fixed high-resolution at known points. Drone provides flexible
+      overhead at blind spots and incidents. Together: near-100% coverage.
+
+# ═══════════════════════════════════════════════════════════════
+# KPI FRAMEWORK — Aligned with FIFA Proposal Section 9
+# ═══════════════════════════════════════════════════════════════
+
+kpi:
+  operational:
+    - id: KPI-OPS-01
+      name: "Drone deployment time"
+      unit: seconds
+      description: "Time from VOC command to drone on-station at incident"
+      baseline_target: 60
+      measurement: "Timestamp: VOC command → drone video feed showing incident"
+      
+    - id: KPI-OPS-02
+      name: "Live feed integration time"
+      unit: seconds
+      description: "Time from drone airborne to video visible on VOC monitors"
+      baseline_target: 10
+      measurement: "Timestamp: takeoff → VOC screen shows drone feed"
+      
+    - id: KPI-OPS-03
+      name: "System uptime"
+      unit: percent
+      description: "Percentage of event duration with drone system operational"
+      baseline_target: 95
+      measurement: "Total operational minutes / total event minutes × 100"
+      
+    - id: KPI-OPS-04
+      name: "Blind spot coverage improvement"
+      unit: count
+      description: "Number of CCTV blind spots covered by drone positioning"
+      baseline_target: 4
+      measurement: "Count of blind spots from config visible in drone feed"
+
+  safety:
+    - id: KPI-SAF-01
+      name: "Incident verification time"
+      unit: seconds
+      description: "Time from first report to visual confirmation of incident"
+      baseline_without_drone: 180    # 3 minutes: send steward to check
+      target_with_drone: 45          # Reposition drone or check tethered feed
+      measurement: "Timestamp: first alert → VOC confirms incident type/severity"
+      
+    - id: KPI-SAF-02
+      name: "Medical dispatch accuracy"
+      unit: percent
+      description: "Percentage of medical dispatches arriving at correct location first time"
+      baseline_without_drone: 70
+      target_with_drone: 95
+      measurement: "Correct location arrivals / total dispatches × 100"
+      
+    - id: KPI-SAF-03
+      name: "Early congestion detection"
+      unit: count
+      description: "Number of congestion events detected before density exceeds 4.5 p/m²"
+      baseline_without_drone: 2
+      target_with_drone: 8
+      measurement: "Congestion events detected at <4.0 p/m² density"
+      
+    - id: KPI-SAF-04
+      name: "Evacuation route assessment time"
+      unit: seconds
+      description: "Time for Safety Officer to confirm all exit routes clear/blocked"
+      baseline_without_drone: 300    # 5 minutes: radio each sector steward
+      target_with_drone: 60          # Drone overhead view of all routes
+      measurement: "Timestamp: assessment request → all routes status confirmed"
+
+  governance:
+    - id: KPI-GOV-01
+      name: "Integration with contingency plan"
+      unit: score_1_to_5
+      description: "Degree to which drone data feeds into existing emergency/contingency plans"
+      measurement: "Post-event assessment by Safety Officer and Police Commander"
+      
+    - id: KPI-GOV-02
+      name: "After-action review data quality"
+      unit: score_1_to_5
+      description: "Quality of drone footage for post-event timeline reconstruction"
+      measurement: "Assessor rating: 1=unusable, 5=complete incident timeline"
+      
+    - id: KPI-GOV-03
+      name: "Inter-agency acceptance"
+      unit: percent
+      description: "Percentage of police/steward/medical staff rating drone as useful"
+      measurement: "Post-event survey: 'Did drone improve your operational effectiveness?'"
+
+  legal_social:
+    - id: KPI-LEG-01
+      name: "Flight compliance"
+      unit: percent
+      description: "Percentage of drone flights within approved parameters"
+      baseline_target: 100
+      measurement: "Flights within geofence and altitude limits / total flights × 100"
+      
+    - id: KPI-LEG-02
+      name: "Privacy incidents"
+      unit: count
+      description: "Number of privacy-related complaints from spectators"
+      baseline_target: 0
+      measurement: "Formal complaints received during/after event"
+      
+    - id: KPI-LEG-03
+      name: "Counter-drone response time"
+      unit: seconds
+      description: "Time from unauthorized drone detection to response initiation"
+      baseline_target: 120
+      measurement: "Timestamp: RF detection → response action initiated"
+
+# ═══════════════════════════════════════════════════════════════
+# SCENARIO COMPARISON MATRIX
+# ═══════════════════════════════════════════════════════════════
+# Run each incident scenario under 3 configurations:
+
+comparison_configurations:
+  - id: "BASELINE"
+    name: "No drone — CCTV + radio + stewards only"
+    description: "Current standard FIFA stadium operations"
+    drone_config: null
+    sensors: ["CCTV (120 cameras)", "Radio network", "Steward ground reports", "Fire detection panel"]
+
+  - id: "TETHERED"
+    name: "Tethered drone only — persistent overwatch"
+    description: "One tethered drone providing continuous aerial view to VOC"
+    drone_config:
+      tethered: 1
+      rapid_response: 0
+    sensors: ["CCTV", "Radio", "Stewards", "Fire panel", "Tethered drone (1×, continuous)"]
+
+  - id: "FULL"
+    name: "Tethered + rapid-response — two-layer drone system"
+    description: "Complete drone augmentation: persistent overwatch + rapid response capability"
+    drone_config:
+      tethered: 1
+      rapid_response: 2
+    sensors: ["CCTV", "Radio", "Stewards", "Fire panel", "Tethered drone (1×)", "Rapid-response drone (2×)"]
+
+# MiroFish Scenario Comparison Engine (TIP-11) runs each of the
+# 12 scenarios × 3 configurations × 50 random variations = 1,800 runs
+# Output: statistical distribution of every KPI for each configuration
+
+# ═══════════════════════════════════════════════════════════════
+# REPORT TEMPLATE — Structure for FIFA Pilot Report
+# ═══════════════════════════════════════════════════════════════
+
+report_template:
+  title: "Drone-Augmented Stadium Operations: Simulation Evidence Report"
+  sections:
+    - title: "Executive Summary"
+      guidance: |
+        Lead with the headline KPI improvement numbers.
+        Format: "Across 1,800 simulated scenarios, drone augmentation
+        reduced incident verification time by X% and medical dispatch
+        accuracy improved from Y% to Z%."
+        
+    - title: "Methodology"
+      guidance: |
+        Describe: 12 scenario types, 3 configurations, 50 variations each.
+        Explain agent decision model, knowledge graph source, LLM reasoning.
+        Note: this is decision simulation, not crowd physics.
+        
+    - title: "Scenario Results — Crowd Safety"
+      guidance: |
+        Present CROWD-001, CROWD-002, CROWD-003 results.
+        Format: baseline vs tethered vs full, with confidence intervals.
+        Highlight specific decision points where drone made measurable difference.
+        
+    - title: "Scenario Results — Medical Emergency"
+      guidance: |
+        Present MED-001, MED-002 results.
+        Focus on time-to-medical-arrival and route guidance accuracy.
+        
+    - title: "Scenario Results — Security Threat"
+      guidance: |
+        Present SEC-001, SEC-002, SEC-003 results.
+        Include counter-drone scenario (SEC-003) as evidence of
+        comprehensive approach.
+        
+    - title: "Scenario Results — Environmental & Operational"
+      guidance: |
+        Present ENV-001, ENV-002, OPS-001, OPS-002 results.
+        Show drone limitations (must ground during lightning) as well
+        as strengths (compensate CCTV loss during power failure).
+        
+    - title: "KPI Summary — Baseline vs Drone-Augmented"
+      guidance: |
+        Master KPI comparison table across all 4 categories.
+        Statistical significance markers. Box plots for time-based KPIs.
+        
+    - title: "Integration with FIFA VOC Framework"
+      guidance: |
+        Map findings to FIFA Section 5.4.3 (VOC) and 4.7.1 (integrated
+        command). Show how drone fits as additional data layer, not replacement.
+        
+    - title: "Legal and Operational Considerations"
+      guidance: |
+        Address TFR/airspace, privacy, counter-drone.
+        Cite specific jurisdictional requirements.
+        
+    - title: "Recommendation and Proposed Pilot Design"
+      guidance: |
+        3-phase pilot: desktop design → closed rehearsal → live pilot.
+        Specific success criteria for FIFA to evaluate.
+
+# ═══════════════════════════════════════════════════════════════
+# EVALUATION METRICS (for MiroFish internal quality assessment)
+# ═══════════════════════════════════════════════════════════════
+
+evaluation_metrics:
+  - name: "Decision chain fidelity"
+    description: "Are simulated decisions realistic for each agent type?"
+    assessment: "Expert review by stadium safety professional"
+    
+  - name: "KPI statistical validity"
+    description: "Do 50 runs per scenario produce stable distributions?"
+    assessment: "Coefficient of variation < 0.3 for all KPIs"
+    
+  - name: "Scenario coverage"
+    description: "Do 12 scenarios cover FIFA's primary risk categories?"
+    assessment: "Map to FIFA Safety & Security Regulations risk matrix"
+    
+  - name: "Report actionability"
+    description: "Can FIFA use the report to make a pilot approval decision?"
+    assessment: "Review by operations professional with FIFA experience"

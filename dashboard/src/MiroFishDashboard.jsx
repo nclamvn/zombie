@@ -1,18 +1,14 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import * as api from "./api/client.js";
 import useSimulationWS from "./api/useSimulationWS.js";
+import StadiumSimGraph from "./StadiumSimGraph.jsx";
+import VOCCommandCenter from "./VOCCommandCenter.jsx";
+import { THEMES, LANG } from "./theme.js";
 
-// ─── Bloomberg-inspired color system ──────────────────────────
-const C = {
-  bg0: "#0a0e17", bg1: "#0f1521", bg2: "#151d2e", bg3: "#1c2640",
-  border: "#1e2a42", borderHi: "#2a3a5c",
-  text0: "#e8ecf1", text1: "#8b9dc3", text2: "#4a5f8a",
-  amber: "#ff9e1b", amberDim: "#c47a12",
-  green: "#00d26a", greenDim: "#0a5c30",
-  red: "#ff3b5c", redDim: "#5c1525",
-  blue: "#3e8eff", blueDim: "#162d54",
-  cyan: "#00e5ff", purple: "#a78bfa", white: "#ffffff",
-};
+// Module-level theme refs — updated by main component each render
+// Allows utility components (Badge, Panel, etc.) to access current theme
+let C = THEMES.light;
+let L = LANG.vi;
 
 const PHASE_STATUS = {
   created: "queued", seed_uploaded: "queued", ontology_designed: "running",
@@ -229,6 +225,12 @@ function buildEdgeLines(nodes, edges, layoutMap) {
 // ─── Main Dashboard ───────────────────────────────────────────
 export default function MiroFishDashboard() {
   // ── State ──
+  const [themeId, setThemeId] = useState("light");
+  const [langId, setLangId] = useState("vi");
+  // Update module-level refs so utility components see current theme
+  C = THEMES[themeId];
+  L = LANG[langId];
+
   const [projects, setProjects] = useState([]);
   const [activeProjectId, setActiveProjectId] = useState(null);
   const [projectData, setProjectData] = useState(null);
@@ -251,20 +253,33 @@ export default function MiroFishDashboard() {
   const [showInjectModal, setShowInjectModal] = useState(false);
   const [liveRound, setLiveRound] = useState(0);
   const [recentAgentIds, setRecentAgentIds] = useState(new Set());
+  const [comparisonData, setComparisonData] = useState(null);
+  const [compareConfig, setCompareConfig] = useState("FULL"); // TETHERED or FULL vs BASELINE
+  const [expandedScenario, setExpandedScenario] = useState(null);
+  const [comparisonLoading, setComparisonLoading] = useState(false);
+  const [fifaView, setFifaView] = useState("command"); // "data" | "sim" | "command"
   const chatEndRef = useRef(null);
+
+  // ── Derived (must be before wsEnabled) ──
+  const status = projectData ? (PHASE_STATUS[projectData.phase] || projectData.status || "queued") : "queued";
 
   // ── WebSocket for live simulation ──
   const wsEnabled = status === "running" && !!activeProjectId;
   const ws = useSimulationWS(activeProjectId, wsEnabled);
 
-  // ── Derived ──
-  const status = projectData ? (PHASE_STATUS[projectData.phase] || projectData.status || "queued") : "queued";
+  // ── Derived (continued) ──
   const simSummary = simData?.summary || projectData?.simulation_summary || {};
   const totalRounds = simSummary.total_rounds || 0;
   const maxRounds = simData?.config?.time_config?.max_rounds || totalRounds || 1;
   const agentCount = agents.length || projectData?.agent_count || 0;
   const nodeCount = graphData?.info?.node_count || projectData?.graph_info?.node_count || 0;
   const edgeCount = graphData?.info?.edge_count || projectData?.graph_info?.edge_count || 0;
+
+  // ── Sync body bg with theme ──
+  useEffect(() => {
+    document.body.style.background = C.bg0;
+    document.body.style.color = C.text0;
+  }, [themeId]);
 
   // ── Tick ──
   useEffect(() => {
@@ -327,6 +342,22 @@ export default function MiroFishDashboard() {
     if (activeTab === "agents" && agents.length === 0) loadAgents(activeProjectId);
     if (activeTab === "graph" && !graphData) loadGraph(activeProjectId);
     if ((activeTab === "overview" || activeTab === "events") && !simData) loadSimulation(activeProjectId);
+    if (activeTab === "fifa" && !comparisonData) {
+      // Auto-load: try static file directly, then API
+      (async () => {
+        setComparisonLoading(true);
+        try {
+          const res = await fetch("/comparison.json");
+          if (res.ok) {
+            const raw = await res.json();
+            await handleImportComparison(raw);
+            return;
+          }
+        } catch {}
+        if (activeProjectId) loadComparison(activeProjectId);
+        else setComparisonLoading(false);
+      })();
+    }
   }, [activeTab, activeProjectId]);
 
   // ── Data loaders ──
@@ -345,7 +376,7 @@ export default function MiroFishDashboard() {
 
   async function selectProject(id) {
     setActiveProjectId(id);
-    setGraphData(null); setAgents([]); setSimData(null);
+    setGraphData(null); setAgents([]); setSimData(null); setComparisonData(null);
     setChatMsgs([{ role: "system", text: "ReportAgent ready. Ask about this simulation." }]);
     loadProjectData(id);
   }
@@ -376,6 +407,94 @@ export default function MiroFishDashboard() {
     const r = await api.getSimulation(id);
     if (r.status === "ok") setSimData(r.data);
     setLoading(l => ({ ...l, sim: false }));
+  }
+
+  async function loadComparison(id) {
+    setComparisonLoading(true);
+    // Try API first (only if real project)
+    if (id && id !== "_default") {
+      const r = await api.getComparison(id);
+      if (r.status === "ok" && r.data?.summary) {
+        setComparisonData(r.data.summary);
+        setComparisonLoading(false);
+        return;
+      }
+    }
+    // Fallback: load pre-computed static file
+    try {
+      const res = await fetch("/comparison.json");
+      if (res.ok) {
+        const raw = await res.json();
+        await handleImportComparison(raw);
+        return;
+      }
+    } catch (e) { console.warn("Static comparison load failed:", e); }
+    setComparisonLoading(false);
+  }
+
+  async function handleImportComparison(jsonData) {
+    setComparisonLoading(true);
+    // Client-side aggregation — works without backend
+    try {
+      const scenarios = [];
+      const masterKpi = {};
+      for (const [scenarioId, sdata] of Object.entries(jsonData)) {
+        const configs = sdata.configs || {};
+        const entry = { id: scenarioId, name: sdata.name || scenarioId, category: sdata.category || "unknown", configs: {} };
+        for (const [cfgId, runs] of Object.entries(configs)) {
+          const kpiAgg = {};
+          if (runs.length > 0) {
+            for (const key of Object.keys(runs[0].kpi || {})) {
+              const vals = runs.map(r => r.kpi[key]).filter(v => v != null);
+              const n = vals.length, mean = vals.reduce((a, b) => a + b, 0) / n;
+              const std = Math.sqrt(vals.reduce((a, v) => a + (v - mean) ** 2, 0) / Math.max(n - 1, 1));
+              kpiAgg[key] = { mean: +mean.toFixed(1), std: +std.toFixed(1), min: +Math.min(...vals).toFixed(1), max: +Math.max(...vals).toFixed(1), n };
+              masterKpi[cfgId] = masterKpi[cfgId] || {};
+              masterKpi[cfgId][key] = masterKpi[cfgId][key] || [];
+              masterKpi[cfgId][key].push(...vals);
+            }
+          }
+          entry.configs[cfgId] = { runs: runs.length, kpi: kpiAgg };
+        }
+        scenarios.push(entry);
+      }
+      // Aggregate master KPI
+      const masterSummary = {};
+      for (const [cfgId, kpis] of Object.entries(masterKpi)) {
+        masterSummary[cfgId] = {};
+        for (const [k, vals] of Object.entries(kpis)) {
+          const n = vals.length, mean = vals.reduce((a, b) => a + b, 0) / n;
+          const std = Math.sqrt(vals.reduce((a, v) => a + (v - mean) ** 2, 0) / Math.max(n - 1, 1));
+          masterSummary[cfgId][k] = { mean: +mean.toFixed(1), std: +std.toFixed(1), min: +Math.min(...vals).toFixed(1), max: +Math.max(...vals).toFixed(1), n };
+        }
+      }
+      const totalRuns = Object.values(jsonData).reduce((sum, s) => sum + Object.values(s.configs || {}).reduce((s2, runs) => s2 + runs.length, 0), 0);
+      setComparisonData({ scenarios, master_kpi: masterSummary, total_scenarios: scenarios.length, total_runs: totalRuns });
+    } catch (e) { console.error("Import failed:", e); }
+    // Also try backend if connected
+    if (activeProjectId) {
+      api.importComparison(activeProjectId, jsonData).catch(() => {});
+    }
+    setComparisonLoading(false);
+  }
+
+  async function handleRunComparison() {
+    if (!activeProjectId) return;
+    setComparisonLoading(true);
+    const r = await api.runComparison(activeProjectId);
+    if (r.status === "ok") {
+      // Poll for completion
+      const poll = setInterval(async () => {
+        const cr = await api.getComparison(activeProjectId);
+        if (cr.status === "ok" && cr.data?.summary) {
+          setComparisonData(cr.data.summary);
+          setComparisonLoading(false);
+          clearInterval(poll);
+        }
+      }, 3000);
+    } else {
+      setComparisonLoading(false);
+    }
   }
 
   // ── Chat handler ──
@@ -469,13 +588,14 @@ export default function MiroFishDashboard() {
   }, [projectData]);
 
   const tabs = [
-    { id: "overview", label: "OVERVIEW" },
-    { id: "agents", label: "AGENTS" },
-    { id: "graph", label: "K-GRAPH" },
-    { id: "events", label: "EVENTS" },
+    { id: "overview", label: L.overview },
+    { id: "agents", label: L.agentsTab },
+    { id: "graph", label: L.kGraph },
+    { id: "events", label: L.events },
+    { id: "fifa", label: L.fifa },
   ];
 
-  const simName = projectData?.name || "No Project Selected";
+  const simName = projectData?.name || L.noProject;
   const simId = projectData?.project_id || "—";
 
   return (
@@ -485,7 +605,7 @@ export default function MiroFishDashboard() {
       {/* Connection banner */}
       {!connected && (
         <div style={{ background: C.redDim, color: C.red, padding: "4px 12px", fontSize: 10, textAlign: "center", flexShrink: 0 }}>
-          Backend disconnected — retrying every 5s...
+          {L.backendDown}
         </div>
       )}
 
@@ -494,43 +614,55 @@ export default function MiroFishDashboard() {
         padding: "6px 12px", background: C.bg1, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 14, fontWeight: 700, color: C.amber, letterSpacing: 2 }}>MIROFISH</span>
-          <span style={{ color: C.text2, fontSize: 10 }}>SWARM INTELLIGENCE TERMINAL</span>
+          <span style={{ color: C.text2, fontSize: 10 }}>{L.title}</span>
           <span style={{ color: C.text2 }}>|</span>
-          <span style={{ color: connected ? C.green : C.red, fontSize: 10 }}>{connected ? "CONNECTED" : "DISCONNECTED"}</span>
+          <span style={{ color: connected ? C.green : C.red, fontSize: 10 }}>{connected ? L.connected : L.disconnected}</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <span style={{ color: C.text2, fontSize: 10 }}>AGENTS: {agentCount}</span>
-          <span style={{ color: C.text2, fontSize: 10 }}>PROJECTS: {projects.length}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ color: C.text2, fontSize: 10 }}>{L.agents}: {agentCount}</span>
+          <span style={{ color: C.text2, fontSize: 10 }}>{L.projects}: {projects.length}</span>
           <span style={{ color: C.text1, fontSize: 10 }}>{new Date().toLocaleTimeString("en-US", { hour12: false })}</span>
+          <button onClick={() => setLangId(l => l === "vi" ? "en" : "vi")}
+            style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 3, padding: "2px 8px", color: C.text1,
+              cursor: "pointer", fontFamily: "inherit", fontSize: 9, fontWeight: 600 }}>
+            {langId === "vi" ? "VI 🇻🇳" : "EN 🇬🇧"}
+          </button>
+          <button onClick={() => setThemeId(t => t === "light" ? "dark" : "light")}
+            style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 3, padding: "2px 8px", color: C.text1,
+              cursor: "pointer", fontFamily: "inherit", fontSize: 9 }}>
+            {themeId === "light" ? "☀" : "◐"}
+          </button>
+          <button onClick={() => setShowNewSim(true)}
+            style={{ background: C.amber + "18", border: `1px solid ${C.amber}44`, borderRadius: 2, padding: "2px 10px", color: C.amber,
+              cursor: "pointer", fontFamily: "inherit", fontSize: 9, fontWeight: 700, letterSpacing: 1 }}>
+            {L.newProject}
+          </button>
         </div>
       </div>
 
-      {/* ═══ SCENARIO STRIP ═══ */}
-      <div style={{ display: "flex", gap: 1, borderBottom: `1px solid ${C.border}`, flexShrink: 0, overflow: "auto" }}>
-        {projects.map((s) => (
-          <button key={s.project_id} onClick={() => selectProject(s.project_id)}
-            style={{ flex: "0 0 auto", padding: "6px 14px", background: s.project_id === activeProjectId ? C.bg2 : "transparent",
-              border: "none", borderBottom: s.project_id === activeProjectId ? `2px solid ${C.amber}` : "2px solid transparent",
-              color: s.project_id === activeProjectId ? C.text0 : C.text2, cursor: "pointer", fontFamily: "inherit", fontSize: 10,
-              display: "flex", alignItems: "center", gap: 6, transition: "all 0.15s", whiteSpace: "nowrap" }}>
-            <StatusDot status={PHASE_STATUS[s.phase] || s.status} />
-            <span>{s.project_id.slice(0, 12)}</span>
-            <span style={{ color: s.project_id === activeProjectId ? C.text1 : C.text2, maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{s.name}</span>
-          </button>
-        ))}
-        <button onClick={() => setShowNewSim(true)}
-          style={{ flex: "0 0 auto", padding: "6px 14px", background: "transparent", border: "none", color: C.amber,
-            cursor: "pointer", fontFamily: "inherit", fontSize: 10, fontWeight: 700, letterSpacing: 1 }}>
-          + NEW
-        </button>
-      </div>
+      {/* ═══ SCENARIO STRIP (hidden when no projects) ═══ */}
+      {projects.length > 0 && (
+        <div style={{ display: "flex", gap: 1, borderBottom: `1px solid ${C.border}`, flexShrink: 0, overflow: "auto" }}>
+          {projects.map((s) => (
+            <button key={s.project_id} onClick={() => selectProject(s.project_id)}
+              style={{ flex: "0 0 auto", padding: "6px 14px", background: s.project_id === activeProjectId ? C.bg2 : "transparent",
+                border: "none", borderBottom: s.project_id === activeProjectId ? `2px solid ${C.amber}` : "2px solid transparent",
+                color: s.project_id === activeProjectId ? C.text0 : C.text2, cursor: "pointer", fontFamily: "inherit", fontSize: 10,
+                display: "flex", alignItems: "center", gap: 6, transition: "all 0.15s", whiteSpace: "nowrap" }}>
+              <StatusDot status={PHASE_STATUS[s.phase] || s.status} />
+              <span>{s.project_id.slice(0, 12)}</span>
+              <span style={{ color: s.project_id === activeProjectId ? C.text1 : C.text2, maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{s.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
 
-      {/* ═══ SIMULATION HEADER ═══ */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "8px 12px", background: C.bg1, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 600, color: C.text0 }}>{simName}</div>
-          <div style={{ fontSize: 10, color: C.text2, marginTop: 2 }}>{simId} {agentCount > 0 ? `· ${agentCount} agents` : ""}</div>
+      {/* ═══ SIMULATION HEADER (hidden on FIFA tab when no project) ═══ */}
+      {(activeProjectId || activeTab !== "fifa") && <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "6px 12px", background: C.bg1, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: C.text0 }}>{simName}</div>
+          {agentCount > 0 && <span style={{ fontSize: 9, color: C.text2 }}>{agentCount} agents</span>}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ textAlign: "right" }}>
@@ -570,7 +702,7 @@ export default function MiroFishDashboard() {
             </div>
           )}
         </div>
-      </div>
+      </div>}
 
       {/* ═══ TAB BAR ═══ */}
       <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
@@ -587,7 +719,7 @@ export default function MiroFishDashboard() {
 
       {/* ═══ MAIN CONTENT ═══ */}
       <div style={{ flex: 1, display: "grid",
-        gridTemplateColumns: activeTab === "agents" ? "1fr" : "1fr 320px",
+        gridTemplateColumns: (activeTab === "agents" || activeTab === "fifa") ? "1fr" : "1fr 320px",
         gridTemplateRows: "1fr 1fr",
         gap: 1, padding: 1, minHeight: 0, overflow: "hidden" }}>
 
@@ -897,6 +1029,55 @@ export default function MiroFishDashboard() {
             ) : <div style={{ color: C.text2, fontSize: 10, textAlign: "center", padding: 20 }}>No distribution data</div>}
           </Panel>
         </>}
+
+        {/* ═══ FIFA TAB — TIP-17 ═══ */}
+        {activeTab === "fifa" && (
+          <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+            {/* View toggle bar */}
+            <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
+              {[{ id: "command", label: L.commandCenter }, { id: "data", label: L.kpiData }, { id: "sim", label: L.liveSim }].map(v => (
+                <button key={v.id} onClick={() => setFifaView(v.id)}
+                  style={{ padding: "5px 14px", background: "transparent", border: "none",
+                    borderBottom: fifaView === v.id ? `2px solid ${C.cyan}` : "2px solid transparent",
+                    color: fifaView === v.id ? C.cyan : C.text2, cursor: "pointer", fontFamily: "inherit",
+                    fontSize: 9, letterSpacing: 1, fontWeight: 600, transition: "all 0.15s" }}>
+                  {v.label}
+                </button>
+              ))}
+            </div>
+            {/* Content */}
+            <div style={{ flex: 1, overflow: "hidden" }}>
+              {fifaView === "command" ? (
+                <VOCCommandCenter embedded defaultTheme={themeId} defaultLang={langId} />
+              ) : fifaView === "data" ? (
+                <FifaComparisonTab
+                  data={comparisonData}
+                  loading={comparisonLoading}
+                  compareConfig={compareConfig}
+                  setCompareConfig={setCompareConfig}
+                  expandedScenario={expandedScenario}
+                  setExpandedScenario={setExpandedScenario}
+                  onImport={handleImportComparison}
+                  onRunComparison={handleRunComparison}
+                  C={C} L={L}
+                  onExportReport={async () => {
+                    if (!activeProjectId) return;
+                    const r = await api.generateFifaReport(activeProjectId);
+                    if (r.status === "ok" && r.data?.report) {
+                      const blob = new Blob([r.data.report], { type: "text/markdown" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url; a.download = `fifa_report_${activeProjectId.slice(0, 8)}.md`;
+                      a.click(); URL.revokeObjectURL(url);
+                    }
+                  }}
+                />
+              ) : (
+                <StadiumSimGraph comparisonData={comparisonData} themeId={themeId} />
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ═══ STATUS BAR ═══ */}
@@ -914,7 +1095,7 @@ export default function MiroFishDashboard() {
           {healthData?.uptime_seconds > 0 && <span>UP: {Math.floor(healthData.uptime_seconds / 3600)}h{Math.floor((healthData.uptime_seconds % 3600) / 60)}m</span>}
         </div>
         <div style={{ color: C.text2, fontSize: 9 }}>
-          <span style={{ color: C.amber }}>MiroFish Kernel — Swarm Intelligence Engine</span>
+          <span style={{ color: C.amber }}>{L.engine}</span>
         </div>
       </div>
 
@@ -934,6 +1115,244 @@ export default function MiroFishDashboard() {
     </div>
   );
 }
+
+// ─── FIFA Comparison Tab — TIP-17 ─────────────────────────────
+const KPI_ORDER = ["detection_latency", "verification_time", "decision_time", "response_time", "total_resolution"];
+
+function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, expandedScenario, setExpandedScenario, onImport, onRunComparison, onExportReport, C, L }) {
+  const CAT_COLORS = { crowd_safety: C.amber, medical: C.red, security: C.blue, environmental: C.green, operational: C.text2 };
+  const KPI_LABELS = {
+    detection_latency: L.detectionLatency, verification_time: L.verificationTime,
+    decision_time: L.decisionTime, response_time: L.responseTime, total_resolution: L.totalResolution,
+  };
+  const fileRef = useRef(null);
+
+  if (loading) {
+    return (
+      <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 12 }}>
+        <Loader text="Loading comparison data..." />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 16, padding: 40 }}>
+        <div style={{ fontSize: 32, color: C.text2 }}>&#9958;</div>
+        <div style={{ fontSize: 13, color: C.text1, textAlign: "center" }}>{L.noComparison}</div>
+        <div style={{ fontSize: 10, color: C.text2, textAlign: "center", maxWidth: 400 }}>
+          {L.noComparisonDesc}
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+          <input type="file" ref={fileRef} accept=".json" style={{ display: "none" }}
+            onChange={e => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              const reader = new FileReader();
+              reader.onload = ev => {
+                try { onImport(JSON.parse(ev.target.result)); } catch {}
+              };
+              reader.readAsText(file);
+            }} />
+          <button onClick={() => fileRef.current?.click()}
+            style={{ background: C.amber, color: C.bg0, border: "none", borderRadius: 2, padding: "8px 16px", fontFamily: "inherit", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+            {L.importJson}
+          </button>
+          <button onClick={onRunComparison}
+            style={{ background: C.bg2, color: C.green, border: `1px solid ${C.border}`, borderRadius: 2, padding: "8px 16px", fontFamily: "inherit", fontSize: 11, fontWeight: 600, cursor: "pointer", letterSpacing: 1 }}>
+            {L.runComparison}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const masterKpi = data.master_kpi || {};
+  const baselineKpi = masterKpi.BASELINE || {};
+  const compareKpi = masterKpi[compareConfig] || {};
+  const scenarios = data.scenarios || [];
+
+  // Compute improvement for a KPI
+  const improvement = (kpiKey) => {
+    const bm = baselineKpi[kpiKey]?.mean;
+    const cm = compareKpi[kpiKey]?.mean;
+    if (!bm || bm === 0) return 0;
+    return Math.round((1 - cm / bm) * 100);
+  };
+
+  return (
+    <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", overflow: "auto", padding: 12, display: "flex", flexDirection: "column", gap: 12 }}>
+
+      {/* ── Section D: Config Selector + Controls ── */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 4 }}>
+          {["TETHERED", "FULL"].map(cfg => (
+            <button key={cfg} onClick={() => setCompareConfig(cfg)}
+              style={{ padding: "5px 14px", background: compareConfig === cfg ? C.amber + "22" : "transparent",
+                border: `1px solid ${compareConfig === cfg ? C.amber : C.border}`, borderRadius: 2,
+                color: compareConfig === cfg ? C.amber : C.text2, fontFamily: "inherit", fontSize: 10,
+                fontWeight: 600, cursor: "pointer", letterSpacing: 1 }}>
+              BASELINE vs {cfg}
+            </button>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <Badge color={C.green}>{data.total_runs?.toLocaleString() || 0} RUNS</Badge>
+          <Badge color={C.blue}>{data.total_scenarios || 0} SCENARIOS</Badge>
+          <button onClick={onExportReport}
+            style={{ background: C.bg2, color: C.cyan, border: `1px solid ${C.border}`, borderRadius: 2,
+              padding: "5px 12px", fontFamily: "inherit", fontSize: 10, fontWeight: 600, cursor: "pointer", letterSpacing: 1 }}>
+            {L.exportReport}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Section A: KPI Summary Cards ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
+        {KPI_ORDER.map(kpiKey => {
+          const bm = baselineKpi[kpiKey]?.mean || 0;
+          const cm = compareKpi[kpiKey]?.mean || 0;
+          const imp = improvement(kpiKey);
+          const impColor = imp > 0 ? C.green : imp < 0 ? C.red : C.text2;
+          return (
+            <div key={kpiKey} style={{ background: C.bg1, border: `1px solid ${C.border}`, borderRadius: 3, padding: "12px 14px",
+              borderLeft: `3px solid ${imp > 50 ? C.green : imp > 20 ? C.amber : C.text2}` }}>
+              <div style={{ fontSize: 9, color: C.text2, letterSpacing: 1, marginBottom: 8 }}>{KPI_LABELS[kpiKey]}</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                <span style={{ fontSize: 22, fontWeight: 700, color: impColor }}>{imp > 0 ? "-" : "+"}{Math.abs(imp)}%</span>
+              </div>
+              <div style={{ fontSize: 10, color: C.text2, marginTop: 6, display: "flex", gap: 8 }}>
+                <span>{bm.toFixed(0)}s</span>
+                <span style={{ color: C.text2 }}>→</span>
+                <span style={{ color: C.text1 }}>{cm.toFixed(0)}s</span>
+              </div>
+              <div style={{ fontSize: 9, color: C.text2, marginTop: 2 }}>
+                ±{compareKpi[kpiKey]?.std?.toFixed(0) || 0}s
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Section B: Scenario Comparison Table ── */}
+      <div style={{ background: C.bg1, border: `1px solid ${C.border}`, borderRadius: 3, overflow: "hidden", flex: 1, minHeight: 0 }}>
+        <div style={{ padding: "8px 12px", borderBottom: `1px solid ${C.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: C.text0, letterSpacing: 1 }}>{L.scenarioComparison}</span>
+          <span style={{ fontSize: 9, color: C.text2 }}>{scenarios.length} scenarios · BASELINE vs {compareConfig}</span>
+        </div>
+        <div style={{ overflowY: "auto", maxHeight: 380 }}>
+          {/* Header */}
+          <div style={{ display: "grid", gridTemplateColumns: "200px 80px repeat(3, 90px) 80px", gap: 0,
+            padding: "6px 12px", borderBottom: `1px solid ${C.border}`, fontSize: 9, color: C.text2, letterSpacing: 1, position: "sticky", top: 0, background: C.bg2, zIndex: 1 }}>
+            <span>SCENARIO</span><span>CATEGORY</span><span style={{ textAlign: "right" }}>BASELINE</span>
+            <span style={{ textAlign: "right" }}>TETHERED</span><span style={{ textAlign: "right" }}>FULL</span>
+            <span style={{ textAlign: "right" }}>IMPROVE</span>
+          </div>
+          {/* Rows */}
+          {scenarios.map(sc => {
+            const catColor = CAT_COLORS[sc.category] || C.text2;
+            const catLabel = L[sc.category] || sc.category?.toUpperCase();
+            const bTotal = sc.configs?.BASELINE?.kpi?.total_resolution?.mean || 0;
+            const tTotal = sc.configs?.TETHERED?.kpi?.total_resolution?.mean || 0;
+            const fTotal = sc.configs?.FULL?.kpi?.total_resolution?.mean || 0;
+            const imp = bTotal > 0 ? Math.round((1 - fTotal / bTotal) * 100) : 0;
+            const isExpanded = expandedScenario === sc.id;
+
+            return (
+              <div key={sc.id}>
+                <div onClick={() => setExpandedScenario(isExpanded ? null : sc.id)}
+                  style={{ display: "grid", gridTemplateColumns: "200px 80px repeat(3, 90px) 80px", gap: 0,
+                    padding: "8px 12px", borderBottom: `1px solid ${C.border}`, cursor: "pointer",
+                    background: isExpanded ? C.bg2 : "transparent", transition: "background 0.15s" }}>
+                  <span style={{ fontSize: 10, color: C.text0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <span style={{ color: C.amber, marginRight: 6 }}>{isExpanded ? "▾" : "▸"}</span>
+                    {sc.name}
+                  </span>
+                  <span><Badge color={catColor}>{catLabel}</Badge></span>
+                  <span style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{bTotal.toFixed(0)}s</span>
+                  <span style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{tTotal.toFixed(0)}s</span>
+                  <span style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{fTotal.toFixed(0)}s</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: imp > 0 ? C.green : C.text2, textAlign: "right" }}>
+                    {imp > 0 ? `-${imp}%` : `${imp}%`}
+                  </span>
+                </div>
+                {/* Expanded: decision chain timeline */}
+                {isExpanded && (
+                  <div style={{ padding: "12px 16px", background: C.bg0, borderBottom: `1px solid ${C.border}` }}>
+                    <div style={{ fontSize: 9, color: C.text2, letterSpacing: 1, marginBottom: 8 }}>DECISION CHAIN — T0 → T6</div>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+                      {["BASELINE", "TETHERED", "FULL"].map(cfgId => {
+                        const cfgKpi = sc.configs?.[cfgId]?.kpi || {};
+                        const cfgColor = cfgId === "BASELINE" ? C.text2 : cfgId === "TETHERED" ? C.amber : C.green;
+                        return (
+                          <div key={cfgId} style={{ background: C.bg1, borderRadius: 3, padding: 10, border: `1px solid ${C.border}` }}>
+                            <div style={{ fontSize: 10, fontWeight: 700, color: cfgColor, marginBottom: 8 }}>{cfgId}</div>
+                            {KPI_ORDER.map(kk => {
+                              const val = cfgKpi[kk]?.mean || 0;
+                              const std = cfgKpi[kk]?.std || 0;
+                              const maxVal = sc.configs?.BASELINE?.kpi?.[kk]?.mean || 1;
+                              const pct = Math.min((val / maxVal) * 100, 100);
+                              return (
+                                <div key={kk} style={{ marginBottom: 6 }}>
+                                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: C.text2, marginBottom: 2 }}>
+                                    <span>{KPI_LABELS[kk]}</span>
+                                    <span style={{ color: C.text1 }}>{val.toFixed(0)}s ±{std.toFixed(0)}</span>
+                                  </div>
+                                  <div style={{ height: 4, background: C.bg0, borderRadius: 2, overflow: "hidden" }}>
+                                    <div style={{ width: `${pct}%`, height: "100%", background: cfgColor, borderRadius: 2, transition: "width 0.3s" }} />
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Section C: KPI Phase Breakdown Bars ── */}
+      <div style={{ background: C.bg1, border: `1px solid ${C.border}`, borderRadius: 3, padding: 14 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.text0, letterSpacing: 1, marginBottom: 12 }}>{L.kpiPhaseBreakdown} — BASELINE vs {compareConfig}</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {KPI_ORDER.slice(0, 4).map(kpiKey => {
+            const bm = baselineKpi[kpiKey]?.mean || 1;
+            const cm = compareKpi[kpiKey]?.mean || 0;
+            const imp = improvement(kpiKey);
+            const pct = Math.min((cm / bm) * 100, 100);
+            return (
+              <div key={kpiKey}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, marginBottom: 4 }}>
+                  <span style={{ color: C.text1 }}>{KPI_LABELS[kpiKey]}</span>
+                  <span style={{ color: imp > 0 ? C.green : C.text2, fontWeight: 700 }}>
+                    {imp > 0 ? `-${imp}%` : `${imp}%`}
+                    <span style={{ color: C.text2, fontWeight: 400, marginLeft: 8 }}>{bm.toFixed(0)}s → {cm.toFixed(0)}s</span>
+                  </span>
+                </div>
+                <div style={{ position: "relative", height: 16, background: C.bg0, borderRadius: 3, overflow: "hidden" }}>
+                  {/* Baseline (full width reference) */}
+                  <div style={{ position: "absolute", inset: 0, background: C.text2 + "20", borderRadius: 3 }} />
+                  {/* Compare config bar */}
+                  <div style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: `${pct}%`,
+                    background: imp > 50 ? C.green + "55" : imp > 20 ? C.amber + "55" : C.text2 + "40",
+                    borderRadius: 3, transition: "width 0.4s" }} />
+                  {/* Baseline marker at 100% */}
+                  <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 2, background: C.text2 + "60" }} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 // ─── Event Injection Modal ────────────────────────────────────
 function InjectEventModal({ onClose, onInject }) {

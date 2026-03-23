@@ -1,0 +1,362 @@
+{
+  "CROWD-001": {
+    "name": "Gate congestion — peak ingress",
+    "category": "crowd_safety",
+    "configs": {
+      "BASELINE": [
+        {
+          "timestamps": {
+            "T0": 2400.0,
+            "T1": 2430.0,
+            "T2": 2455.0,
+            "T3": 2545.0,
+            "T4": 2635.0,
+            "T5": 2725.0,
+            "T6": 2905.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 115.0,
+            "decision_time": 90.0,
+            "response_time": 90.0,
+            "total_resolution": 505.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 2400.0,
+            "T1": 2430.0,
+            "T2": 2455.0,
+            "T3": 2505.0,
+            "T4": 2565.0,
+            "T5": 2775.0,
+            "T6": 2955.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 75.0,
+            "decision_time": 60.0,
+            "response_time": 210.0,
+            "total_resolution": 555.0
+          }
+        }
+      ],
+      "TETHERED": [
+        {
+          "timestamps": {
+            "T0": 2400.0,
+            "T1": 2430.0,
+            "T2": 2438.0,
+            "T3": 2528.0,
+            "T4": 2588.0,
+            "T5": 2798.0,
+            "T6": 2933.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 98.0,
+            "decision_time": 60.0,
+            "response_time": 210.0,
+            "total_resolution": 533.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 2400.0,
+            "T1": 2430.0,
+            "T2": 2438.0,
+            "T3": 2483.0,
+            "T4": 2663.0,
+            "T5": 2813.0,
+            "T6": 2948.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 53.0,
+            "decision_time": 180.0,
+            "response_time": 150.0,
+            "total_resolution": 548.0
+          }
+        }
+      ],
+      "FULL": [
+        {
+          "timestamps": {
+            "T0": 2400.0,
+            "T1": 2430.0,
+            "T2": 2438.0,
+            "T3": 2513.0,
+            "T4": 2618.0,
+            "T5": 2723.0,
+            "T6": 2831.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 83.0,
+            "decision_time": 105.0,
+            "response_time": 105.0,
+            "total_resolution": 431.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 2400.0,
+            "T1": 2430.0,
+            "T2": 2438.0,
+            "T3": 2543.0,
+            "T4": 2648.0,
+            "T5": 2753.0,
+            "T6": 2861.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 113.0,
+            "decision_time": 105.0,
+            "response_time": 105.0,
+            "total_resolution": 461.0
+          }
+        }
+      ]
+    }
+  },
+  "MED-001": {
+    "name": "Cardiac arrest in upper tier",
+    "category": "medical",
+    "configs": {
+      "BASELINE": [
+        {
+          "timestamps": {
+            "T0": 4500.0,
+            "T1": 4710.0,
+            "T2": 4735.0,
+            "T3": 4855.0,
+            "T4": 4945.0,
+            "T5": 5335.0,
+            "T6": 5605.0
+          },
+          "kpi": {
+            "detection_latency": 210.0,
+            "verification_time": 145.0,
+            "decision_time": 90.0,
+            "response_time": 390.0,
+            "total_resolution": 1105.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 4500.0,
+            "T1": 4650.0,
+            "T2": 4675.0,
+            "T3": 4705.0,
+            "T4": 5095.0,
+            "T5": 5455.0,
+            "T6": 5725.0
+          },
+          "kpi": {
+            "detection_latency": 150.0,
+            "verification_time": 55.0,
+            "decision_time": 390.0,
+            "response_time": 360.0,
+            "total_resolution": 1225.0
+          }
+        }
+      ],
+      "TETHERED": [
+        {
+          "timestamps": {
+            "T0": 4500.0,
+            "T1": 4530.0,
+            "T2": 4538.0,
+            "T3": 4628.0,
+            "T4": 5018.0,
+            "T5": 5378.0,
+            "T6": 5580.5
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 98.0,
+            "decision_time": 390.0,
+            "response_time": 360.0,
+            "total_resolution": 1080.5
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 4500.0,
+            "T1": 4590.0,
+            "T2": 4598.0,
+            "T3": 4928.0,
+            "T4": 5258.0,
+            "T5": 5738.0,
+            "T6": 5940.5
+          },
+          "kpi": {
+            "detection_latency": 90.0,
+            "verification_time": 338.0,
+            "decision_time": 330.0,
+            "response_time": 480.0,
+            "total_resolution": 1440.5
+          }
+        }
+      ],
+      "FULL": [
+        {
+          "timestamps": {
+            "T0": 4500.0,
+            "T1": 4845.0,
+            "T2": 4853.0,
+            "T3": 5393.0,
+            "T4": 5993.0,
+            "T5": 6653.0,
+            "T6": 6815.0
+          },
+          "kpi": {
+            "detection_latency": 345.0,
+            "verification_time": 548.0,
+            "decision_time": 600.0,
+            "response_time": 660.0,
+            "total_resolution": 2315.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 4500.0,
+            "T1": 4545.0,
+            "T2": 4553.0,
+            "T3": 4598.0,
+            "T4": 4643.0,
+            "T5": 4688.0,
+            "T6": 4850.0
+          },
+          "kpi": {
+            "detection_latency": 45.0,
+            "verification_time": 53.0,
+            "decision_time": 45.0,
+            "response_time": 45.0,
+            "total_resolution": 350.0
+          }
+        }
+      ]
+    }
+  },
+  "SEC-003": {
+    "name": "Unauthorized drone detected",
+    "category": "security",
+    "configs": {
+      "BASELINE": [
+        {
+          "timestamps": {
+            "T0": 4200.0,
+            "T1": 4230.0,
+            "T2": 4255.0,
+            "T3": 4285.0,
+            "T4": 4315.0,
+            "T5": 4345.0,
+            "T6": 4525.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 55.0,
+            "decision_time": 30.0,
+            "response_time": 30.0,
+            "total_resolution": 325.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 4200.0,
+            "T1": 4230.0,
+            "T2": 4255.0,
+            "T3": 4275.0,
+            "T4": 4365.0,
+            "T5": 4455.0,
+            "T6": 4635.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 45.0,
+            "decision_time": 90.0,
+            "response_time": 90.0,
+            "total_resolution": 435.0
+          }
+        }
+      ],
+      "TETHERED": [
+        {
+          "timestamps": {
+            "T0": 4200.0,
+            "T1": 4220.0,
+            "T2": 4228.0,
+            "T3": 4288.0,
+            "T4": 4348.0,
+            "T5": 4408.0,
+            "T6": 4543.0
+          },
+          "kpi": {
+            "detection_latency": 20.0,
+            "verification_time": 68.0,
+            "decision_time": 60.0,
+            "response_time": 60.0,
+            "total_resolution": 343.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 4200.0,
+            "T1": 4230.0,
+            "T2": 4238.0,
+            "T3": 4288.0,
+            "T4": 4333.0,
+            "T5": 4393.0,
+            "T6": 4528.0
+          },
+          "kpi": {
+            "detection_latency": 30.0,
+            "verification_time": 58.0,
+            "decision_time": 45.0,
+            "response_time": 60.0,
+            "total_resolution": 328.0
+          }
+        }
+      ],
+      "FULL": [
+        {
+          "timestamps": {
+            "T0": 4200.0,
+            "T1": 4245.0,
+            "T2": 4253.0,
+            "T3": 4298.0,
+            "T4": 4343.0,
+            "T5": 4388.0,
+            "T6": 4496.0
+          },
+          "kpi": {
+            "detection_latency": 45.0,
+            "verification_time": 53.0,
+            "decision_time": 45.0,
+            "response_time": 45.0,
+            "total_resolution": 296.0
+          }
+        },
+        {
+          "timestamps": {
+            "T0": 4200.0,
+            "T1": 4245.0,
+            "T2": 4253.0,
+            "T3": 4298.0,
+            "T4": 4343.0,
+            "T5": 4388.0,
+            "T6": 4496.0
+          },
+          "kpi": {
+            "detection_latency": 45.0,
+            "verification_time": 53.0,
+            "decision_time": 45.0,
+            "response_time": 45.0,
+            "total_resolution": 296.0
+          }
+        }
+      ]
+    }
+  }
+}

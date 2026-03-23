@@ -15,8 +15,11 @@ Usage:
 import os
 import json
 import logging
+from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
+
+import yaml
 
 logger = logging.getLogger("mirofish.templates")
 
@@ -28,11 +31,17 @@ class DomainTemplate:
     name: str
     description: str
     icon: str = ""
+    category: str = "general"
     ontology_prompt: str = ""
     default_config: Dict[str, Any] = field(default_factory=dict)
     sample_events: List[Dict[str, Any]] = field(default_factory=list)
     evaluation_metrics: List[str] = field(default_factory=list)
     sample_seed_text: str = ""
+    scenarios: List[Dict[str, Any]] = field(default_factory=list)
+    agent_profiles: Dict[str, Any] = field(default_factory=dict)
+    kpi: Dict[str, Any] = field(default_factory=dict)
+    comparison_configurations: List[Dict[str, Any]] = field(default_factory=list)
+    report_template: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -40,11 +49,16 @@ class DomainTemplate:
             "name": self.name,
             "description": self.description,
             "icon": self.icon,
+            "category": self.category,
             "has_ontology_prompt": bool(self.ontology_prompt),
             "default_config": self.default_config,
             "sample_events": self.sample_events,
             "evaluation_metrics": self.evaluation_metrics,
             "has_sample_seed": bool(self.sample_seed_text),
+            "has_scenarios": bool(self.scenarios),
+            "has_comparison": bool(self.comparison_configurations),
+            "scenario_count": len(self.scenarios),
+            "comparison_config_count": len(self.comparison_configurations),
         }
 
 
@@ -142,6 +156,52 @@ Focus on policy stakeholders and their influence on decision-making.""",
         evaluation_metrics=[],
     ),
 ]
+
+
+def _load_stadium_operations() -> Optional[DomainTemplate]:
+    """Load stadium_operations template from its YAML file."""
+    template_dir = Path(__file__).parent / "stadium_operations"
+    yaml_path = template_dir / "template.yaml"
+    seed_path = template_dir / "examples" / "my_dinh_stadium_seed.txt"
+
+    if not yaml_path.exists():
+        logger.warning("stadium_operations template YAML not found")
+        return None
+
+    try:
+        with open(yaml_path, "r", encoding="utf-8") as f:
+            tmpl = yaml.safe_load(f)
+
+        seed_text = ""
+        if seed_path.exists():
+            seed_text = seed_path.read_text(encoding="utf-8")
+
+        return DomainTemplate(
+            id="stadium_operations",
+            name=tmpl.get("display_name", "Stadium Operations — Drone-Augmented Safety"),
+            description=tmpl.get("description", ""),
+            icon="⛨",
+            category=tmpl.get("category", "critical_infrastructure"),
+            ontology_prompt=tmpl.get("ontology_prompt", ""),
+            default_config=tmpl.get("default_config", {}),
+            sample_events=[],
+            evaluation_metrics=[m["name"] for m in tmpl.get("evaluation_metrics", [])],
+            sample_seed_text=seed_text,
+            scenarios=tmpl.get("scenarios", []),
+            agent_profiles=tmpl.get("agent_profiles", {}),
+            kpi=tmpl.get("kpi", {}),
+            comparison_configurations=tmpl.get("comparison_configurations", []),
+            report_template=tmpl.get("report_template", {}),
+        )
+    except Exception as e:
+        logger.error(f"Failed to load stadium_operations template: {e}")
+        return None
+
+
+# Load stadium template and append if available
+_stadium_tmpl = _load_stadium_operations()
+if _stadium_tmpl:
+    TEMPLATES.append(_stadium_tmpl)
 
 
 class TemplateRegistry:

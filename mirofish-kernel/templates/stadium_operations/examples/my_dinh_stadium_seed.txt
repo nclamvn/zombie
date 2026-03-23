@@ -1,0 +1,140 @@
+=== VENUE OPERATIONAL PROFILE ===
+Stadium: My Dinh National Stadium
+Location: Hanoi, Vietnam
+Capacity: 40,192
+Configuration: Open-air, oval, 2-tier bowl
+
+=== OPERATIONAL STRUCTURE ===
+
+Venue Operations Centre (VOC):
+Located at Level 3, West Stand. Overlooks main concourse via window.
+Equipment: 24× CCTV monitors, radio base station (6 channels), PA system control,
+fire detection panel, access control system, weather monitoring.
+Staffed by: Safety Officer (overall command), CCTV Operator (2 persons),
+Radio Dispatcher, IT Support.
+
+Police Operations:
+Police Commander and 4 officers stationed in dedicated Police Room adjacent to VOC.
+External: 120 police officers deployed in perimeter and internal checkpoints.
+Radio: separate police frequency, patched into VOC main channel.
+
+Steward Organization:
+280 stewards organized in 4 sector teams (North, South, East, West).
+Each sector: 1 Supervisor + 69 stewards.
+Communication: handheld radios on VOC channel, sector sub-channels.
+Responsibilities: spectator guidance, ticket checking, emergency evacuation support,
+incident first-response, crowd density observation.
+
+Medical Operations:
+Medical Coordinator in VOC.
+Resources: 2× medical rooms (North, South concourse), 1× pitch-side medical station,
+12× paramedic foot patrol teams (3 per sector), 2× ambulances staged at Gate D,
+8× defibrillators distributed across concourses.
+MCI Protocol: mass casualty staging area designated at P2 parking zone.
+
+Fire Safety:
+Fire Safety Commander in VOC.
+Detection: automated smoke/heat detection in all enclosed areas.
+Equipment: fire extinguishers every 30m on concourses, hose reels at each stairwell.
+External: fire station 4.2km away, response time ~8 minutes.
+
+=== CURRENT CCTV COVERAGE ===
+
+Total cameras: 128
+Coverage:
+- All 4 main gates: 100% coverage (8 cameras per gate)
+- All concourses: 85% coverage (gaps at stairwell blind spots)
+- All seating sectors: 90% coverage from roof-mounted PTZ cameras
+- External perimeter: 60% coverage (gaps at East fence, P1 rear, loading dock)
+- Parking zones: 40% coverage (P1: 8 cameras, P2: 6 cameras, P3: 4 cameras)
+
+Known blind spots:
+1. P1 North parking rear area (no camera, 200m× 80m zone)
+2. East Concourse stairwell B (camera angle blocked by structural column)
+3. South Gate external queue area beyond 100m from gate (no camera)
+4. Loading dock behind North Stand (service area, 2 cameras but poor lighting)
+5. West perimeter fence section near railway line (no camera, 150m stretch)
+6. Rooftop access points (3 access hatches, no monitoring)
+
+=== MATCH-DAY PROFILE ===
+
+Typical high-attendance match: 35,000-38,000 spectators
+Gate opening: 2 hours before kickoff (typically 5:00 PM for 7:00 PM match)
+Peak ingress: 60-30 minutes before kickoff
+Average ingress rate: 600 persons/minute across all gates
+Maximum gate throughput: Gate A: 200/min, Gate B: 180/min, Gate C: 200/min, Gate D: 150/min
+Egress: 80% of spectators exit within 20 minutes of final whistle
+
+Transportation:
+- Public bus: 45% of spectators (bus stops 400m from Gate A and Gate C)
+- Private vehicle: 35% (parking P1, P2, P3 capacity: 3,200 vehicles)
+- Motorbike: 15% (designated parking area near East perimeter)
+- Taxi/ride-hail: 5% (drop-off zone at South Gate)
+
+=== HISTORICAL INCIDENTS (last 24 months) ===
+
+1. Crowd congestion at Gate A during Vietnam vs Thailand match (38,000 capacity).
+   Queue exceeded 1km. 45-minute wait. 3 minor crush injuries.
+   Root cause: late ticket activation + insufficient steward guidance.
+   Lesson: need earlier detection of queue buildup beyond camera range.
+
+2. Medical emergency in East Upper tier (elderly spectator, cardiac event).
+   Time to detection: 4 minutes (adjacent spectators waved for help).
+   Time to medical arrival: 7 minutes (paramedic had to navigate full concourse).
+   Root cause: steward was 3 sections away, no direct line of sight.
+   Lesson: need faster detection + optimal routing guidance for medical team.
+
+3. Unauthorized entry via East perimeter fence (group of 5 ticket-less fans).
+   Detection: 8 minutes after entry (spotted by steward inside stadium).
+   Root cause: no CCTV on East fence section, steward patrol gap.
+   Lesson: need perimeter monitoring beyond CCTV coverage.
+
+4. Post-match traffic gridlock in P1 and surrounding roads.
+   Duration: 90 minutes of severe congestion.
+   Root cause: no visibility of external traffic patterns from VOC.
+   Lesson: need overhead view of egress patterns extending beyond stadium perimeter.
+
+5. Pyrotechnic device thrown from South Stand during derby match.
+   Detection: immediate (visible fire/smoke in stand).
+   Response: 3 minutes to identify source section, 8 minutes to locate perpetrators.
+   Root cause: CCTV angle could not pinpoint thrower among 8,000 spectators in sector.
+   Lesson: overhead angle could narrow search area significantly.
+
+=== PROPOSED DRONE DEPLOYMENT ===
+
+Tethered drone (HERA-T platform by RTR):
+- Position: tethered from P2 staging area, altitude 40m
+- Coverage: continuous 360° view of South Gate, P2, P3, South Concourse external
+- AI: 105 TOPS edge computing for crowd density estimation, anomaly detection
+- Endurance: 6+ hours continuous operation
+- Feed: 4K video + thermal overlay → VOC Monitor 25 (dedicated drone display)
+
+Rapid-response drone (Vega-R platform by RTR):
+- Quantity: 2 units
+- Base: staging pad at North Stand service area
+- Deployment: 45 seconds from command to on-station
+- Speed: 15 m/s, max flight time 25 minutes
+- Capabilities: 30× optical zoom, speaker (1W PA for ground instructions),
+  spotlight (for night/power failure), thermal camera
+- AI: real-time object detection, crowd density heatmap, person tracking
+- Feed: live video → VOC, with automatic density alert when >4.0 p/m²
+
+Counter-drone system:
+- RF scanner: 360° coverage, detection range 2km
+- Integration: alerts VOC + police immediately upon unauthorized drone detection
+- Friendly identification: transponder + geofence + pre-registered flight plan
+- Response kit: RF jammer (police-operated), net-capture drone (backup)
+
+=== REGULATORY CONTEXT (VIETNAM) ===
+
+UAV operations governed by:
+- Government Decree on UAV management (under Bộ Quốc phòng oversight)
+- No-fly zones published publicly (vùng cấm bay, vùng hạn chế bay)
+- Online permit application system available
+- Recent incidents: UAV intrusions near Tan Son Nhat airport (Feb-Mar 2026)
+  prompted enhanced enforcement and detection capabilities
+- HCMC Police surveyed UAV use for security and rescue operations (Feb 2026)
+
+For stadium pilot: requires coordination with local military command,
+pre-approved flight plan, real-time position reporting, and integration
+with national UAV monitoring system.

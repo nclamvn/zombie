@@ -203,6 +203,33 @@ async function runPipelineStepsFallback(projectId, onEvent) {
   return { projectId, close: () => {} };
 }
 
+// ─── Stadium Comparison (TIP-17) ────────────────────────────
+
+export async function runComparison(projectId, configurations = ["BASELINE", "TETHERED", "FULL"], runsPerScenario = 50) {
+  return apiCall("POST", `/api/projects/${projectId}/compare`, { configurations, runs_per_scenario: runsPerScenario });
+}
+
+export async function getComparison(projectId, includeRaw = false) {
+  return apiCall("GET", `/api/projects/${projectId}/comparison${includeRaw ? "?include_raw=true" : ""}`);
+}
+
+export async function importComparison(projectId, data) {
+  return apiCall("POST", `/api/projects/${projectId}/import-comparison`, { data });
+}
+
+export async function generateFifaReport(projectId) {
+  return apiCall("POST", `/api/projects/${projectId}/fifa-report`);
+}
+
+export async function runE2EPipeline(projectId, template = "stadium_operations", runsPerScenario = 5, scenarios = null) {
+  return apiCall("POST", `/api/projects/${projectId}/run-e2e`, { template, runs_per_scenario: runsPerScenario, scenarios });
+}
+
+export async function getAgentDecisions(projectId, scenarioId = null) {
+  const qs = scenarioId ? `?scenario_id=${scenarioId}` : "";
+  return apiCall("GET", `/api/projects/${projectId}/agent-decisions${qs}`);
+}
+
 // ─── Legacy step-by-step (kept for backward compat) ──────────
 
 export async function runPipelineSteps(name, requirement, text, onProgress) {
