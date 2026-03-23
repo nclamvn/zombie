@@ -144,17 +144,17 @@ function useClock(){const[t,s]=useState(Date.now());useEffect(()=>{const i=setIn
 function Panel({title,accent,children,flex,T,style}){
   return(<div style={{background:T.bgPanel,border:`1px solid ${T.border}`,borderTop:`2px solid ${accent||T.border}`,display:"flex",flexDirection:"column",flex:flex||"none",borderRadius:3,transition:"background .3s, border-color .3s",...style}}>
     {title&&<div style={{padding:"5px 10px",borderBottom:`1px solid ${T.border}`,display:"flex",alignItems:"center",gap:6}}>
-      <div style={{width:5,height:5,borderRadius:1,background:accent||T.dim}}/>
-      <span style={{fontSize:9,color:T.mid,letterSpacing:1.5,textTransform:"uppercase",fontWeight:600}}>{title}</span>
+      <div style={{width:6,height:6,borderRadius:1,background:accent||T.dim}}/>
+      <span style={{fontSize:13,color:T.mid,letterSpacing:1.5,textTransform:"uppercase",fontWeight:800}}>{title}</span>
     </div>}
     <div style={{flex:1,overflow:"hidden",position:"relative"}}>{children}</div>
   </div>);
 }
 
 function MetricBox({label,value,unit,color,T,small}){
-  return(<div style={{padding:small?"4px 6px":"6px 10px",background:T.bgCard,border:`1px solid ${T.border}`,flex:1,minWidth:0,borderRadius:2,transition:"background .3s"}}>
-    <div style={{fontSize:7,color:T.dim,letterSpacing:1,textTransform:"uppercase",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{label}</div>
-    <div style={{fontSize:small?14:18,fontWeight:700,color:color||T.text,lineHeight:1.2}}>{value}{unit&&<span style={{fontSize:9,color:T.dim,marginLeft:2}}>{unit}</span>}</div>
+  return(<div style={{padding:small?"5px 8px":"8px 12px",background:T.bgCard,border:`1px solid ${T.border}`,flex:1,minWidth:0,borderRadius:2,transition:"background .3s"}}>
+    <div style={{fontSize:10,color:T.dim,letterSpacing:1,textTransform:"uppercase",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",fontWeight:700}}>{label}</div>
+    <div style={{fontSize:small?20:26,fontWeight:800,color:color||T.text,lineHeight:1.2}}>{value}{unit&&<span style={{fontSize:12,color:T.dim,marginLeft:2}}>{unit}</span>}</div>
   </div>);
 }
 
@@ -178,8 +178,8 @@ function SimPanel({title,scId,mode,step,T,L}){
     <Panel title={title} accent={accent} flex="1" T={T} style={{minWidth:0}}>
       <div style={{padding:"3px 8px",display:"flex",gap:3,borderBottom:`1px solid ${T.border}`}}>
         {PHASE_KEYS.map(k=>(<div key={k} style={{flex:1,textAlign:"center",padding:"2px 0",background:cur?.p===k?phaseColor(k,T)+"18":"transparent",borderBottom:cur?.p===k?`2px solid ${phaseColor(k,T)}`:"2px solid transparent",transition:"all .3s"}}>
-          <div style={{fontSize:7,color:cur?.p===k?phaseColor(k,T):T.dim,fontWeight:600}}>{L[k]}</div>
-          <div style={{fontSize:9,color:cur?.p===k?T.text:T.dim,fontWeight:700}}>{phaseCounts[k]}</div>
+          <div style={{fontSize:10,color:cur?.p===k?phaseColor(k,T):T.dim,fontWeight:700}}>{L[k]}</div>
+          <div style={{fontSize:13,color:cur?.p===k?T.text:T.dim,fontWeight:800}}>{phaseCounts[k]}</div>
         </div>))}
       </div>
       <div style={{padding:3}}>
@@ -189,14 +189,14 @@ function SimPanel({title,scId,mode,step,T,L}){
           {/* Stadium outline */}
           <ellipse cx="300" cy="250" rx="120" ry="70" fill="none" stroke={T.mid} strokeWidth="1.2" strokeDasharray="4 4" opacity=".5"/>
           <ellipse cx="300" cy="250" rx="55" ry="32" fill={T.pitchFill} stroke={T.green} strokeWidth="1" opacity=".7"/>
-          <text x="300" y="253" textAnchor="middle" fill={T.mid} fontSize="7" fontWeight="600" fontFamily="monospace">PITCH</text>
+          <text x="300" y="253" textAnchor="middle" fill={T.mid} fontSize="10" fontWeight="700" fontFamily="monospace">PITCH</text>
           {/* Edges */}
           {EDGES.map(([f,t],i)=>{const fa=AGENT_META.find(a=>a.id===f),fb=AGENT_META.find(a=>a.id===t);if(!fa||!fb)return null;const isAct=activeEdges.has(`${f}-${t}`);const aD=activeMap[f]||activeMap[t];return<line key={i} x1={fa.x} y1={fa.y} x2={fb.x} y2={fb.y} stroke={isAct?phaseColor(aD?.p,T):T.dim} strokeWidth={isAct?1.5:.6} opacity={isAct?.7:.25}/>;
           })}
           {/* Agent nodes */}
-          {AGENT_META.map(a=>{const d=activeMap[a.id];const isD=a.id==="drone";const show=isDrone||!isD;const agL=L.agents[a.id]?.l||a.id;const col_=T===THEMES.dark?a.c_dk:a.c_lt;if(!show)return<g key={a.id} opacity=".2"><circle cx={a.x} cy={a.y} r={16} fill={T.bgCard} stroke={T.dim} strokeWidth=".8" strokeDasharray="2 3"/></g>;const col=d?phaseColor(d.p,T):col_;return(<g key={a.id}>{d&&<circle cx={a.x} cy={a.y} r={22} fill={col} opacity=".12"><animate attributeName="r" values="18;26;18" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.03;.15" dur="2s" repeatCount="indefinite"/></circle>}<circle cx={a.x} cy={a.y} r={16} fill={T.bgPanel} stroke={d?col:col_} strokeWidth={d?2:1.2}/><text x={a.x} y={a.y+1} textAnchor="middle" dominantBaseline="central" fill={d?T.text:col_} fontSize="7" fontWeight="700" fontFamily="monospace">{agL}</text>{d&&<text x={a.x} y={a.y+28} textAnchor="middle" fill={col} fontSize="5.5" fontFamily="monospace" fontWeight="600">{d.act.length>30?d.act.slice(0,30)+"…":d.act}</text>}</g>);})}
+          {AGENT_META.map(a=>{const d=activeMap[a.id];const isD=a.id==="drone";const show=isDrone||!isD;const agL=L.agents[a.id]?.l||a.id;const col_=T===THEMES.dark?a.c_dk:a.c_lt;if(!show)return<g key={a.id} opacity=".2"><circle cx={a.x} cy={a.y} r={20} fill={T.bgCard} stroke={T.dim} strokeWidth=".8" strokeDasharray="2 3"/></g>;const col=d?phaseColor(d.p,T):col_;return(<g key={a.id}>{d&&<circle cx={a.x} cy={a.y} r={26} fill={col} opacity=".12"><animate attributeName="r" values="22;30;22" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.03;.15" dur="2s" repeatCount="indefinite"/></circle>}<circle cx={a.x} cy={a.y} r={20} fill={T.bgPanel} stroke={d?col:col_} strokeWidth={d?2.5:1.5}/><text x={a.x} y={a.y+1} textAnchor="middle" dominantBaseline="central" fill={d?T.text:col_} fontSize="10" fontWeight="800" fontFamily="monospace">{agL}</text>{d&&<text x={a.x} y={a.y+32} textAnchor="middle" fill={col} fontSize="8" fontFamily="monospace" fontWeight="700">{d.act.length>28?d.act.slice(0,28)+"…":d.act}</text>}</g>);})}
           {/* Incident marker */}
-          {step>=0&&scMeta&&<g><circle cx={scMeta.incX} cy={scMeta.incY} r={12} fill={sevColor} opacity=".1"><animate attributeName="r" values="8;22;8" dur="1.5s" repeatCount="indefinite"/></circle><polygon points={`${scMeta.incX},${scMeta.incY-7} ${scMeta.incX+5},${scMeta.incY+3} ${scMeta.incX-5},${scMeta.incY+3}`} fill={sevColor} opacity=".85"><animate attributeName="opacity" values=".85;.4;.85" dur="1s" repeatCount="indefinite"/></polygon><text x={scMeta.incX} y={scMeta.incY+16} textAnchor="middle" fill={sevColor} fontSize="7" fontWeight="700" fontFamily="monospace">{L.scenarios[scId]?.incLabel||scId}</text></g>}
+          {step>=0&&scMeta&&<g><circle cx={scMeta.incX} cy={scMeta.incY} r={12} fill={sevColor} opacity=".1"><animate attributeName="r" values="8;22;8" dur="1.5s" repeatCount="indefinite"/></circle><polygon points={`${scMeta.incX},${scMeta.incY-7} ${scMeta.incX+5},${scMeta.incY+3} ${scMeta.incX-5},${scMeta.incY+3}`} fill={sevColor} opacity=".85"><animate attributeName="opacity" values=".85;.4;.85" dur="1s" repeatCount="indefinite"/></polygon><text x={scMeta.incX} y={scMeta.incY+18} textAnchor="middle" fill={sevColor} fontSize="10" fontWeight="800" fontFamily="monospace">{L.scenarios[scId]?.incLabel||scId}</text></g>}
         </svg>
       </div>
       <div style={{padding:"0 6px 4px",display:"flex",gap:3}}>
@@ -310,16 +310,16 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
         </div>
         <div style={{flex:1,display:"flex",flexDirection:"column",gap:1,minWidth:200}}>
           <Panel title={L.radioTraffic} accent={T.cyan} flex="2" T={T}>
-            <div ref={logRef} style={{padding:"4px 8px",overflowY:"auto",flex:1,fontSize:8,lineHeight:1.6,maxHeight:"100%"}}>
+            <div ref={logRef} style={{padding:"4px 8px",overflowY:"auto",flex:1,fontSize:11,lineHeight:1.7,maxHeight:"100%"}}>
               {radioLog.map((e,i)=>{const agL=L.agents[e.a]?.l||e.a;const agM=AGENT_META.find(a=>a.id===e.a);const col=T===THEMES.dark?agM?.c_dk:agM?.c_lt;
-                return(<div key={i} style={{display:"flex",gap:5,opacity:i===radioLog.length-1?1:.4,transition:"opacity .4s"}}>
-                  <span style={{color:T.dim,minWidth:28,textAlign:"right",fontSize:7}}>{fmt(e.d)}</span>
-                  <span style={{width:4,height:4,borderRadius:1,background:phaseColor(e.p,T),marginTop:4,flexShrink:0}}/>
-                  <span style={{color:col||T.mid,fontWeight:600,minWidth:30,fontSize:7.5}}>{agL}</span>
-                  <span style={{color:e.m==="D"?T.text:T.mid,fontSize:7.5}}>{e.act}{e.dr?" ▲":""}</span>
+                return(<div key={i} style={{display:"flex",gap:6,opacity:i===radioLog.length-1?1:.4,transition:"opacity .4s"}}>
+                  <span style={{color:T.dim,minWidth:36,textAlign:"right",fontSize:10}}>{fmt(e.d)}</span>
+                  <span style={{width:6,height:6,borderRadius:1,background:phaseColor(e.p,T),marginTop:5,flexShrink:0}}/>
+                  <span style={{color:col||T.mid,fontWeight:700,minWidth:36,fontSize:11}}>{agL}</span>
+                  <span style={{color:e.m==="D"?T.text:T.mid,fontSize:11}}>{e.act}{e.dr?" ▲":""}</span>
                 </div>);
               })}
-              {radioLog.length===0&&<div style={{color:T.dim,textAlign:"center",marginTop:20,fontSize:9}}>{L.awaiting}</div>}
+              {radioLog.length===0&&<div style={{color:T.dim,textAlign:"center",marginTop:20,fontSize:13}}>{L.awaiting}</div>}
             </div>
           </Panel>
           <Panel title={L.agentStatus} accent={T.amber} flex="1" T={T}>
@@ -327,20 +327,20 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
               {AGENT_META.map(a=>{const agL=L.agents[a.id]?.l||a.id;const col=T===THEMES.dark?a.c_dk:a.c_lt;
                 const findLast=(arr,ag,step_)=>{for(let i=Math.min(step_,arr.length-1);i>=0;i--)if(CHAIN_AGENTS[scId][arr===chainsD?"drone":"base"][i]===ag)return{act:arr[i],p:(arr===chainsD?phD:phB)[i]};return null;};
                 const data=(stepD>=0?findLast(chainsD,a.id,stepD):null)||(stepB>=0?findLast(chainsB,a.id,stepB):null);
-                return(<div key={a.id} style={{display:"flex",alignItems:"center",gap:4,padding:"2px 4px",borderBottom:`1px solid ${T.border}20`}}>
-                  <div style={{width:5,height:5,borderRadius:1,background:data?phaseColor(data.p,T):T.border,boxShadow:data?`0 0 4px ${phaseColor(data.p,T)}`:"none"}}/>
-                  <span style={{color:col,fontWeight:600,fontSize:7.5,minWidth:32}}>{agL}</span>
-                  <span style={{color:T.dim,fontSize:7,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{data?data.act:"—"}</span>
+                return(<div key={a.id} style={{display:"flex",alignItems:"center",gap:5,padding:"3px 6px",borderBottom:`1px solid ${T.border}20`}}>
+                  <div style={{width:7,height:7,borderRadius:2,background:data?phaseColor(data.p,T):T.border,boxShadow:data?`0 0 5px ${phaseColor(data.p,T)}`:"none"}}/>
+                  <span style={{color:col,fontWeight:700,fontSize:11,minWidth:40}}>{agL}</span>
+                  <span style={{color:T.dim,fontSize:10,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{data?data.act:"—"}</span>
                 </div>);
               })}
             </div>
           </Panel>
           <Panel title={L.kpiDelta} accent={T.green} T={T} style={{minHeight:110}}>
             <div style={{padding:"6px 8px",display:"flex",flexDirection:"column",gap:3}}>
-              {KPI.map(k=>(<div key={k.l} style={{display:"flex",alignItems:"center",gap:4}}>
-                <span style={{fontSize:7,color:T.dim,minWidth:50}}>{k.l}</span>
-                <div style={{flex:1,height:4,background:T.border,borderRadius:2,overflow:"hidden"}}><div style={{height:"100%",width:`${100-k.p}%`,background:T.green,borderRadius:2,transition:"width 1s"}}/></div>
-                <span style={{fontSize:8,color:T.green,fontWeight:700,minWidth:28,textAlign:"right"}}>-{k.p}%</span>
+              {KPI.map(k=>(<div key={k.l} style={{display:"flex",alignItems:"center",gap:5}}>
+                <span style={{fontSize:10,color:T.dim,minWidth:65,fontWeight:600}}>{k.l}</span>
+                <div style={{flex:1,height:6,background:T.border,borderRadius:3,overflow:"hidden"}}><div style={{height:"100%",width:`${100-k.p}%`,background:T.green,borderRadius:3,transition:"width 1s"}}/></div>
+                <span style={{fontSize:12,color:T.green,fontWeight:800,minWidth:36,textAlign:"right"}}>-{k.p}%</span>
               </div>))}
             </div>
           </Panel>
