@@ -319,18 +319,21 @@ function SimPanel({title,scId,mode,step,T,L}){
   const sevColor={critical:T.red,high:T.amber,moderate:T.blue}[scMeta?.sev]||T.dim;
 
   return(
-    <Panel title={title} accent={accent} flex="1" T={T} style={{minWidth:0,minHeight:0}}>
-      <div style={{display:"flex",flexDirection:"column",height:"100%",minHeight:0}}>
+    <div style={{flex:1,display:"flex",flexDirection:"column",minHeight:0,minWidth:0,background:T.bgPanel,border:`1px solid ${T.border}`,borderTop:`2px solid ${accent}`,borderRadius:3}}>
+      {/* Phase bar — stick to top */}
       <div style={{padding:"3px 8px",display:"flex",gap:3,borderBottom:`1px solid ${T.border}`,flexShrink:0}}>
+        <div style={{width:6,height:6,borderRadius:1,background:accent,alignSelf:"center",marginRight:2}}/>
+        <span style={{fontSize:11,color:T.mid,fontWeight:800,letterSpacing:1,textTransform:"uppercase",marginRight:8,alignSelf:"center"}}>{title}</span>
         {PHASE_KEYS.map(k=>(<div key={k} style={{flex:1,textAlign:"center",padding:"2px 0",background:cur?.p===k?phaseColor(k,T)+"18":"transparent",borderBottom:cur?.p===k?`2px solid ${phaseColor(k,T)}`:"2px solid transparent",transition:"all .3s"}}>
-          <div style={{fontSize:10,color:cur?.p===k?phaseColor(k,T):T.dim,fontWeight:700}}>{L[k]}</div>
-          <div style={{fontSize:13,color:cur?.p===k?T.text:T.dim,fontWeight:800}}>{phaseCounts[k]}</div>
+          <div style={{fontSize:9,color:cur?.p===k?phaseColor(k,T):T.dim,fontWeight:700}}>{L[k]}</div>
+          <div style={{fontSize:12,color:cur?.p===k?T.text:T.dim,fontWeight:800}}>{phaseCounts[k]}</div>
         </div>))}
       </div>
-      <div style={{flex:1,padding:3,minHeight:0,overflow:"hidden"}}>
-        <svg viewBox="0 0 600 340" style={{width:"100%",height:"100%",display:"block"}}>
+      {/* SVG graph — fills all available space */}
+      <div style={{flex:1,minHeight:0,overflow:"hidden",position:"relative"}}>
+        <svg viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet" style={{position:"absolute",inset:0,width:"100%",height:"100%",display:"block"}}>
           <defs><pattern id={`g${mode}${T===THEMES.dark?1:0}`} width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0L0 0 0 30" fill="none" stroke={T.border} strokeWidth=".2" opacity={T.gridOpacity}/></pattern></defs>
-          <rect width="600" height="340" fill={`url(#g${mode}${T===THEMES.dark?1:0})`}/>
+          <rect width="600" height="360" fill={`url(#g${mode}${T===THEMES.dark?1:0})`}/>
           {/* Stadium outline */}
           <ellipse cx="300" cy="250" rx="120" ry="70" fill="none" stroke={T.mid} strokeWidth="1.2" strokeDasharray="4 4" opacity=".5"/>
           <ellipse cx="300" cy="250" rx="55" ry="32" fill={T.pitchFill} stroke={T.green} strokeWidth="1" opacity=".7"/>
@@ -344,13 +347,13 @@ function SimPanel({title,scId,mode,step,T,L}){
           {step>=0&&scMeta&&<g><circle cx={scMeta.incX} cy={scMeta.incY} r={12} fill={sevColor} opacity=".1"><animate attributeName="r" values="8;22;8" dur="1.5s" repeatCount="indefinite"/></circle><polygon points={`${scMeta.incX},${scMeta.incY-7} ${scMeta.incX+5},${scMeta.incY+3} ${scMeta.incX-5},${scMeta.incY+3}`} fill={sevColor} opacity=".85"><animate attributeName="opacity" values=".85;.4;.85" dur="1s" repeatCount="indefinite"/></polygon><text x={scMeta.incX} y={scMeta.incY+18} textAnchor="middle" fill={sevColor} fontSize="10" fontWeight="800" fontFamily="monospace">{L.scenarios[scId]?.incLabel||scId}</text></g>}
         </svg>
       </div>
-      <div style={{padding:"0 6px 4px",display:"flex",gap:3,flexShrink:0}}>
+      {/* Metrics bar — stick to bottom */}
+      <div style={{padding:"3px 6px",display:"flex",gap:3,flexShrink:0,borderTop:`1px solid ${T.border}`}}>
         <MetricBox label={L.elapsed} value={fmt(cur?.d||0)} color={accent} T={T} small/>
         <MetricBox label={L.steps} value={`${Math.max(0,step+1)}/${chains.length}`} color={T.mid} T={T} small/>
         <MetricBox label={L.phase} value={cur?L[cur.p]:"—"} color={cur?phaseColor(cur.p,T):T.dim} T={T} small/>
       </div>
-      </div>{/* close inner flex column */}
-    </Panel>
+    </div>
   );
 }
 
