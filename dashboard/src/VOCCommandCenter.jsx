@@ -286,12 +286,12 @@ const fmt=ms=>ms>=60000?`${Math.floor(ms/60000)}m${((ms%60000)/1000)|0}s`:`${(ms
 function useClock(){const[t,s]=useState(Date.now());useEffect(()=>{const i=setInterval(()=>s(Date.now()),1000);return()=>clearInterval(i)},[]);return t;}
 
 function Panel({title,accent,children,flex,T,style}){
-  return(<div style={{background:T.bgPanel,border:`1px solid ${T.border}`,borderTop:`2px solid ${accent||T.border}`,display:"flex",flexDirection:"column",flex:flex||"none",borderRadius:3,transition:"background .3s, border-color .3s",...style}}>
-    {title&&<div style={{padding:"5px 10px",borderBottom:`1px solid ${T.border}`,display:"flex",alignItems:"center",gap:6}}>
+  return(<div style={{background:T.bgPanel,border:`1px solid ${T.border}`,borderTop:`2px solid ${accent||T.border}`,display:"flex",flexDirection:"column",flex:flex||"none",minHeight:0,borderRadius:3,transition:"background .3s, border-color .3s",...style}}>
+    {title&&<div style={{padding:"5px 10px",borderBottom:`1px solid ${T.border}`,display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
       <div style={{width:6,height:6,borderRadius:1,background:accent||T.dim}}/>
       <span style={{fontSize:13,color:T.mid,letterSpacing:1.5,textTransform:"uppercase",fontWeight:800}}>{title}</span>
     </div>}
-    <div style={{flex:1,overflow:"hidden",position:"relative"}}>{children}</div>
+    <div style={{flex:1,overflow:"auto",position:"relative",minHeight:0}}>{children}</div>
   </div>);
 }
 
@@ -319,15 +319,16 @@ function SimPanel({title,scId,mode,step,T,L}){
   const sevColor={critical:T.red,high:T.amber,moderate:T.blue}[scMeta?.sev]||T.dim;
 
   return(
-    <Panel title={title} accent={accent} flex="1" T={T} style={{minWidth:0}}>
-      <div style={{padding:"3px 8px",display:"flex",gap:3,borderBottom:`1px solid ${T.border}`}}>
+    <Panel title={title} accent={accent} flex="1" T={T} style={{minWidth:0,minHeight:0}}>
+      <div style={{display:"flex",flexDirection:"column",height:"100%",minHeight:0}}>
+      <div style={{padding:"3px 8px",display:"flex",gap:3,borderBottom:`1px solid ${T.border}`,flexShrink:0}}>
         {PHASE_KEYS.map(k=>(<div key={k} style={{flex:1,textAlign:"center",padding:"2px 0",background:cur?.p===k?phaseColor(k,T)+"18":"transparent",borderBottom:cur?.p===k?`2px solid ${phaseColor(k,T)}`:"2px solid transparent",transition:"all .3s"}}>
           <div style={{fontSize:10,color:cur?.p===k?phaseColor(k,T):T.dim,fontWeight:700}}>{L[k]}</div>
           <div style={{fontSize:13,color:cur?.p===k?T.text:T.dim,fontWeight:800}}>{phaseCounts[k]}</div>
         </div>))}
       </div>
-      <div style={{padding:3}}>
-        <svg viewBox="0 0 600 340" style={{width:"100%",display:"block"}}>
+      <div style={{flex:1,padding:3,minHeight:0,overflow:"hidden"}}>
+        <svg viewBox="0 0 600 340" style={{width:"100%",height:"100%",display:"block"}}>
           <defs><pattern id={`g${mode}${T===THEMES.dark?1:0}`} width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0L0 0 0 30" fill="none" stroke={T.border} strokeWidth=".2" opacity={T.gridOpacity}/></pattern></defs>
           <rect width="600" height="340" fill={`url(#g${mode}${T===THEMES.dark?1:0})`}/>
           {/* Stadium outline */}
@@ -343,11 +344,12 @@ function SimPanel({title,scId,mode,step,T,L}){
           {step>=0&&scMeta&&<g><circle cx={scMeta.incX} cy={scMeta.incY} r={12} fill={sevColor} opacity=".1"><animate attributeName="r" values="8;22;8" dur="1.5s" repeatCount="indefinite"/></circle><polygon points={`${scMeta.incX},${scMeta.incY-7} ${scMeta.incX+5},${scMeta.incY+3} ${scMeta.incX-5},${scMeta.incY+3}`} fill={sevColor} opacity=".85"><animate attributeName="opacity" values=".85;.4;.85" dur="1s" repeatCount="indefinite"/></polygon><text x={scMeta.incX} y={scMeta.incY+18} textAnchor="middle" fill={sevColor} fontSize="10" fontWeight="800" fontFamily="monospace">{L.scenarios[scId]?.incLabel||scId}</text></g>}
         </svg>
       </div>
-      <div style={{padding:"0 6px 4px",display:"flex",gap:3}}>
+      <div style={{padding:"0 6px 4px",display:"flex",gap:3,flexShrink:0}}>
         <MetricBox label={L.elapsed} value={fmt(cur?.d||0)} color={accent} T={T} small/>
         <MetricBox label={L.steps} value={`${Math.max(0,step+1)}/${chains.length}`} color={T.mid} T={T} small/>
         <MetricBox label={L.phase} value={cur?L[cur.p]:"—"} color={cur?phaseColor(cur.p,T):T.dim} T={T} small/>
       </div>
+      </div>{/* close inner flex column */}
     </Panel>
   );
 }
@@ -446,13 +448,13 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
         <MetricBox label={L.attendance} value="37.400" color={T.amber} T={T}/>
       </div>
 
-      {/* MAIN */}
+      {/* MAIN — locked to viewport, no overflow */}
       <div style={{flex:1,display:"flex",gap:1,padding:"0 12px 4px",overflow:"hidden",minHeight:0}}>
-        <div style={{flex:3,display:"flex",gap:1,minWidth:0}}>
+        <div style={{flex:3,display:"flex",gap:1,minWidth:0,minHeight:0}}>
           <SimPanel title={L.baseline} scId={scId} mode="BASELINE" step={stepB} T={T} L={L}/>
           <SimPanel title={L.drone} scId={scId} mode="DRONE" step={stepD} T={T} L={L}/>
         </div>
-        <div style={{flex:1,display:"flex",flexDirection:"column",gap:1,minWidth:200}}>
+        <div style={{flex:1,display:"flex",flexDirection:"column",gap:1,minWidth:200,minHeight:0,overflow:"hidden"}}>
           <Panel title={L.radioTraffic} accent={T.cyan} flex="2" T={T}>
             <div ref={logRef} style={{padding:"4px 8px",overflowY:"auto",flex:1,fontSize:11,lineHeight:1.7,maxHeight:"100%"}}>
               {radioLog.map((e,i)=>{const agL=L.agents[e.a]?.l||e.a;const agM=AGENT_META.find(a=>a.id===e.a);const col=T===THEMES.dark?agM?.c_dk:agM?.c_lt;
