@@ -58,22 +58,94 @@ const LANG = {
       cctv:{l:"CCTV",f:"Vận hành Camera"},
     },
     scenarios:{
-      "CROWD-001":{name:"Ùn tắc cổng B — cao điểm vào sân",incLabel:"CỔNG B"},
-      "MED-001":{name:"Ngừng tim — tầng trên Đông hàng 34",incLabel:"ĐÔNG TRÊN"},
-      "SEC-003":{name:"Drone trái phép — tiếp cận 800m ĐB",incLabel:"UAV LẠ"},
+      "CROWD-001":{name:"⚠ NGUY CƠ GIẪM ĐẠP — Cổng B — 4.2 người/m²",incLabel:"⚠ CỔNG B"},
+      "MED-001":{name:"🔴 NGỪNG TIM — Tầng Đông — Bệnh nhân ngừng thở",incLabel:"🔴 CẤP CỨU"},
+      "SEC-003":{name:"🛑 DRONE ĐỊCH — Tiếp cận 800m — Có thể mang tải",incLabel:"🛑 UAV ĐỊCH"},
     },
     chains:{
       "CROWD-001":{
-        drone:["Mật độ tăng tại Cổng B — hàng chờ 600m+","Cam 23: mật độ 3.8 người/m² và tăng","Nhận 2 báo cáo — kéo feed drone","Drone xác nhận: 4.2 người/m², hàng 800m, CAO","Phân loại VÀNG — kích hoạt chuyển hướng","Mở Cổng C + thông báo PA","Triển khai rào — hướng dẫn sang Cổng C","Đội Cổng C sẵn sàng — tăng tiếp nhận","Mật độ giảm: 3.5 → 3.0 — chuyển hướng hiệu quả","Cổng B bình thường — XANH"],
-        base:["Cổng B có vẻ đông, khó đánh giá","Một báo cáo — yêu cầu CCTV kiểm tra","Cam 23 thấy hàng nhưng không hết","Gửi đội kiểm tra bằng chân","Xác minh: mật độ rất cao, hàng 800m","Xác nhận CAO — kích hoạt chuyển hướng","Lệnh mở Cổng C","Chuyển hướng — đám đông bức xúc vì chờ","Cổng C tiếp nhận","Ổn định sau 25+ phút"]
+        drone:[
+          "⚠ CẢNH BÁO: mật độ Cổng B vượt 3.8 người/m² — tăng nhanh!",
+          "Camera 23 xác nhận: hàng chờ 600m+ — đám đông bắt đầu xô đẩy",
+          "DRONE TRINH SÁT: triển khai ngay — feed trực tiếp lên VOC",
+          "🔴 DRONE XÁC NHẬN: 4.2 người/m², hàng 800m — NGUY CƠ GIẪM ĐẠP!",
+          "VOC PHÂN LOẠI ĐỎ — Kích hoạt Phương án Chuyển hướng KHẨN",
+          "LỆNH: Mở tất cả lane Cổng C + PA toàn sân + bật đèn hướng dẫn",
+          "Đội giám sát triển khai rào chắn — hướng dẫn 3.000 người sang Cổng C",
+          "Cổng C tiếp nhận: throughput tăng 200→350 người/phút",
+          "📉 DRONE: Mật độ GIẢM 4.2→3.0 người/m² — nguy cơ được kiểm soát",
+          "✅ GIẢI QUYẾT trong 2 phút — Cổng B ổn định — XANH"
+        ],
+        base:[
+          "Cổng B hình như đông... khó đánh giá từ vị trí giám sát",
+          "VOC: chỉ 1 báo cáo — yêu cầu CCTV kiểm tra Cổng B",
+          "CCTV: Camera 23 thấy hàng dài nhưng góc hạn chế — không đo được mật độ",
+          "VOC: Gửi 2 giám sát đi bộ kiểm tra — ETA 3 phút...",
+          "⏳ 5 phút trôi qua... giám sát đang di chuyển qua đám đông",
+          "Giám sát tại chỗ: MẬT ĐỘ RẤT CAO! Hàng 800m! Đám đông bắt đầu xô!",
+          "🔴 XÁC NHẬN MUỘN — Kích hoạt chuyển hướng — đã mất 7 phút!",
+          "Mở Cổng C nhưng đám đông BỨC XÚC — la hét, xô đẩy rào chắn",
+          "Cổng C tiếp nhận chậm — thiếu nhân sự điều phối",
+          "⚠ Ổn định sau 25+ phút — 3 người bị thương nhẹ do chen lấn"
+        ]
       },
       "MED-001":{
-        drone:["Feed drone: đám đông tụ tròn tầng Đông","Giám sát kề bên: khán giả vẫy tay","Hình drone: người nằm — phân loại ĐỎ","Cứu thương 3 xuất phát — yêu cầu đường","Drone: cầu thang C thông, B tắc","Hướng dẫn: CT C → Hàng 34 — ETA 90s","Đội tại chỗ — triển khai AED","Dọn Cổng D cho xe cứu thương","Sốc điện — mạch đập trở lại","Xe cứu thương tại Cổng D","Bệnh nhân ổn — chuyển xe","Sự cố y tế giải quyết — ghi nhật ký"],
-        base:["Khán giả vẫy tay cách mấy khu — đi kiểm tra","Giám sát đi bộ — ETA 2 phút","Xác nhận: người bất tỉnh — cần y tế NGAY","ĐỎ — điều động y tế","Cứu thương xuất phát — đi cầu thang nào?","Kiểm tra CCTV — góc camera hạn chế","Đi cầu thang B — tắc — quay lại","Tới qua CT A — AED — chậm 8 phút","Yêu cầu xe cứu thương — dọn Cổng D","Bệnh nhân ổn sau phản ứng chậm","Giải quyết — ghi nhận chậm trễ"]
+        drone:[
+          "🔴 DRONE PHÁT HIỆN: đám đông tụ thành VÒNG TRÒN tầng Đông Trên!",
+          "Giám sát kề bên: Khán giả la hét vẫy tay cầu cứu!",
+          "DRONE ZOOM: Người đàn ông NẰM BẤT ĐỘNG — không thở — PHÂN LOẠI ĐỎ!",
+          "Y TẾ 3 XUẤT PHÁT NGAY — drone dẫn đường thời gian thực!",
+          "🛸 DRONE: Cầu thang C THÔNG — cầu thang B TẮC NGHẼN — tránh!",
+          "Hướng dẫn: Cầu thang C → hành lang 7 → Hàng 34 — ETA 90 giây!",
+          "💓 ĐỘI Y TẾ TẠI CHỖ — triển khai AED — bắt đầu sốc điện!",
+          "An toàn dọn Cổng D — xe cứu thương sẵn sàng tiếp nhận",
+          "⚡ SỐC ĐIỆN LẦN 1 — TIM ĐẬP TRỞ LẠI! Mạch 72bpm!",
+          "Xe cứu thương tại Cổng D — cáng đang vào",
+          "Bệnh nhân ổn định — SpO2 96% — đang chuyển lên xe",
+          "✅ CỨU SỐNG THÀNH CÔNG — Tổng: 2 phút 30 giây từ phát hiện"
+        ],
+        base:[
+          "Khán giả vẫy tay cách 3 khu — giám sát không rõ chuyện gì",
+          "Giám sát ĐI BỘ đến kiểm tra — phải đi qua 3 khu đông...",
+          "⏳ 4 PHÚT... giám sát chưa tới — đám đông cản đường",
+          "Tới nơi: NGƯỜI BẤT TỈNH! Không thở! CẦN Y TẾ KHẨN CẤP!",
+          "🔴 ĐỎ — Điều động y tế — NHƯNG ĐI CẦU THANG NÀO?!",
+          "Kiểm tra CCTV — góc camera bị cột che — KHÔNG THẤY!",
+          "Y tế đi cầu thang B — TẮC NGHẼN hoàn toàn — QUAY LẠI!",
+          "⏳ 8 PHÚT TRỄ — Y tế đi vòng cầu thang A — AED triển khai muộn",
+          "Sốc điện thành công NHƯNG não thiếu oxy 8 phút — TIÊN LƯỢNG XẤU",
+          "Xe cứu thương tới — bệnh nhân sống nhưng TỔN THƯƠNG NẶNG",
+          "⚠ SỐNG nhưng DI CHỨNG — nếu tới sớm 6 phút sẽ hồi phục hoàn toàn"
+        ]
       },
       "SEC-003":{
-        drone:["Máy quét RF: tín hiệu lạ 800m ĐB","Cảnh báo: drone trái phép — KHÔNG trong đội","Hạ cánh drone trinh sát — kiểm tra","Đánh giá: drone do thám, không tải trọng","Drone hợp pháp hạ hết — địch xác nhận","Kích hoạt gây nhiễu RF tần số địch","Sẵn sàng trú ẩn nếu vào không phận sân","Gây nhiễu — drone địch mất tín hiệu","Drone địch hạ — ngoài vành đai","Thu hồi drone địch — bằng chứng đảm bảo","Drone hợp pháp hoạt động lại","Chống drone giải quyết — XANH"],
-        base:["Cảnh báo RF: phát hiện tín hiệu lạ","Ghi nhận — không xác nhận bằng mắt","Yêu cầu tìm bằng mắt hướng ĐB","Không thấy drone — quá xa / nhỏ","Chưa xác minh — duy trì cảnh báo","Phân loại đe dọa — kích hoạt gây nhiễu","Chuẩn bị trú ẩn một phần","Gây nhiễu — không biết hiệu quả","Tín hiệu RF yếu — có thể hạ hoặc bay đi","Tìm kiếm — khu vực rộng, không hướng dẫn","Không thu hồi — ghi nhận chưa giải quyết"]
+        drone:[
+          "🛑 RADAR RF: TÍN HIỆU LẠ 800m ĐÔNG BẮC — đang tiếp cận!",
+          "VOC CẢNH BÁO: Drone KHÔNG trong đội — phân tích tín hiệu KHẨN!",
+          "🛸 HẠ TOÀN BỘ DRONE HỢP PHÁP — tránh nhầm lẫn đối tượng!",
+          "DRONE trinh sát: Đối tượng loại quadcopter — CÓ THỂ MANG TẢI!",
+          "Phân biệt hoàn tất: drone hợp pháp ĐÃ HẠ — đối tượng ĐÃ XÁC NHẬN",
+          "⚡ KÍCH HOẠT GÂY NHIỄU RF — tần số 2.4GHz + 5.8GHz!",
+          "An toàn: sẵn sàng trú ẩn nếu UAV vào không phận khán đài",
+          "GÂY NHIỄU HIỆU QUẢ — drone địch MẤT TÍN HIỆU ĐIỀU KHIỂN!",
+          "📉 DRONE ĐỊCH RƠI — hạ cánh bắt buộc ngoài vành đai 200m",
+          "Cảnh sát THU GIỮ thiết bị — bảo toàn bằng chứng — kiểm tra tải",
+          "🛸 Drone hợp pháp CẤT CÁNH LẠI — overwatch khôi phục 100%",
+          "✅ MỐI ĐE DỌA VÔ HIỆU HÓA — 2 phút 40 giây — BÁO CÁO BỘ QUỐC PHÒNG"
+        ],
+        base:[
+          "Radar RF: tín hiệu lạ — hướng Đông Bắc",
+          "VOC ghi nhận — KHÔNG CÓ HÌNH ẢNH xác nhận bằng mắt",
+          "Yêu cầu giám sát NHÌN LÊN TRỜI tìm drone — hướng ĐB",
+          "⏳ 3 phút... giám sát: KHÔNG THẤY GÌ — trời mây, drone quá nhỏ",
+          "VOC: Vẫn chưa xác minh — chỉ có tín hiệu RF — không biết loại gì",
+          "⏳ 7 phút — Phân loại MỐI ĐE DỌA CÓ THỂ — kích hoạt gây nhiễu",
+          "Chuẩn bị phương án trú ẩn — 40.000 khán giả trong nguy hiểm",
+          "Gây nhiễu tần số — KHÔNG BIẾT HIỆU QUẢ vì không có hình ảnh!",
+          "Tín hiệu RF yếu dần — drone bay đi hay rơi? KHÔNG RÕ!",
+          "Cảnh sát tìm kiếm mặt đất — khu vực 2km² — KHÔNG CÓ DẪN ĐƯỜNG",
+          "⚠ KHÔNG THU HỒI ĐƯỢC — mối đe dọa CHƯA XÁC NHẬN — ghi nhận LỖ HỔNG"
+        ]
       }
     }
   },
@@ -99,22 +171,94 @@ const LANG = {
       cctv:{l:"CCTV",f:"CCTV Operator"},
     },
     scenarios:{
-      "CROWD-001":{name:"Gate B congestion — peak ingress",incLabel:"GATE B"},
-      "MED-001":{name:"Cardiac arrest — East Upper Row 34",incLabel:"EAST UPPER"},
-      "SEC-003":{name:"Unauthorized drone — 800m NE approach",incLabel:"HOSTILE UAV"},
+      "CROWD-001":{name:"⚠ CRUSH RISK — Gate B — 4.2 p/m² density",incLabel:"⚠ GATE B"},
+      "MED-001":{name:"🔴 CARDIAC ARREST — East Upper — Patient not breathing",incLabel:"🔴 CARDIAC"},
+      "SEC-003":{name:"🛑 HOSTILE DRONE — 800m NE approach — Possible payload",incLabel:"🛑 HOSTILE UAV"},
     },
     chains:{
       "CROWD-001":{
-        drone:["Crowd density rising at Gate B — queue 600m+","Cam 23: density 3.8 p/m² climbing","Dual report — pulling drone feed","Overhead: 4.2 p/m², 800m queue, HIGH","AMBER — activating redirect","Opening Gate C + PA announcement","Deploying barrier — guiding to Gate C","Gate C ready — intake increasing","Density dropping: 3.5→3.0 — working","Gate B normalized — GREEN"],
-        base:["Crowd seems busy at Gate B","Single report — requesting CCTV","Cam 23 shows queue, can't see extent","Sending steward to assess on foot","On foot: density very high, 800m","Confirmed HIGH — activating redirect","Gate C overflow order","Executing — crowd frustrated","Gate C receiving overflow","Stabilizing after 25+ minutes"]
+        drone:[
+          "⚠ ALERT: Gate B density exceeding 3.8 p/m² — rising fast!",
+          "Camera 23 confirms: 600m+ queue — crowd starting to PUSH",
+          "DRONE DEPLOYED: live overhead feed to VOC — 15 seconds",
+          "🔴 DRONE CONFIRMS: 4.2 p/m², 800m queue — CRUSH RISK IMMINENT!",
+          "VOC CLASSIFIES RED — Activating Emergency Redirect Protocol",
+          "ORDER: Open all Gate C lanes + PA full stadium + guide lights ON",
+          "Stewards deploying barriers — redirecting 3,000 people to Gate C",
+          "Gate C receiving: throughput up 200→350 persons/minute",
+          "📉 DRONE: Density FALLING 4.2→3.0 p/m² — redirect WORKING",
+          "✅ RESOLVED in 2 minutes — Gate B stable — GREEN"
+        ],
+        base:[
+          "Gate B looks busy... hard to tell from steward position",
+          "VOC: only 1 report — requesting CCTV check Gate B",
+          "CCTV: Camera 23 shows queue but angle limited — can't measure density",
+          "VOC: Sending 2 stewards on foot to assess — ETA 3 minutes...",
+          "⏳ 5 minutes elapsed... stewards still moving through crowd",
+          "Steward arrives: DENSITY VERY HIGH! 800m queue! Crowd PUSHING!",
+          "🔴 LATE CONFIRMATION — Activating redirect — 7 minutes LOST!",
+          "Gate C opened but crowd FRUSTRATED — shouting, pushing barriers",
+          "Gate C receiving slow — understaffed for overflow",
+          "⚠ Stabilized after 25+ minutes — 3 minor crush injuries reported"
+        ]
       },
       "MED-001":{
-        drone:["Tethered: crowd circle in East Upper","Steward alerted by spectators waving","Drone: person on ground — RED","Paramedic 3 dispatched — route?","Drone: stairwell C clear, B congested","Route: stairwell C → Row 34, ETA 90s","On scene — AED deploying","Clearing Gate D for ambulance","AED shock — pulse restored","Ambulance at Gate D","Patient stable — transporting","Resolved — logging"],
-        base:["Spectators waving sections away","Steward walking — ETA 2 min","Confirmed: person collapsed — NOW","RED — dispatching medical","Paramedic out — which stairwell?","Checking CCTV — angle limited","Stairwell B — congested — back","Via stairwell A — AED — 8 min delay","Ambulance request — clearing Gate D","Patient stable after delay","Resolved — delay noted for review"]
+        drone:[
+          "🔴 DRONE DETECTS: crowd forming CIRCLE in East Upper section!",
+          "Adjacent steward: Spectators SCREAMING and waving for help!",
+          "DRONE ZOOM: Male on ground NOT BREATHING — CLASSIFYING RED!",
+          "PARAMEDIC TEAM 3 DISPATCHED — drone guiding route in real-time!",
+          "🛸 DRONE: Stairwell C CLEAR — stairwell B BLOCKED — avoid!",
+          "Route guidance: Stairwell C → corridor 7 → Row 34 — ETA 90 sec!",
+          "💓 MEDICAL ON SCENE — AED deployed — initiating defibrillation!",
+          "Safety clearing Gate D — ambulance staging ready",
+          "⚡ FIRST SHOCK DELIVERED — HEARTBEAT RESTORED! Pulse 72bpm!",
+          "Ambulance at Gate D — stretcher team entering",
+          "Patient stable — SpO2 96% — transferring to ambulance",
+          "✅ LIFE SAVED — Total: 2 min 30 sec from detection to pulse"
+        ],
+        base:[
+          "Spectators waving 3 sections away — steward can't see what's happening",
+          "Steward WALKING to investigate — pushing through packed crowd...",
+          "⏳ 4 MINUTES... steward still not there — crowd blocking path",
+          "Arrives: MAN DOWN! NOT BREATHING! NEED MEDICAL IMMEDIATELY!",
+          "🔴 RED — Dispatching medical — BUT WHICH STAIRWELL?!",
+          "Checking CCTV — camera BLOCKED by pillar — CANNOT SEE!",
+          "Paramedic takes stairwell B — COMPLETELY BLOCKED — TURNING BACK!",
+          "⏳ 8 MINUTE DELAY — Rerouting via stairwell A — AED deploying LATE",
+          "Shock delivered BUT brain without oxygen for 8 minutes — POOR PROGNOSIS",
+          "Ambulance arrives — patient alive but SIGNIFICANT DAMAGE",
+          "⚠ SURVIVED but PERMANENT INJURY — 6 minutes earlier = full recovery"
+        ]
       },
       "SEC-003":{
-        drone:["RF scanner: unknown 800m NE","Alert: unauthorized — NOT in fleet","Grounding recon units — check","Assessment: surveillance, no payload","Friendlies grounded — hostile confirmed","RF jamming on hostile frequency","Standby shelter if enters airspace","Jammer active — losing signal","Hostile descending — outside perimeter","Ground unit recovering — evidence","Friendlies back online — overwatch","Counter-drone GREEN — reporting"],
-        base:["RF alert: unknown signal","Acknowledged — no visual","Visual search NE — stewards look up","Can't see — too far/small","Unverified — maintaining alert","Probable threat — activating jammer","Partial shelter prepared","Jamming — unknown effect","Signal fading — maybe landed","Ground search — large area, no guide","Cannot recover — logged unresolved"]
+        drone:[
+          "🛑 RF RADAR: UNKNOWN SIGNAL 800m NORTHEAST — closing fast!",
+          "VOC ALERT: Drone NOT IN FLEET — analyzing signal URGENTLY!",
+          "🛸 ALL FRIENDLY DRONES GROUNDED — preventing misidentification!",
+          "RECON DRONE: Target is quadcopter — POSSIBLE PAYLOAD detected!",
+          "Deconfliction complete: friendlies DOWN — hostile CONFIRMED",
+          "⚡ RF JAMMING ACTIVE — targeting 2.4GHz + 5.8GHz bands!",
+          "Safety: shelter-in-place READY if UAV breaches stadium airspace",
+          "JAMMING EFFECTIVE — hostile drone LOSING CONTROL SIGNAL!",
+          "📉 HOSTILE DRONE FALLING — forced landing 200m outside perimeter",
+          "Police SECURING device — preserving evidence — checking payload",
+          "🛸 Friendly drones RELAUNCHING — overwatch restored 100%",
+          "✅ THREAT NEUTRALIZED — 2 min 40 sec — REPORTING TO DEFENSE MINISTRY"
+        ],
+        base:[
+          "RF radar: unknown signal — northeast direction",
+          "VOC acknowledged — NO VISUAL CONFIRMATION available",
+          "Requesting stewards to LOOK UP at sky — northeast direction",
+          "⏳ 3 minutes... stewards: CAN'T SEE ANYTHING — cloudy, drone too small",
+          "VOC: Still UNVERIFIED — only RF signal — don't know drone type",
+          "⏳ 7 minutes — Classifying PROBABLE THREAT — activating jammer",
+          "Preparing shelter plan — 40,000 spectators potentially at risk",
+          "Jamming broadcast frequencies — NO WAY TO KNOW IF EFFECTIVE!",
+          "RF signal fading — drone flew away or crashed? UNKNOWN!",
+          "Police ground search — 2km² area — NO GUIDANCE for search team",
+          "⚠ CANNOT RECOVER — threat UNCONFIRMED — logging SECURITY GAP"
+        ]
       }
     }
   }
@@ -135,7 +279,7 @@ const EDGES=[["drone","voc"],["cctv","voc"],["police","voc"],["voc","safety"],["
 const SC_META=[{id:"CROWD-001",cat:"CROWD",sev:"high",trigMin:40,incX:250,incY:340},{id:"MED-001",cat:"MEDICAL",sev:"critical",trigMin:75,incX:450,incY:340},{id:"SEC-003",cat:"SECURITY",sev:"high",trigMin:70,incX:500,incY:50}];
 const CHAIN_AGENTS={"CROWD-001":{drone:["stw_s","cctv","voc","drone","voc","safety","stw_s","stw_n","drone","voc"],base:["stw_s","voc","cctv","voc","stw_s","voc","safety","stw_s","stw_n","voc"]},"MED-001":{drone:["drone","stw_n","voc","medical","drone","voc","medical","safety","medical","voc","medical","voc"],base:["stw_n","voc","stw_n","voc","medical","voc","medical","medical","voc","medical","voc"]},"SEC-003":{drone:["cctv","voc","drone","police","voc","police","safety","police","voc","police","drone","voc"],base:["cctv","voc","police","stw_n","voc","police","safety","police","voc","police","voc"]}};
 const CHAIN_PHASES={"CROWD-001":{drone:["detect","detect","verify","verify","decide","decide","respond","respond","resolve","resolve"],base:["detect","detect","verify","verify","verify","decide","decide","respond","respond","resolve"]},"MED-001":{drone:["detect","detect","verify","decide","decide","decide","respond","respond","respond","respond","resolve","resolve"],base:["detect","detect","verify","verify","decide","decide","respond","respond","respond","resolve","resolve"]},"SEC-003":{drone:["detect","detect","verify","verify","decide","decide","decide","respond","respond","resolve","resolve","resolve"],base:["detect","detect","verify","verify","verify","decide","decide","respond","respond","respond","resolve"]}};
-const CHAIN_DELAYS={"CROWD-001":{drone:[0,1200,2200,3200,4500,5800,7000,8200,10000,12000],base:[0,3000,5000,7000,12000,14000,16000,18000,20000,25000]},"MED-001":{drone:[0,1500,2500,3500,4500,5500,7500,8500,10000,11500,13500,15000],base:[0,4000,12000,14000,15500,17000,20000,25000,27000,32000,35000]},"SEC-003":{drone:[0,1000,2000,3500,5000,6500,7500,9000,11000,13000,14500,16000],base:[0,2000,5000,9000,12000,15000,17000,20000,25000,30000,38000]}};
+const CHAIN_DELAYS={"CROWD-001":{drone:[0,800,1500,2500,3500,4500,5500,6500,8000,10000],base:[0,4000,8000,12000,17000,22000,25000,28000,32000,40000]},"MED-001":{drone:[0,1000,2000,3000,4000,5000,6500,7500,9000,10500,12000,14000],base:[0,5000,14000,20000,24000,27000,30000,36000,42000,48000,55000]},"SEC-003":{drone:[0,800,1800,3000,4500,5500,6500,8000,10000,12000,13500,15000],base:[0,3000,7000,12000,18000,25000,30000,34000,40000,48000,58000]}};
 const CHAIN_DR={"CROWD-001":{drone:[0,0,0,1,0,0,0,0,1,0]},"MED-001":{drone:[1,0,0,0,1,0,0,0,0,0,0,0]},"SEC-003":{drone:[0,0,1,0,0,0,0,0,0,0,1,0]}};
 
 const fmt=ms=>ms>=60000?`${Math.floor(ms/60000)}m${((ms%60000)/1000)|0}s`:`${(ms/1000).toFixed(1)}s`;
