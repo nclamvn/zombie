@@ -262,8 +262,8 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
     <div style={{fontFamily:"'JetBrains Mono','SF Mono','Fira Code',monospace",background:T.bg,color:T.text,height:embedded?"100%":"100vh",display:"flex",flexDirection:"column",overflow:"hidden",fontSize:10,transition:"background .4s,color .4s"}}>
       <style>{`@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}} ::-webkit-scrollbar{width:3px} ::-webkit-scrollbar-track{background:transparent} ::-webkit-scrollbar-thumb{background:${T.border};border-radius:2px}`}</style>
 
-      {/* TOP */}
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"6px 12px",borderBottom:`1px solid ${T.border}`,background:T.bgPanel,flexShrink:0,transition:"background .3s"}}>
+      {/* TOP — standalone only */}
+      {!embedded&&<div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"6px 12px",borderBottom:`1px solid ${T.border}`,background:T.bgPanel,flexShrink:0}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <span style={{color:T.amber,fontWeight:800,fontSize:12,letterSpacing:3}}>RTR SIMULATOR</span>
           <span style={{color:T.dim,fontSize:8,letterSpacing:1}}>{L.title}</span>
@@ -275,16 +275,19 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
           <button onClick={()=>setTheme(t=>t==="dark"?"light":"dark")} style={{background:T.bgCard,border:`1px solid ${T.border}`,padding:"3px 10px",fontSize:9,color:T.mid,fontFamily:"inherit",cursor:"pointer",borderRadius:3}}>{theme==="dark"?"☀":"◐"}</button>
           <span style={{color:T.amber,fontSize:11,fontWeight:700,letterSpacing:1,marginLeft:4}}>{timeStr}</span>
         </div>
-      </div>
+      </div>}
 
-      {/* SCENARIO BAR */}
-      <div style={{display:"flex",alignItems:"center",padding:"4px 12px",borderBottom:`1px solid ${T.border}`,background:T.bgPanel,flexShrink:0,gap:4,transition:"background .3s"}}>
+      {/* SINGLE CONTROL BAR — everything in one compact row */}
+      <div style={{display:"flex",alignItems:"center",padding:"3px 10px",borderBottom:`1px solid ${T.border}`,background:T.bgPanel,flexShrink:0,gap:3}}>
+        <span style={{color:isRun?T.green:T.dim,fontSize:8,fontWeight:700,animation:isRun?"blink 1s infinite":"none"}}>
+          {isRun?"●":"○"}
+        </span>
         {SC_META.map((s,i)=>{const done=i<scDone;const active=i===scIdx&&isRun;const sC={critical:T.red,high:T.amber}[s.sev]||T.blue;
-          return(<button key={s.id} onClick={()=>{if(!autoPlay){reset();setScIdx(i);}}} style={{background:active?sC+"15":done?T.greenDim:"transparent",border:`1px solid ${active?sC:done?T.green:T.border}`,padding:"3px 8px",fontSize:8,color:active?sC:done?T.green:T.dim,fontFamily:"inherit",cursor:autoPlay?"default":"pointer",borderRadius:2,transition:"all .3s"}}>{done?"✓ ":active?"▶ ":""}{s.id}</button>);
+          return(<button key={s.id} onClick={()=>{if(!autoPlay){reset();setScIdx(i);}}} style={{background:active?sC+"15":done?T.greenDim:"transparent",border:`1px solid ${active?sC:done?T.green:T.border}`,padding:"2px 7px",fontSize:8,color:active?sC:done?T.green:T.dim,fontFamily:"inherit",cursor:autoPlay?"default":"pointer",borderRadius:2}}>{done?"✓ ":active?"▶ ":""}{s.id}</button>);
         })}
         <div style={{flex:1}}/>
-        <button onClick={autoPlay?stopAll:startAuto} style={{background:autoPlay?T.redDim:T.amberDim,border:`1px solid ${autoPlay?T.red:T.amber}`,padding:"4px 14px",fontSize:9,color:autoPlay?T.red:T.amber,fontWeight:700,fontFamily:"inherit",cursor:"pointer",borderRadius:2}}>{autoPlay?L.stopBtn:L.autoBtn}</button>
-        {!autoPlay&&<button onClick={isRun?reset:run} style={{background:isRun?T.redDim:T.greenDim,border:`1px solid ${isRun?T.red:T.green}`,padding:"4px 14px",fontSize:9,color:isRun?T.red:T.green,fontWeight:700,fontFamily:"inherit",cursor:"pointer",borderRadius:2}}>{isRun?L.stopBtn:L.runBtn}</button>}
+        <button onClick={autoPlay?stopAll:startAuto} style={{background:autoPlay?T.redDim:T.amberDim,border:`1px solid ${autoPlay?T.red:T.amber}`,padding:"3px 12px",fontSize:8,color:autoPlay?T.red:T.amber,fontWeight:700,fontFamily:"inherit",cursor:"pointer",borderRadius:2}}>{autoPlay?L.stopBtn:L.autoBtn}</button>
+        {!autoPlay&&<button onClick={isRun?reset:run} style={{background:isRun?T.redDim:T.greenDim,border:`1px solid ${isRun?T.red:T.green}`,padding:"3px 12px",fontSize:8,color:isRun?T.red:T.green,fontWeight:700,fontFamily:"inherit",cursor:"pointer",borderRadius:2}}>{isRun?L.stopBtn:L.runBtn}</button>}
       </div>
 
       {/* METRICS */}
