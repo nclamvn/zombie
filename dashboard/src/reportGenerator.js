@@ -279,12 +279,12 @@ export function exportAsPDF(markdown, filename = "report") {
 <p>${html}</p>
 </body></html>`;
 
-  // Open in new window and trigger print
-  const w = window.open('', '_blank', 'width=900,height=700');
-  w.document.write(styledHtml);
-  w.document.close();
-  // Wait for fonts to load, then print
-  setTimeout(() => {
-    w.print();
-  }, 500);
+  // Download as HTML file (user opens → Cmd+P → Save as PDF)
+  const blob = new Blob([styledHtml], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${filename}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
