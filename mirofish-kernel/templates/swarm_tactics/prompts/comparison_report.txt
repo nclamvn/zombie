@@ -1,0 +1,4 @@
+Generate a formal evidence report for Swarm Tactics simulation results.
+Compare configurations: SMALL, MEDIUM, LARGE.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

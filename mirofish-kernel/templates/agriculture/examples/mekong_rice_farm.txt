@@ -1,0 +1,18 @@
+=== NÔNG NGHIỆP CHÍNH XÁC — OPERATIONAL PROFILE ===
+Trang trại lúa An Giang, 500 ha, 3 drone RTR HERA-A.
+
+=== AGENTS ===
+- Quản lý Nông trại (Farm Manager): Quyết định phun/tưới, lên lịch mùa vụ
+- Drone Phun (Spray Drone): Phun thuốc/phân bón chính xác theo bản đồ
+- Drone Khảo sát (Survey Drone): Chụp multispectral, tạo bản đồ NDVI
+- Kỹ sư Nông nghiệp (Agronomist): Phân tích NDVI, chẩn đoán bệnh, đề xuất xử lý
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Phun thủ công, Drone phun, Nông nghiệp chính xác
+
+=== SCENARIOS TO SIMULATE ===
+- AGR-001: Phun thuốc 100 ha lúa — sâu cuốn lá [MODERATE]
+- AGR-002: Phát hiện stress cây — vùng khô [MODERATE]
+- AGR-003: Dịch bệnh lan — cần phun khẩn cấp [HIGH]
+- AGR-004: Đánh giá thiệt hại sau bão [HIGH]

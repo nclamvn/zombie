@@ -1,0 +1,22 @@
+=== CHIẾN THUẬT BAY ĐÀN (SWARM) — OPERATIONAL PROFILE ===
+Trường huấn luyện bầy drone, khu vực 20km², 200 drone RTR Vega-S, AI coordinator trung tâm.
+
+=== AGENTS ===
+- Chỉ huy Bầy (Swarm Commander): Xác định nhiệm vụ tổng thể, phê duyệt chiến thuật, quyết định quy mô
+- AI Điều phối Bầy (Swarm AI Controller): Thuật toán phân công tự động, tái cấu hình đội hình, cân bằng tải
+- Nút mạng Mesh (Mesh Network Node): Truyền tin phi tập trung, relay dữ liệu, duy trì kết nối bầy
+- Phân đội Trinh sát (Scout Element): Drone tiên phong, phát hiện mục tiêu, cảnh báo sớm
+- Phân đội Tấn công (Strike Element): Drone tấn công/gây nhiễu, phân công mục tiêu, đánh giá kết quả
+- Phân đội Dự bị (Reserve Element): Drone thay thế, bổ sung khi tổn thất, mở rộng phạm vi
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Bầy nhỏ 10 drone, Bầy trung 50 drone, Bầy lớn 200 drone
+
+=== SCENARIOS TO SIMULATE ===
+- SWM-001: Quét vùng 10km² — đội hình lưới [MODERATE]
+- SWM-002: Áp chế hệ thống phòng không — 50 drone [CRITICAL]
+- SWM-003: Bao vây và theo dõi mục tiêu di động [HIGH]
+- SWM-004: Phòng thủ chống bầy drone đối phương [CRITICAL]
+- SWM-005: Relay truyền thông — mạng mesh di động [MODERATE]
+- SWM-006: Tái cấu hình sau tổn thất 30% [HIGH]

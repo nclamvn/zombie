@@ -1,0 +1,20 @@
+=== GIÁM SÁT GIAO THÔNG ĐÔ THỊ — OPERATIONAL PROFILE ===
+TPHCM, 10 nút giao chính, 500 camera giao thông, 3 drone RTR, AI đèn tín hiệu thí điểm.
+
+=== AGENTS ===
+- Trung tâm Giao thông (Traffic Command): Điều phối tổng thể, quyết định đổi đèn/tuyến
+- Drone Giám sát (Drone Monitor): Bay giám sát nút giao, đo mật độ, phát hiện tai nạn
+- CSGT (Traffic Police): Điều phối tại nút, xử lý vi phạm, hỗ trợ xe khẩn cấp
+- Xe Cấp cứu (Ambulance): Di chuyển đến hiện trường, cần đường ưu tiên
+- Điều khiển Đèn (Signal Control): Đổi pha đèn, tạo làn ưu tiên, wave xanh
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Camera cố định, Camera + drone, AI giao thông tích hợp
+
+=== SCENARIOS TO SIMULATE ===
+- TFC-001: Ùn tắc giờ cao điểm — 3 nút cùng lúc [HIGH]
+- TFC-002: Tai nạn giao thông — cần xe cứu thương [CRITICAL]
+- TFC-003: Đoàn xe VIP — cần làn ưu tiên [MODERATE]
+- TFC-004: Ngập đường sau mưa — đổi tuyến [HIGH]
+- TFC-005: Sự kiện thể thao — 50.000 người ra về [HIGH]

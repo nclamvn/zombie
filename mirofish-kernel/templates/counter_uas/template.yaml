@@ -1,0 +1,159 @@
+name: counter_uas
+display_name: Chống Drone (Counter-UAS)
+display_name_en: Counter-UAS Defense
+version: 1.0.0
+domain: defense
+description: 'Mô phỏng phát hiện, phân loại và vô hiệu hóa drone trái phép. Đánh giá hiệu quả các phương án đánh chặn: gây
+  nhiễu RF, bắt lưới, tác chiến điện tử.'
+agents:
+- id: radar_op
+  label: Radar Operator
+  label_vi: Vận hành Radar
+  authority: 2
+  role: Vận hành radar phát hiện drone, theo dõi quỹ đạo, phân loại kích thước/tốc độ
+- id: rf_analyst
+  label: RF Analyst
+  label_vi: Phân tích RF
+  authority: 2
+  role: Quét phổ tần, xác định tần số điều khiển drone, phân loại giao thức
+- id: command
+  label: C-UAS Commander
+  label_vi: Chỉ huy C-UAS
+  authority: 5
+  role: Ra quyết định đánh chặn, chọn phương án, phối hợp các lực lượng
+- id: jammer_op
+  label: Jammer Operator
+  label_vi: Vận hành Gây nhiễu
+  authority: 3
+  role: Kích hoạt gây nhiễu RF/GPS, điều chỉnh tần số, đánh giá hiệu quả
+- id: interceptor
+  label: Interceptor Pilot
+  label_vi: Phi công Drone chặn
+  authority: 3
+  role: Điều khiển drone đánh chặn, bắt lưới hoặc va chạm có kiểm soát
+- id: ground_team
+  label: Ground Recovery
+  label_vi: Đội thu hồi
+  authority: 2
+  role: Thu hồi drone bị hạ, bảo quản bằng chứng, kiểm tra vật liệu nguy hiểm
+- id: legal_officer
+  label: Legal Officer
+  label_vi: Sĩ quan Pháp lý
+  authority: 4
+  role: Đánh giá quyền sử dụng vũ lực, vùng trời cho phép, quy tắc giao chiến
+- id: eo_ir_op
+  label: EO/IR Operator
+  label_vi: Vận hành Quang/Nhiệt
+  authority: 2
+  role: Theo dõi bằng camera quang học/hồng ngoại, xác nhận bằng hình ảnh
+scenarios:
+- id: CUAS-001
+  name: Drone do thám đơn lẻ — tiếp cận chậm
+  category: reconnaissance
+  severity: moderate
+  trigger_min: 10
+  description: 1 drone thương mại (DJI Mavic class) bay ở độ cao 120m, tốc độ 8m/s, hướng về cơ sở được bảo vệ. Mục đích có
+    thể là do thám hoặc quay phim bất hợp pháp.
+- id: CUAS-002
+  name: Bầy drone 5 chiếc — tấn công phối hợp
+  category: swarm_attack
+  severity: critical
+  trigger_min: 15
+  description: 5 drone FPV racing phát hiện cùng lúc ở 3 hướng khác nhau, khoảng cách 1.5km, tốc độ 20m/s. Có dấu hiệu phối
+    hợp (cùng tần số điều khiển).
+- id: CUAS-003
+  name: Drone mang tải trọng — nghi vấn vũ khí
+  category: armed_threat
+  severity: critical
+  trigger_min: 5
+  description: 1 drone lớn (>25kg) phát hiện ở 2km, bay thấp 30m, mang vật thể treo dưới bụng. Không rõ tải trọng — có thể
+    là camera hoặc thiết bị nổ tự chế.
+- id: CUAS-004
+  name: Drone xâm nhập vùng cấm bay — sân bay
+  category: airspace_violation
+  severity: high
+  trigger_min: 20
+  description: Drone phát hiện trong CTR (Control Zone) sân bay, gây nguy hiểm cho máy bay cất/hạ cánh. Cần phối hợp ATC để
+    xử lý.
+- id: CUAS-005
+  name: Drone phun hóa chất — mục tiêu nông nghiệp giả
+  category: cbrn_threat
+  severity: critical
+  trigger_min: 12
+  description: Drone nông nghiệp lớn bay trên khu đô thị, phun chất lỏng không xác định. Có thể là hóa chất độc hại hoặc nhầm
+    đường bay.
+- id: CUAS-006
+  name: GPS spoofing — drone lạc hướng
+  category: electronic_warfare
+  severity: high
+  trigger_min: 8
+  description: Phát hiện tín hiệu GPS giả mạo trong khu vực. Drone hợp pháp bắt đầu lệch quỹ đạo. Cần xác định nguồn phát
+    và bảo vệ drone thân thiện.
+kpi:
+  detection:
+  - id: DET-01
+    name: Thời gian phát hiện
+    unit: seconds
+    baseline: 45
+    target: 8
+  - id: DET-02
+    name: Phạm vi phát hiện
+    unit: meters
+    baseline: 800
+    target: 2000
+  - id: DET-03
+    name: Tỷ lệ phát hiện đúng
+    unit: percent
+    baseline: 70
+    target: 95
+  response:
+  - id: RSP-01
+    name: Thời gian phân loại mối đe dọa
+    unit: seconds
+    baseline: 120
+    target: 30
+  - id: RSP-02
+    name: Thời gian vô hiệu hóa
+    unit: seconds
+    baseline: 300
+    target: 90
+  - id: RSP-03
+    name: Tỷ lệ đánh chặn thành công
+    unit: percent
+    baseline: 60
+    target: 90
+  safety:
+  - id: SAF-01
+    name: Thiệt hại phụ (collateral)
+    unit: count
+    baseline: 2
+    target: 0
+  - id: SAF-02
+    name: Thời gian thu hồi bằng chứng
+    unit: minutes
+    baseline: 30
+    target: 10
+comparison_configurations:
+- id: PASSIVE
+  name: Chỉ theo dõi — không đánh chặn
+  sensors:
+  - Radar
+  - RF scanner
+  - Camera
+- id: SOFT_KILL
+  name: Gây nhiễu RF/GPS — không vật lý
+  sensors:
+  - Radar
+  - RF scanner
+  - Camera
+  - RF jammer
+  - GPS jammer
+- id: HARD_KILL
+  name: Đánh chặn vật lý — drone bắt lưới
+  sensors:
+  - Radar
+  - RF scanner
+  - Camera
+  - RF jammer
+  - Interceptor drone
+  - Net launcher

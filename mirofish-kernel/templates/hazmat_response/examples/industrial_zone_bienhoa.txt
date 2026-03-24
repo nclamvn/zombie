@@ -1,0 +1,19 @@
+=== SỰ CỐ HÓA CHẤT / PHÓNG XẠ — OPERATIONAL PROFILE ===
+KCN Biên Hòa, 300 nhà máy, 2 drone RTR HERA-C (cảm biến khí).
+
+=== AGENTS ===
+- Chỉ huy HAZMAT (HAZMAT Commander): Ra quyết định sơ tán, vùng cách ly
+- Drone Cảm biến (Sensor Drone): Đo nồng độ hóa chất, bản đồ gió, thermal
+- Đội Tẩy độc (Decon Team): Tẩy độc người và thiết bị
+- Y tế (Medical): Xử lý ngộ độc, bỏng hóa chất
+- Cảnh báo Cộng đồng (Public Alert): Thông báo dân, hướng dẫn sơ tán theo hướng gió
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Đội HAZMAT mặt đất, Drone cảm biến khí, Tích hợp đầy đủ
+
+=== SCENARIOS TO SIMULATE ===
+- HAZ-001: Rò rỉ chlorine tại nhà máy [CRITICAL]
+- HAZ-002: Đổ hóa chất trên đường — xe bồn lật [HIGH]
+- HAZ-003: Nghi vấn phóng xạ — nguồn không rõ [CRITICAL]
+- HAZ-004: Cháy kho hóa chất — khói độc [CRITICAL]

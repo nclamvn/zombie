@@ -1,0 +1,4 @@
+Generate a formal evidence report for Urban Traffic Management simulation results.
+Compare configurations: CAMERA_ONLY, DRONE_ASSIST, AI_TRAFFIC.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

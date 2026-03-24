@@ -1,0 +1,22 @@
+=== TUẦN TRA BIÊN GIỚI — OPERATIONAL PROFILE ===
+Đồn biên phòng Lạng Sơn, 50km tuyến biên, địa hình đồi núi, 4 drone RTR HERA.
+
+=== AGENTS ===
+- Chỉ huy Biên phòng (Border Commander): Ra lệnh tuần tra, phân vùng, quyết định chặn bắt
+- Tuần tra Drone (Drone Patrol): Bay tuần tra tuyến biên, phát hiện dấu hiệu xâm nhập
+- Tuần tra Bộ (Ground Patrol): Tuần tra mặt đất, kiểm tra dấu vết, chặn bắt
+- Chốt Quan sát (Watchtower): Quan sát cố định, cảnh báo sớm, liên lạc radio
+- Lực lượng Phản ứng nhanh (QRF): Cơ động chặn bắt, sẵn sàng 24/7
+- Tình báo (Intelligence): Phân tích mẫu xâm nhập, dự đoán điểm nóng, phối hợp quốc tế
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Tuần tra bộ, Tuần tra drone, Tích hợp đầy đủ
+
+=== SCENARIOS TO SIMULATE ===
+- BDR-001: Nhóm vượt biên trái phép — đêm [HIGH]
+- BDR-002: Buôn lậu qua đường mòn — gùi hàng [HIGH]
+- BDR-003: Drone trinh sát đối phương qua biên [CRITICAL]
+- BDR-004: Người dân lạc trong vùng biên [MODERATE]
+- BDR-005: Hoạt động xây dựng lạ sát biên giới [MODERATE]
+- BDR-006: Xe không rõ nguồn gốc trong vùng cấm [HIGH]

@@ -1,0 +1,4 @@
+Generate a formal evidence report for Drone Delivery & Logistics simulation results.
+Compare configurations: MOTORCYCLE, SINGLE_DRONE, FLEET.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

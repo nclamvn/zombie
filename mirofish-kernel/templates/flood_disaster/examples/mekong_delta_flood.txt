@@ -1,0 +1,21 @@
+=== ỨNG PHÓ LŨ LỤT & THIÊN TAI — OPERATIONAL PROFILE ===
+Đồng bằng sông Cửu Long, mùa lũ tháng 9-11, 5 huyện ngập, 3 drone RTR HERA.
+
+=== AGENTS ===
+- Chỉ huy Thiên tai (Disaster Commander): Điều phối tổng thể ứng phó, phân bổ nguồn lực
+- Drone Khảo sát (Drone Survey): Bay khảo sát vùng ngập, đo mực nước, phát hiện người
+- Xuồng Cứu hộ (Rescue Boat): Di chuyển trong vùng ngập, cứu người, vận chuyển
+- Hậu cần (Logistics): Cung cấp lương thực, nước, thuốc cho vùng cô lập
+- Khí tượng (Meteorologist): Dự báo mưa, cảnh báo lũ, mực nước dự kiến
+- Chính quyền Địa phương (Local Authority): Quyết định sơ tán, thông báo dân, mở trung tâm lánh nạn
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Cứu hộ truyền thống, Drone bản đồ ngập, Tích hợp đầy đủ
+
+=== SCENARIOS TO SIMULATE ===
+- FLD-001: Lũ quét miền Trung — 3 xã cô lập [CRITICAL]
+- FLD-002: Ngập đô thị TPHCM — triều cường [HIGH]
+- FLD-003: Sạt lở đất sau mưa lớn [CRITICAL]
+- FLD-004: Bão đổ bộ — sóng to gió lớn [CRITICAL]
+- FLD-005: Vỡ đê/đập — sơ tán khẩn cấp [CRITICAL]

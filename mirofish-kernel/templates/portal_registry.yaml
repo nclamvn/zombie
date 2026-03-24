@@ -1,0 +1,173 @@
+portal_name: RTR Simulator Portal
+version: 1.0.0
+total_modules: 17
+modules:
+  stadium_operations:
+    name: An toàn Sân vận động (FIFA)
+    name_en: Stadium Operations — FIFA
+    category: public_safety
+    status: shipped
+    tip: TIP-17/18/19
+    scenarios: 12
+    agents: 8
+    kpis: 14
+  counter_uas:
+    name: Chống Drone (Counter-UAS)
+    name_en: Counter-UAS Defense
+    category: defense
+    status: ready
+    scenarios: 6
+    agents: 8
+    kpis: 8
+    configs: 3
+    path: templates/counter_uas/template.yaml
+  search_rescue:
+    name: Tìm kiếm Cứu nạn (SAR)
+    name_en: Search & Rescue
+    category: emergency
+    status: ready
+    scenarios: 6
+    agents: 8
+    kpis: 8
+    configs: 3
+    path: templates/search_rescue/template.yaml
+  isr_surveillance:
+    name: Trinh sát, Giám sát (ISR)
+    name_en: Intelligence, Surveillance & Reconnaissance
+    category: defense
+    status: ready
+    scenarios: 6
+    agents: 6
+    kpis: 4
+    configs: 3
+    path: templates/isr_surveillance/template.yaml
+  swarm_tactics:
+    name: Chiến thuật Bay đàn (Swarm)
+    name_en: Swarm Tactics
+    category: defense
+    status: ready
+    scenarios: 6
+    agents: 6
+    kpis: 4
+    configs: 3
+    path: templates/swarm_tactics/template.yaml
+  fire_response:
+    name: Ứng phó Cháy rừng & Tòa nhà
+    name_en: Fire Emergency Response
+    category: emergency
+    status: ready
+    scenarios: 6
+    agents: 6
+    kpis: 4
+    configs: 3
+    path: templates/fire_response/template.yaml
+  border_patrol:
+    name: Tuần tra Biên giới
+    name_en: Border Patrol & Surveillance
+    category: defense
+    status: ready
+    scenarios: 6
+    agents: 6
+    kpis: 3
+    configs: 3
+    path: templates/border_patrol/template.yaml
+  flood_disaster:
+    name: Ứng phó Lũ lụt & Thiên tai
+    name_en: Flood & Natural Disaster Response
+    category: emergency
+    status: ready
+    scenarios: 5
+    agents: 6
+    kpis: 3
+    configs: 3
+    path: templates/flood_disaster/template.yaml
+  traffic_management:
+    name: Giám sát Giao thông Đô thị
+    name_en: Urban Traffic Management
+    category: public_safety
+    status: ready
+    scenarios: 5
+    agents: 5
+    kpis: 3
+    configs: 3
+    path: templates/traffic_management/template.yaml
+  perimeter_defense:
+    name: Bảo vệ Căn cứ / Cơ sở
+    name_en: Perimeter Defense
+    category: defense
+    status: ready
+    scenarios: 5
+    agents: 5
+    kpis: 3
+    configs: 3
+    path: templates/perimeter_defense/template.yaml
+  concert_festival:
+    name: Concert / Lễ hội / Festival
+    name_en: Concert & Festival Safety
+    category: public_safety
+    status: ready
+    scenarios: 5
+    agents: 5
+    kpis: 3
+    configs: 3
+    path: templates/concert_festival/template.yaml
+  crowd_management:
+    name: Quản lý Đám đông / Biểu tình
+    name_en: Crowd & Protest Management
+    category: public_safety
+    status: ready
+    scenarios: 4
+    agents: 5
+    kpis: 3
+    configs: 3
+    path: templates/crowd_management/template.yaml
+  infrastructure_inspection:
+    name: Kiểm tra Hạ tầng
+    name_en: Infrastructure Inspection
+    category: industrial
+    status: ready
+    scenarios: 5
+    agents: 4
+    kpis: 3
+    configs: 3
+    path: templates/infrastructure_inspection/template.yaml
+  agriculture:
+    name: Nông nghiệp Chính xác
+    name_en: Precision Agriculture
+    category: industrial
+    status: ready
+    scenarios: 4
+    agents: 4
+    kpis: 3
+    configs: 3
+    path: templates/agriculture/template.yaml
+  hazmat_response:
+    name: Sự cố Hóa chất / Phóng xạ
+    name_en: HAZMAT Response
+    category: emergency
+    status: ready
+    scenarios: 4
+    agents: 5
+    kpis: 3
+    configs: 3
+    path: templates/hazmat_response/template.yaml
+  mapping_survey:
+    name: Đo đạc & Bản đồ 3D
+    name_en: Mapping & 3D Survey
+    category: industrial
+    status: ready
+    scenarios: 4
+    agents: 4
+    kpis: 3
+    configs: 3
+    path: templates/mapping_survey/template.yaml
+  delivery_logistics:
+    name: Vận chuyển & Logistics
+    name_en: Drone Delivery & Logistics
+    category: industrial
+    status: ready
+    scenarios: 5
+    agents: 5
+    kpis: 3
+    configs: 3
+    path: templates/delivery_logistics/template.yaml

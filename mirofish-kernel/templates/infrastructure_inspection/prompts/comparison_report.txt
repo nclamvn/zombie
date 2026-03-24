@@ -1,0 +1,4 @@
+Generate a formal evidence report for Infrastructure Inspection simulation results.
+Compare configurations: MANUAL, DRONE_PHOTO, AI_INSPECT.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

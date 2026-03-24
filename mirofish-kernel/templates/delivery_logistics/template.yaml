@@ -1,0 +1,96 @@
+name: delivery_logistics
+display_name: Vận chuyển & Logistics
+display_name_en: Drone Delivery & Logistics
+version: 1.0.0
+domain: industrial
+description: 'Giao hàng drone: tuyến bay, tránh vật cản, quản lý pin, multi-drop, đảo/vùng xa.'
+agents:
+- id: dispatch
+  label: Dispatcher
+  label_vi: Điều phối
+  authority: 4
+  role: Phân bổ đơn hàng, tối ưu tuyến bay, quản lý đội drone
+- id: drone_courier
+  label: Delivery Drone
+  label_vi: Drone Giao hàng
+  authority: 2
+  role: Bay giao hàng, tránh vật cản, hạ cánh chính xác
+- id: customer
+  label: Customer
+  label_vi: Khách hàng
+  authority: 1
+  role: Xác nhận nhận hàng, phản hồi chất lượng
+- id: maintenance
+  label: Maintenance
+  label_vi: Bảo trì
+  authority: 2
+  role: Thay pin, kiểm tra drone, sạc
+- id: air_traffic
+  label: UTM
+  label_vi: Quản lý Không lưu
+  authority: 5
+  role: Phê duyệt tuyến bay, tránh va chạm, vùng cấm
+scenarios:
+- id: DLV-001
+  name: Giao hàng đảo — 20km qua biển
+  category: island
+  severity: moderate
+  trigger_min: 0
+- id: DLV-002
+  name: Giao thuốc khẩn cấp — vùng lũ
+  category: emergency_med
+  severity: critical
+  trigger_min: 0
+- id: DLV-003
+  name: Multi-drop 10 điểm — tối ưu tuyến
+  category: multi_drop
+  severity: moderate
+  trigger_min: 0
+- id: DLV-004
+  name: Thời tiết xấu — gió 40km/h
+  category: weather
+  severity: high
+  trigger_min: 15
+- id: DLV-005
+  name: Drone hết pin giữa đường
+  category: battery
+  severity: high
+  trigger_min: 20
+kpi:
+  delivery:
+  - id: DLV-01
+    name: Thời gian giao trung bình
+    unit: minutes
+    baseline: 60
+    target: 15
+  reliability:
+  - id: REL-01
+    name: Tỷ lệ giao thành công
+    unit: percent
+    baseline: 85
+    target: 98
+  cost:
+  - id: CST-01
+    name: Chi phí/km
+    unit: VND/km
+    baseline: 50000
+    target: 5000
+comparison_configurations:
+- id: MOTORCYCLE
+  name: Xe máy truyền thống
+  sensors:
+  - Xe máy
+  - GPS
+  - Điện thoại
+- id: SINGLE_DRONE
+  name: 1 drone giao hàng
+  sensors:
+  - 1 drone RTR HERA-D
+  - GPS RTK
+- id: FLEET
+  name: Đội 10 drone + UTM
+  sensors:
+  - 10 drone
+  - UTM system
+  - AI routing
+  - Auto-charge

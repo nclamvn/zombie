@@ -1,0 +1,4 @@
+Generate a formal evidence report for Search & Rescue simulation results.
+Compare configurations: MANUAL, DRONE_BASIC, DRONE_FULL.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

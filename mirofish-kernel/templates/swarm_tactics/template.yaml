@@ -1,0 +1,110 @@
+name: swarm_tactics
+display_name: Chiến thuật Bay đàn (Swarm)
+display_name_en: Swarm Tactics
+version: 1.0.0
+domain: defense
+description: 'Mô phỏng chiến thuật bầy drone 20-200 chiếc: hình thành đội hình, chia vùng, truyền tin phi tập trung, phân
+  công mục tiêu, phối hợp tấn công/phòng thủ.'
+agents:
+- id: swarm_cmd
+  label: Swarm Commander
+  label_vi: Chỉ huy Bầy
+  authority: 5
+  role: Xác định nhiệm vụ tổng thể, phê duyệt chiến thuật, quyết định quy mô
+- id: swarm_ai
+  label: Swarm AI Controller
+  label_vi: AI Điều phối Bầy
+  authority: 4
+  role: Thuật toán phân công tự động, tái cấu hình đội hình, cân bằng tải
+- id: comms_node
+  label: Mesh Network Node
+  label_vi: Nút mạng Mesh
+  authority: 1
+  role: Truyền tin phi tập trung, relay dữ liệu, duy trì kết nối bầy
+- id: scout_lead
+  label: Scout Element
+  label_vi: Phân đội Trinh sát
+  authority: 2
+  role: Drone tiên phong, phát hiện mục tiêu, cảnh báo sớm
+- id: strike_lead
+  label: Strike Element
+  label_vi: Phân đội Tấn công
+  authority: 3
+  role: Drone tấn công/gây nhiễu, phân công mục tiêu, đánh giá kết quả
+- id: reserve
+  label: Reserve Element
+  label_vi: Phân đội Dự bị
+  authority: 2
+  role: Drone thay thế, bổ sung khi tổn thất, mở rộng phạm vi
+scenarios:
+- id: SWM-001
+  name: Quét vùng 10km² — đội hình lưới
+  category: area_search
+  severity: moderate
+  trigger_min: 0
+- id: SWM-002
+  name: Áp chế hệ thống phòng không — 50 drone
+  category: sead
+  severity: critical
+  trigger_min: 0
+- id: SWM-003
+  name: Bao vây và theo dõi mục tiêu di động
+  category: encirclement
+  severity: high
+  trigger_min: 10
+- id: SWM-004
+  name: Phòng thủ chống bầy drone đối phương
+  category: counter_swarm
+  severity: critical
+  trigger_min: 5
+- id: SWM-005
+  name: Relay truyền thông — mạng mesh di động
+  category: comms_relay
+  severity: moderate
+  trigger_min: 0
+- id: SWM-006
+  name: Tái cấu hình sau tổn thất 30%
+  category: resilience
+  severity: high
+  trigger_min: 20
+kpi:
+  formation:
+  - id: FRM-01
+    name: Thời gian hình thành đội hình
+    unit: seconds
+    baseline: 120
+    target: 15
+  coverage:
+  - id: COV-01
+    name: Diện tích phủ sóng đồng thời
+    unit: km²
+    baseline: 1
+    target: 10
+  resilience:
+  - id: RES-01
+    name: Khả năng tái cấu hình sau tổn thất
+    unit: percent_loss
+    baseline: 10
+    target: 50
+  latency:
+  - id: LAT-01
+    name: Độ trễ truyền lệnh trong bầy
+    unit: ms
+    baseline: 500
+    target: 50
+comparison_configurations:
+- id: SMALL
+  name: Bầy nhỏ 10 drone
+  sensors:
+  - 10 Vega-S
+- id: MEDIUM
+  name: Bầy trung 50 drone
+  sensors:
+  - 50 Vega-S
+  - Mesh network
+- id: LARGE
+  name: Bầy lớn 200 drone
+  sensors:
+  - 200 Vega-S
+  - Mesh network
+  - AI coordinator

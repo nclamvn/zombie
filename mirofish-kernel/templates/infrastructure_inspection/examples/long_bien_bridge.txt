@@ -1,0 +1,19 @@
+=== KIỂM TRA HẠ TẦNG — OPERATIONAL PROFILE ===
+Cầu Long Biên, 120 năm tuổi, 1.862m, cần kiểm tra 2 lần/năm.
+
+=== AGENTS ===
+- Trưởng Kiểm tra (Inspection Lead): Lập kế hoạch kiểm tra, đánh giá kết quả
+- Phi công Drone (Drone Pilot): Bay kiểm tra, chụp ảnh chi tiết
+- AI Phân tích (AI Analyst): Phát hiện vết nứt, ăn mòn, biến dạng bằng AI
+- Kỹ sư Kết cấu (Structural Engineer): Đánh giá mức độ nghiêm trọng, đề xuất sửa chữa
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Kiểm tra thủ công, Drone chụp ảnh, Drone + AI phát hiện
+
+=== SCENARIOS TO SIMULATE ===
+- INS-001: Kiểm tra cầu — vết nứt đáy dầm [HIGH]
+- INS-002: Đường dây điện cao thế — sứ vỡ [CRITICAL]
+- INS-003: Tòa nhà cao tầng — facade bong tróc [MODERATE]
+- INS-004: Đập thủy điện — rò rỉ [CRITICAL]
+- INS-005: Ống dẫn dầu — ăn mòn [HIGH]

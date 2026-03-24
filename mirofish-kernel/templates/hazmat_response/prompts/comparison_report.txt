@@ -1,0 +1,4 @@
+Generate a formal evidence report for HAZMAT Response simulation results.
+Compare configurations: GROUND, DRONE_DETECT, FULL_HAZMAT.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

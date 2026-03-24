@@ -1,0 +1,18 @@
+=== ĐO ĐẠC & BẢN ĐỒ 3D — OPERATIONAL PROFILE ===
+Công trình khu đô thị mới Thủ Đức, 50 ha, 2 drone RTR.
+
+=== AGENTS ===
+- Trưởng Khảo sát (Survey Lead): Lập kế hoạch bay, kiểm tra độ chính xác
+- Drone Bản đồ (Mapping Drone): Bay chụp ảnh overlap, LiDAR scan
+- Phân tích GIS (GIS Analyst): Xử lý point cloud, tạo DSM/DTM, đo thể tích
+- Kỹ sư Dự án (Project Engineer): So sánh thiết kế vs thực tế, báo cáo tiến độ
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Đo đạc truyền thống, Drone chụp ảnh, Drone LiDAR + ảnh
+
+=== SCENARIOS TO SIMULATE ===
+- MAP-001: Khảo sát mỏ đá — đo thể tích [MODERATE]
+- MAP-002: Theo dõi tiến độ công trình — hàng tuần [MODERATE]
+- MAP-003: Bản đồ 3D khu đô thị mới [MODERATE]
+- MAP-004: Đánh giá sạt lở — so sánh trước/sau [HIGH]

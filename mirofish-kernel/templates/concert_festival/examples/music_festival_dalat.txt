@@ -1,0 +1,20 @@
+=== CONCERT / LỄ HỘI / FESTIVAL — OPERATIONAL PROFILE ===
+Festival âm nhạc Đà Lạt, 60.000 người, 3 sân khấu, 3 drone RTR.
+
+=== AGENTS ===
+- Chỉ huy Sự kiện (Event Commander): Điều phối tổng thể an toàn sự kiện
+- QL Đám đông (Crowd Manager): Giám sát mật độ, hướng dẫn luồng người
+- Y tế (Medical Team): Sơ cứu, heat stroke, overdose
+- An ninh (Security): Kiểm tra vé, phát hiện hành vi nguy hiểm
+- VH Drone (Drone Op): Giám sát trên cao, thermal crowd density
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: An ninh truyền thống, Drone giám sát, Sự kiện thông minh
+
+=== SCENARIOS TO SIMULATE ===
+- EVT-001: Crush risk tại sân khấu chính — 60K [CRITICAL]
+- EVT-002: Heat stroke hàng loạt — nắng nóng [HIGH]
+- EVT-003: Bão đến bất ngờ — sơ tán [CRITICAL]
+- EVT-004: Hoảng loạn — tiếng nổ giả [CRITICAL]
+- EVT-005: VIP bị đe dọa [HIGH]

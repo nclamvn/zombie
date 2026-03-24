@@ -1,0 +1,103 @@
+name: flood_disaster
+display_name: Ứng phó Lũ lụt & Thiên tai
+display_name_en: Flood & Natural Disaster Response
+version: 1.0.0
+domain: emergency
+description: 'Mô phỏng ứng phó lũ: đánh giá ngập, tìm người mắc kẹt, thả vật tư, đo bản đồ ngập, phối hợp cứu hộ.'
+agents:
+- id: disaster_cmd
+  label: Disaster Commander
+  label_vi: Chỉ huy Thiên tai
+  authority: 5
+  role: Điều phối tổng thể ứng phó, phân bổ nguồn lực
+- id: drone_survey
+  label: Drone Survey
+  label_vi: Drone Khảo sát
+  authority: 2
+  role: Bay khảo sát vùng ngập, đo mực nước, phát hiện người
+- id: boat_team
+  label: Rescue Boat
+  label_vi: Xuồng Cứu hộ
+  authority: 3
+  role: Di chuyển trong vùng ngập, cứu người, vận chuyển
+- id: logistics
+  label: Logistics
+  label_vi: Hậu cần
+  authority: 2
+  role: Cung cấp lương thực, nước, thuốc cho vùng cô lập
+- id: meteorology
+  label: Meteorologist
+  label_vi: Khí tượng
+  authority: 3
+  role: Dự báo mưa, cảnh báo lũ, mực nước dự kiến
+- id: local_gov
+  label: Local Authority
+  label_vi: Chính quyền Địa phương
+  authority: 4
+  role: Quyết định sơ tán, thông báo dân, mở trung tâm lánh nạn
+scenarios:
+- id: FLD-001
+  name: Lũ quét miền Trung — 3 xã cô lập
+  category: flash_flood
+  severity: critical
+  trigger_min: 0
+- id: FLD-002
+  name: Ngập đô thị TPHCM — triều cường
+  category: urban_flood
+  severity: high
+  trigger_min: 0
+- id: FLD-003
+  name: Sạt lở đất sau mưa lớn
+  category: landslide
+  severity: critical
+  trigger_min: 5
+- id: FLD-004
+  name: Bão đổ bộ — sóng to gió lớn
+  category: typhoon
+  severity: critical
+  trigger_min: 0
+- id: FLD-005
+  name: Vỡ đê/đập — sơ tán khẩn cấp
+  category: dam_breach
+  severity: critical
+  trigger_min: 0
+kpi:
+  assessment:
+  - id: ASM-01
+    name: Thời gian đánh giá tình hình
+    unit: minutes
+    baseline: 120
+    target: 20
+  rescue:
+  - id: RES-01
+    name: Người cứu được/giờ
+    unit: count/h
+    baseline: 5
+    target: 20
+  supply:
+  - id: SUP-01
+    name: Thời gian tiếp tế vùng cô lập
+    unit: hours
+    baseline: 24
+    target: 2
+comparison_configurations:
+- id: TRADITIONAL
+  name: Cứu hộ truyền thống
+  sensors:
+  - Xuồng
+  - Radio
+  - Bản đồ giấy
+- id: DRONE_MAP
+  name: Drone bản đồ ngập
+  sensors:
+  - Xuồng
+  - 2 drone RTR
+  - Bản đồ số
+- id: FULL_RESPONSE
+  name: Tích hợp đầy đủ
+  sensors:
+  - Xuồng
+  - 3 drone
+  - Trực thăng
+  - Bản đồ AI
+  - Thả vật tư

@@ -1,0 +1,24 @@
+=== TÌM KIẾM CỨU NẠN (SAR) — OPERATIONAL PROFILE ===
+Vườn quốc gia Ba Vì, 10.815 ha, độ cao 400-1.296m. 6 đội cứu nạn, 3 drone RTR HERA, 1 trực thăng.
+
+=== AGENTS ===
+- Chỉ huy SAR (SAR Commander): Ra quyết định vùng tìm kiếm, phân công tổ, quản lý nguồn lực
+- Trưởng nhóm Drone (Drone Team Lead): Điều phối drone tìm kiếm, quản lý pin, phân vùng quét
+- VH Camera Nhiệt (Thermal Operator): Phân tích hình ảnh thermal, xác nhận tín hiệu người, loại bỏ false positive
+- Trưởng nhóm Mặt đất (Ground Team Lead): Dẫn đội mặt đất đến vị trí, sơ cứu, cáng thương
+- Phi công Cứu thương (MEDEVAC Pilot): Bay trực thăng cứu thương, chọn bãi đáp, vận chuyển nạn nhân
+- Sĩ quan Hậu cần (Logistics Officer): Quản lý pin drone, nhiên liệu, vật tư y tế, thay ca
+- Theo dõi Thời tiết (Weather Monitor): Cập nhật thời tiết, cảnh báo gió/mưa, đánh giá điều kiện bay
+- Truyền thông (Communications): Liên lạc radio, phối hợp liên ngành, báo cáo tiến độ
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Tìm kiếm thủ công — đội mặt đất, Drone camera thường, Drone thermal + AI + airdrop
+
+=== SCENARIOS TO SIMULATE ===
+- SAR-001: Người mất tích trong rừng — 24 giờ [HIGH]
+- SAR-002: Sập nhà sau động đất — đa nạn nhân [CRITICAL]
+- SAR-003: Thuyền lật trên biển — 8 ngư dân [CRITICAL]
+- SAR-004: Trẻ em lạc trong khu du lịch [HIGH]
+- SAR-005: Lũ quét — cô lập nhiều hộ dân [CRITICAL]
+- SAR-006: Tai nạn leo núi — vách đá [HIGH]

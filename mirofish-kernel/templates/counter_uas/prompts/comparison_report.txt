@@ -1,0 +1,4 @@
+Generate a formal evidence report for Counter-UAS Defense simulation results.
+Compare configurations: PASSIVE, SOFT_KILL, HARD_KILL.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

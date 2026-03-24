@@ -1,0 +1,90 @@
+name: hazmat_response
+display_name: Sự cố Hóa chất / Phóng xạ
+display_name_en: HAZMAT Response
+version: 1.0.0
+domain: emergency
+description: Giám sát vùng nhiễm, đo bản đồ gió, cảnh báo cộng đồng, phối hợp PCCC + y tế.
+agents:
+- id: hazmat_cmd
+  label: HAZMAT Commander
+  label_vi: Chỉ huy HAZMAT
+  authority: 5
+  role: Ra quyết định sơ tán, vùng cách ly
+- id: drone_sensor
+  label: Sensor Drone
+  label_vi: Drone Cảm biến
+  authority: 2
+  role: Đo nồng độ hóa chất, bản đồ gió, thermal
+- id: decon_team
+  label: Decon Team
+  label_vi: Đội Tẩy độc
+  authority: 3
+  role: Tẩy độc người và thiết bị
+- id: medical
+  label: Medical
+  label_vi: Y tế
+  authority: 3
+  role: Xử lý ngộ độc, bỏng hóa chất
+- id: public_alert
+  label: Public Alert
+  label_vi: Cảnh báo Cộng đồng
+  authority: 4
+  role: Thông báo dân, hướng dẫn sơ tán theo hướng gió
+scenarios:
+- id: HAZ-001
+  name: Rò rỉ chlorine tại nhà máy
+  category: chemical_leak
+  severity: critical
+  trigger_min: 0
+- id: HAZ-002
+  name: Đổ hóa chất trên đường — xe bồn lật
+  category: spill
+  severity: high
+  trigger_min: 5
+- id: HAZ-003
+  name: Nghi vấn phóng xạ — nguồn không rõ
+  category: radiological
+  severity: critical
+  trigger_min: 0
+- id: HAZ-004
+  name: Cháy kho hóa chất — khói độc
+  category: chemical_fire
+  severity: critical
+  trigger_min: 0
+kpi:
+  detection:
+  - id: DET-01
+    name: Xác định loại hóa chất
+    unit: minutes
+    baseline: 30
+    target: 5
+  evacuation:
+  - id: EVA-01
+    name: Sơ tán vùng ảnh hưởng
+    unit: minutes
+    baseline: 60
+    target: 15
+  containment:
+  - id: CON-01
+    name: Kiểm soát nguồn rò rỉ
+    unit: minutes
+    baseline: 120
+    target: 30
+comparison_configurations:
+- id: GROUND
+  name: Đội HAZMAT mặt đất
+  sensors:
+  - Thiết bị đo cầm tay
+  - Xe PCCC
+- id: DRONE_DETECT
+  name: Drone cảm biến khí
+  sensors:
+  - 1 drone RTR + gas sensor
+  - Thiết bị cầm tay
+- id: FULL_HAZMAT
+  name: Tích hợp đầy đủ
+  sensors:
+  - 2 drone cảm biến
+  - Trạm khí tượng
+  - AI bản đồ gió
+  - PA cảnh báo

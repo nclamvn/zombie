@@ -1,0 +1,98 @@
+name: perimeter_defense
+display_name: Bảo vệ Căn cứ / Cơ sở
+display_name_en: Perimeter Defense
+version: 1.0.0
+domain: defense
+description: Tuần tra tự động vành đai căn cứ, phát hiện xâm nhập, cảnh báo sớm.
+agents:
+- id: base_cmd
+  label: Base Commander
+  label_vi: Chỉ huy Căn cứ
+  authority: 5
+  role: Quyết định mức cảnh báo, triển khai lực lượng
+- id: drone_patrol
+  label: Patrol Drone
+  label_vi: Drone Tuần tra
+  authority: 2
+  role: Bay tuần tra vành đai tự động 24/7
+- id: sensor_net
+  label: Sensor Network
+  label_vi: Mạng Cảm biến
+  authority: 1
+  role: Rung, hồng ngoại, từ trường phát hiện xâm nhập
+- id: qrf
+  label: QRF
+  label_vi: Phản ứng Nhanh
+  authority: 3
+  role: Cơ động 3 phút đến bất kỳ điểm nào trên vành đai
+- id: gate_ctrl
+  label: Gate Control
+  label_vi: Kiểm soát Cổng
+  authority: 2
+  role: Mở/đóng cổng, kiểm tra xe ra vào, chặn khẩn cấp
+scenarios:
+- id: PRM-001
+  name: Xâm nhập vành đai — đêm
+  category: intrusion
+  severity: high
+  trigger_min: 0
+- id: PRM-002
+  name: Xe lạ tiếp cận cổng — không rõ ý đồ
+  category: vehicle
+  severity: moderate
+  trigger_min: 10
+- id: PRM-003
+  name: Drone do thám trên căn cứ
+  category: aerial
+  severity: critical
+  trigger_min: 5
+- id: PRM-004
+  name: Cắt hàng rào — nhóm 3 người
+  category: breach
+  severity: high
+  trigger_min: 15
+- id: PRM-005
+  name: Bom thư / vật thể lạ tại cổng
+  category: ied
+  severity: critical
+  trigger_min: 20
+kpi:
+  detection:
+  - id: DET-01
+    name: Phát hiện xâm nhập
+    unit: seconds
+    baseline: 120
+    target: 10
+  response:
+  - id: RSP-01
+    name: QRF tại vị trí
+    unit: minutes
+    baseline: 8
+    target: 3
+  coverage:
+  - id: COV-01
+    name: Phủ sóng vành đai
+    unit: percent
+    baseline: 60
+    target: 98
+comparison_configurations:
+- id: GUARD
+  name: Bảo vệ truyền thống
+  sensors:
+  - Lính gác
+  - Camera
+  - Đèn
+- id: SMART
+  name: Cảm biến + drone
+  sensors:
+  - Cảm biến rung
+  - Camera AI
+  - 2 drone RTR
+- id: FORTRESS
+  name: Tích hợp đầy đủ
+  sensors:
+  - Cảm biến
+  - Camera AI
+  - Drone 24/7
+  - Radar
+  - C-UAS

@@ -1,0 +1,98 @@
+name: concert_festival
+display_name: Concert / Lễ hội / Festival
+display_name_en: Concert & Festival Safety
+version: 1.0.0
+domain: public_safety
+description: 'Mô phỏng an toàn sự kiện ngoài trời 50K+ người: crowd flow, y tế, thời tiết, an ninh.'
+agents:
+- id: event_cmd
+  label: Event Commander
+  label_vi: Chỉ huy Sự kiện
+  authority: 5
+  role: Điều phối tổng thể an toàn sự kiện
+- id: crowd_mgr
+  label: Crowd Manager
+  label_vi: QL Đám đông
+  authority: 3
+  role: Giám sát mật độ, hướng dẫn luồng người
+- id: medical
+  label: Medical Team
+  label_vi: Y tế
+  authority: 3
+  role: Sơ cứu, heat stroke, overdose
+- id: security
+  label: Security
+  label_vi: An ninh
+  authority: 3
+  role: Kiểm tra vé, phát hiện hành vi nguy hiểm
+- id: drone_op
+  label: Drone Op
+  label_vi: VH Drone
+  authority: 2
+  role: Giám sát trên cao, thermal crowd density
+scenarios:
+- id: EVT-001
+  name: Crush risk tại sân khấu chính — 60K
+  category: crush
+  severity: critical
+  trigger_min: 30
+- id: EVT-002
+  name: Heat stroke hàng loạt — nắng nóng
+  category: medical
+  severity: high
+  trigger_min: 45
+- id: EVT-003
+  name: Bão đến bất ngờ — sơ tán
+  category: weather
+  severity: critical
+  trigger_min: 60
+- id: EVT-004
+  name: Hoảng loạn — tiếng nổ giả
+  category: panic
+  severity: critical
+  trigger_min: 50
+- id: EVT-005
+  name: VIP bị đe dọa
+  category: security
+  severity: high
+  trigger_min: 40
+kpi:
+  crowd:
+  - id: CRD-01
+    name: Phát hiện crush risk sớm
+    unit: minutes
+    baseline: 10
+    target: 1
+  medical:
+  - id: MED-01
+    name: Y tế tại chỗ
+    unit: minutes
+    baseline: 8
+    target: 2
+  evacuation:
+  - id: EVA-01
+    name: Sơ tán 50K người
+    unit: minutes
+    baseline: 60
+    target: 25
+comparison_configurations:
+- id: BASIC
+  name: An ninh truyền thống
+  sensors:
+  - Bảo vệ
+  - Camera
+  - PA system
+- id: DRONE
+  name: Drone giám sát
+  sensors:
+  - Bảo vệ
+  - Camera
+  - 2 drone thermal
+- id: SMART_EVENT
+  name: Sự kiện thông minh
+  sensors:
+  - Bảo vệ
+  - Camera AI
+  - Drone
+  - Wearable SOS
+  - AI crowd

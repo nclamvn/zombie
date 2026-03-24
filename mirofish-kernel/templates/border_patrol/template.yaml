@@ -1,0 +1,108 @@
+name: border_patrol
+display_name: Tuần tra Biên giới
+display_name_en: Border Patrol & Surveillance
+version: 1.0.0
+domain: defense
+description: 'Mô phỏng tuần tra biên giới: phát hiện xâm nhập, theo dõi đối tượng, phối hợp đồn biên phòng, chống buôn lậu.'
+agents:
+- id: border_cmd
+  label: Border Commander
+  label_vi: Chỉ huy Biên phòng
+  authority: 5
+  role: Ra lệnh tuần tra, phân vùng, quyết định chặn bắt
+- id: drone_patrol
+  label: Drone Patrol
+  label_vi: Tuần tra Drone
+  authority: 2
+  role: Bay tuần tra tuyến biên, phát hiện dấu hiệu xâm nhập
+- id: ground_patrol
+  label: Ground Patrol
+  label_vi: Tuần tra Bộ
+  authority: 2
+  role: Tuần tra mặt đất, kiểm tra dấu vết, chặn bắt
+- id: watchtower
+  label: Watchtower
+  label_vi: Chốt Quan sát
+  authority: 1
+  role: Quan sát cố định, cảnh báo sớm, liên lạc radio
+- id: rapid_response
+  label: QRF
+  label_vi: Lực lượng Phản ứng nhanh
+  authority: 3
+  role: Cơ động chặn bắt, sẵn sàng 24/7
+- id: intel
+  label: Intelligence
+  label_vi: Tình báo
+  authority: 4
+  role: Phân tích mẫu xâm nhập, dự đoán điểm nóng, phối hợp quốc tế
+scenarios:
+- id: BDR-001
+  name: Nhóm vượt biên trái phép — đêm
+  category: illegal_crossing
+  severity: high
+  trigger_min: 0
+- id: BDR-002
+  name: Buôn lậu qua đường mòn — gùi hàng
+  category: smuggling
+  severity: high
+  trigger_min: 10
+- id: BDR-003
+  name: Drone trinh sát đối phương qua biên
+  category: hostile_drone
+  severity: critical
+  trigger_min: 5
+- id: BDR-004
+  name: Người dân lạc trong vùng biên
+  category: lost_civilian
+  severity: moderate
+  trigger_min: 20
+- id: BDR-005
+  name: Hoạt động xây dựng lạ sát biên giới
+  category: construction
+  severity: moderate
+  trigger_min: 0
+- id: BDR-006
+  name: Xe không rõ nguồn gốc trong vùng cấm
+  category: vehicle_intrusion
+  severity: high
+  trigger_min: 15
+kpi:
+  detection:
+  - id: DET-01
+    name: Phát hiện xâm nhập
+    unit: minutes
+    baseline: 30
+    target: 3
+  response:
+  - id: RSP-01
+    name: Thời gian chặn bắt
+    unit: minutes
+    baseline: 60
+    target: 15
+  coverage:
+  - id: COV-01
+    name: Km biên giới giám sát/ngày
+    unit: km
+    baseline: 20
+    target: 100
+comparison_configurations:
+- id: FOOT
+  name: Tuần tra bộ
+  sensors:
+  - Ống nhòm
+  - Radio
+  - GPS
+- id: DRONE
+  name: Tuần tra drone
+  sensors:
+  - 2 drone HERA
+  - Radar
+  - Camera đêm
+- id: INTEGRATED
+  name: Tích hợp đầy đủ
+  sensors:
+  - Drone
+  - Radar
+  - Cảm biến rung
+  - Camera đêm
+  - AI phân tích

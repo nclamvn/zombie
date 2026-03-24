@@ -1,0 +1,4 @@
+Generate a formal evidence report for Precision Agriculture simulation results.
+Compare configurations: MANUAL, DRONE_SPRAY, PRECISION.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

@@ -158,34 +158,44 @@ Focus on policy stakeholders and their influence on decision-making.""",
 ]
 
 
-def _load_stadium_operations() -> Optional[DomainTemplate]:
-    """Load stadium_operations template from its YAML file."""
-    template_dir = Path(__file__).parent / "stadium_operations"
+def _load_yaml_template(template_id: str) -> Optional[DomainTemplate]:
+    """Load a template from its YAML file in templates/{id}/template.yaml."""
+    template_dir = Path(__file__).parent / template_id
     yaml_path = template_dir / "template.yaml"
-    seed_path = template_dir / "examples" / "my_dinh_stadium_seed.txt"
 
     if not yaml_path.exists():
-        logger.warning("stadium_operations template YAML not found")
         return None
 
     try:
         with open(yaml_path, "r", encoding="utf-8") as f:
             tmpl = yaml.safe_load(f)
 
+        # Find seed example (first .txt in examples/)
         seed_text = ""
-        if seed_path.exists():
-            seed_text = seed_path.read_text(encoding="utf-8")
+        examples_dir = template_dir / "examples"
+        if examples_dir.exists():
+            for txt_file in sorted(examples_dir.glob("*.txt")):
+                seed_text = txt_file.read_text(encoding="utf-8")
+                break
+
+        # Extract evaluation metric names
+        eval_metrics = []
+        for m in tmpl.get("evaluation_metrics", []):
+            if isinstance(m, dict):
+                eval_metrics.append(m.get("name", ""))
+            elif isinstance(m, str):
+                eval_metrics.append(m)
 
         return DomainTemplate(
-            id="stadium_operations",
-            name=tmpl.get("display_name", "Stadium Operations — Drone-Augmented Safety"),
+            id=template_id,
+            name=tmpl.get("display_name", tmpl.get("name", template_id)),
             description=tmpl.get("description", ""),
-            icon="⛨",
-            category=tmpl.get("category", "critical_infrastructure"),
+            icon=tmpl.get("icon", "●"),
+            category=tmpl.get("category", "general"),
             ontology_prompt=tmpl.get("ontology_prompt", ""),
             default_config=tmpl.get("default_config", {}),
             sample_events=[],
-            evaluation_metrics=[m["name"] for m in tmpl.get("evaluation_metrics", [])],
+            evaluation_metrics=eval_metrics,
             sample_seed_text=seed_text,
             scenarios=tmpl.get("scenarios", []),
             agent_profiles=tmpl.get("agent_profiles", {}),
@@ -194,14 +204,18 @@ def _load_stadium_operations() -> Optional[DomainTemplate]:
             report_template=tmpl.get("report_template", {}),
         )
     except Exception as e:
-        logger.error(f"Failed to load stadium_operations template: {e}")
+        logger.error(f"Failed to load template {template_id}: {e}")
         return None
 
 
-# Load stadium template and append if available
-_stadium_tmpl = _load_stadium_operations()
-if _stadium_tmpl:
-    TEMPLATES.append(_stadium_tmpl)
+# Auto-discover and load all YAML templates from templates/*/template.yaml
+_templates_root = Path(__file__).parent
+for _dir in sorted(_templates_root.iterdir()):
+    if _dir.is_dir() and (_dir / "template.yaml").exists():
+        _tmpl = _load_yaml_template(_dir.name)
+        if _tmpl:
+            TEMPLATES.append(_tmpl)
+            logger.info(f"Loaded template: {_dir.name} ({_tmpl.name})")
 
 
 class TemplateRegistry:

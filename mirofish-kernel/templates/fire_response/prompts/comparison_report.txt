@@ -1,0 +1,4 @@
+Generate a formal evidence report for Fire Emergency Response simulation results.
+Compare configurations: GROUND_ONLY, DRONE_ASSIST, FULL_AIR.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

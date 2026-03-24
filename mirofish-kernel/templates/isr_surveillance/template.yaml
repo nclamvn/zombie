@@ -1,0 +1,111 @@
+name: isr_surveillance
+display_name: Trinh sát, Giám sát (ISR)
+display_name_en: Intelligence, Surveillance & Reconnaissance
+version: 1.0.0
+domain: defense
+description: 'Mô phỏng nhiệm vụ ISR: lập kế hoạch tuyến bay, phủ sóng khu vực, phát hiện/phân loại mục tiêu, truyền dữ liệu
+  mã hóa, phối hợp nhiều drone.'
+agents:
+- id: mission_cmd
+  label: Mission Commander
+  label_vi: Chỉ huy Nhiệm vụ
+  authority: 5
+  role: Xác định mục tiêu ưu tiên, phê duyệt tuyến bay, ra quyết định tình báo
+- id: sensor_op
+  label: Sensor Operator
+  label_vi: VH Cảm biến
+  authority: 2
+  role: Điều khiển camera/radar trên drone, zoom mục tiêu, chụp ảnh độ phân giải cao
+- id: intel_analyst
+  label: Intel Analyst
+  label_vi: Phân tích Tình báo
+  authority: 3
+  role: Phân tích hình ảnh, xác định mục tiêu, so sánh với dữ liệu lịch sử
+- id: pilot
+  label: Drone Pilot
+  label_vi: Phi công Drone
+  authority: 2
+  role: Điều khiển drone theo tuyến bay, quản lý pin/nhiên liệu, tránh phòng không
+- id: ew_officer
+  label: EW Officer
+  label_vi: SQ Tác chiến Điện tử
+  authority: 3
+  role: Giám sát tín hiệu đối phương, cảnh báo gây nhiễu, bảo vệ liên lạc
+- id: ground_liaison
+  label: Ground Force Liaison
+  label_vi: Liên lạc Bộ binh
+  authority: 3
+  role: Nhận yêu cầu từ đơn vị mặt đất, cung cấp thông tin mục tiêu real-time
+scenarios:
+- id: ISR-001
+  name: Trinh sát khu vực biên giới — phát hiện hoạt động lạ
+  category: border
+  severity: high
+  trigger_min: 0
+- id: ISR-002
+  name: Giám sát mục tiêu di động — đoàn xe
+  category: tracking
+  severity: moderate
+  trigger_min: 15
+- id: ISR-003
+  name: Trinh sát bờ biển — phát hiện tàu lạ
+  category: maritime
+  severity: high
+  trigger_min: 0
+- id: ISR-004
+  name: Giám sát 24/7 khu vực nhạy cảm
+  category: persistent
+  severity: moderate
+  trigger_min: 0
+- id: ISR-005
+  name: Trinh sát đêm — camera hồng ngoại
+  category: night_ops
+  severity: high
+  trigger_min: 30
+- id: ISR-006
+  name: BDA — Đánh giá thiệt hại sau tác chiến
+  category: assessment
+  severity: moderate
+  trigger_min: 45
+kpi:
+  coverage:
+  - id: COV-01
+    name: Diện tích phủ sóng/giờ
+    unit: km²/h
+    baseline: 2
+    target: 15
+  detection:
+  - id: DET-01
+    name: Xác suất phát hiện mục tiêu
+    unit: percent
+    baseline: 60
+    target: 92
+  timeliness:
+  - id: TIM-01
+    name: Độ trễ thông tin
+    unit: seconds
+    baseline: 300
+    target: 15
+  accuracy:
+  - id: ACC-01
+    name: Tọa độ mục tiêu (CEP)
+    unit: meters
+    baseline: 50
+    target: 3
+comparison_configurations:
+- id: SINGLE
+  name: 1 drone ISR
+  sensors:
+  - 1 HERA-S với EO/IR
+- id: MULTI
+  name: 3 drone phối hợp
+  sensors:
+  - 2 HERA-S EO/IR
+  - 1 HERA-S SIGINT
+- id: FULL_SPECTRUM
+  name: ISR đa phương tiện
+  sensors:
+  - 3 drone
+  - Vệ tinh
+  - SIGINT mặt đất
+  - HUMINT

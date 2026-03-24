@@ -1,0 +1,22 @@
+=== TRINH SÁT, GIÁM SÁT (ISR) — OPERATIONAL PROFILE ===
+Vùng phòng thủ bờ biển Đà Nẵng, 200km đường bờ, 3 trạm radar, 6 drone RTR HERA-S.
+
+=== AGENTS ===
+- Chỉ huy Nhiệm vụ (Mission Commander): Xác định mục tiêu ưu tiên, phê duyệt tuyến bay, ra quyết định tình báo
+- VH Cảm biến (Sensor Operator): Điều khiển camera/radar trên drone, zoom mục tiêu, chụp ảnh độ phân giải cao
+- Phân tích Tình báo (Intel Analyst): Phân tích hình ảnh, xác định mục tiêu, so sánh với dữ liệu lịch sử
+- Phi công Drone (Drone Pilot): Điều khiển drone theo tuyến bay, quản lý pin/nhiên liệu, tránh phòng không
+- SQ Tác chiến Điện tử (EW Officer): Giám sát tín hiệu đối phương, cảnh báo gây nhiễu, bảo vệ liên lạc
+- Liên lạc Bộ binh (Ground Force Liaison): Nhận yêu cầu từ đơn vị mặt đất, cung cấp thông tin mục tiêu real-time
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: 1 drone ISR, 3 drone phối hợp, ISR đa phương tiện
+
+=== SCENARIOS TO SIMULATE ===
+- ISR-001: Trinh sát khu vực biên giới — phát hiện hoạt động lạ [HIGH]
+- ISR-002: Giám sát mục tiêu di động — đoàn xe [MODERATE]
+- ISR-003: Trinh sát bờ biển — phát hiện tàu lạ [HIGH]
+- ISR-004: Giám sát 24/7 khu vực nhạy cảm [MODERATE]
+- ISR-005: Trinh sát đêm — camera hồng ngoại [HIGH]
+- ISR-006: BDA — Đánh giá thiệt hại sau tác chiến [MODERATE]

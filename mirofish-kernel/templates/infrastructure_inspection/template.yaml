@@ -1,0 +1,90 @@
+name: infrastructure_inspection
+display_name: Kiểm tra Hạ tầng
+display_name_en: Infrastructure Inspection
+version: 1.0.0
+domain: industrial
+description: 'Kiểm tra cầu, đường dây điện, tòa nhà cao tầng: phát hiện hư hỏng, đo đạc, báo cáo.'
+agents:
+- id: inspect_cmd
+  label: Inspection Lead
+  label_vi: Trưởng Kiểm tra
+  authority: 4
+  role: Lập kế hoạch kiểm tra, đánh giá kết quả
+- id: drone_pilot
+  label: Drone Pilot
+  label_vi: Phi công Drone
+  authority: 2
+  role: Bay kiểm tra, chụp ảnh chi tiết
+- id: ai_analyst
+  label: AI Analyst
+  label_vi: AI Phân tích
+  authority: 3
+  role: Phát hiện vết nứt, ăn mòn, biến dạng bằng AI
+- id: engineer
+  label: Structural Engineer
+  label_vi: Kỹ sư Kết cấu
+  authority: 4
+  role: Đánh giá mức độ nghiêm trọng, đề xuất sửa chữa
+scenarios:
+- id: INS-001
+  name: Kiểm tra cầu — vết nứt đáy dầm
+  category: bridge
+  severity: high
+  trigger_min: 0
+- id: INS-002
+  name: Đường dây điện cao thế — sứ vỡ
+  category: powerline
+  severity: critical
+  trigger_min: 0
+- id: INS-003
+  name: Tòa nhà cao tầng — facade bong tróc
+  category: building
+  severity: moderate
+  trigger_min: 0
+- id: INS-004
+  name: Đập thủy điện — rò rỉ
+  category: dam
+  severity: critical
+  trigger_min: 0
+- id: INS-005
+  name: Ống dẫn dầu — ăn mòn
+  category: pipeline
+  severity: high
+  trigger_min: 0
+kpi:
+  efficiency:
+  - id: EFF-01
+    name: Diện tích kiểm tra/giờ
+    unit: m²/h
+    baseline: 200
+    target: 5000
+  accuracy:
+  - id: ACC-01
+    name: Phát hiện hư hỏng
+    unit: percent
+    baseline: 70
+    target: 95
+  safety:
+  - id: SAF-01
+    name: Giảm thời gian người làm việc trên cao
+    unit: percent
+    baseline: 0
+    target: 90
+comparison_configurations:
+- id: MANUAL
+  name: Kiểm tra thủ công
+  sensors:
+  - Người leo
+  - Camera cầm tay
+- id: DRONE_PHOTO
+  name: Drone chụp ảnh
+  sensors:
+  - 1 drone RTR
+  - Camera 48MP
+- id: AI_INSPECT
+  name: Drone + AI phát hiện
+  sensors:
+  - Drone
+  - Camera 48MP
+  - AI crack detection
+  - LiDAR

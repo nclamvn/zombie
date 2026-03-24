@@ -1,0 +1,4 @@
+Generate a formal evidence report for Mapping & 3D Survey simulation results.
+Compare configurations: MANUAL, PHOTO, LIDAR.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.

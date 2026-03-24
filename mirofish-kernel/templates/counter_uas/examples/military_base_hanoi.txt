@@ -1,0 +1,24 @@
+=== CHỐNG DRONE (COUNTER-UAS) — OPERATIONAL PROFILE ===
+Căn cứ quân sự ngoại ô Hà Nội, bán kính bảo vệ 3km, hệ thống radar 360°, 4 trạm gây nhiễu, 2 drone đánh chặn RTR Vega-I.
+
+=== AGENTS ===
+- Vận hành Radar (Radar Operator): Vận hành radar phát hiện drone, theo dõi quỹ đạo, phân loại kích thước/tốc độ
+- Phân tích RF (RF Analyst): Quét phổ tần, xác định tần số điều khiển drone, phân loại giao thức
+- Chỉ huy C-UAS (C-UAS Commander): Ra quyết định đánh chặn, chọn phương án, phối hợp các lực lượng
+- Vận hành Gây nhiễu (Jammer Operator): Kích hoạt gây nhiễu RF/GPS, điều chỉnh tần số, đánh giá hiệu quả
+- Phi công Drone chặn (Interceptor Pilot): Điều khiển drone đánh chặn, bắt lưới hoặc va chạm có kiểm soát
+- Đội thu hồi (Ground Recovery): Thu hồi drone bị hạ, bảo quản bằng chứng, kiểm tra vật liệu nguy hiểm
+- Sĩ quan Pháp lý (Legal Officer): Đánh giá quyền sử dụng vũ lực, vùng trời cho phép, quy tắc giao chiến
+- Vận hành Quang/Nhiệt (EO/IR Operator): Theo dõi bằng camera quang học/hồng ngoại, xác nhận bằng hình ảnh
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Chỉ theo dõi — không đánh chặn, Gây nhiễu RF/GPS — không vật lý, Đánh chặn vật lý — drone bắt lưới
+
+=== SCENARIOS TO SIMULATE ===
+- CUAS-001: Drone do thám đơn lẻ — tiếp cận chậm [MODERATE]
+- CUAS-002: Bầy drone 5 chiếc — tấn công phối hợp [CRITICAL]
+- CUAS-003: Drone mang tải trọng — nghi vấn vũ khí [CRITICAL]
+- CUAS-004: Drone xâm nhập vùng cấm bay — sân bay [HIGH]
+- CUAS-005: Drone phun hóa chất — mục tiêu nông nghiệp giả [CRITICAL]
+- CUAS-006: GPS spoofing — drone lạc hướng [HIGH]

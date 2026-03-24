@@ -1,0 +1,92 @@
+name: crowd_management
+display_name: Quản lý Đám đông / Biểu tình
+display_name_en: Crowd & Protest Management
+version: 1.0.0
+domain: public_safety
+description: Giám sát đám đông lớn, phát hiện bạo lực, điều phối cảnh sát, de-escalation.
+agents:
+- id: police_cmd
+  label: Police Commander
+  label_vi: Chỉ huy CAND
+  authority: 5
+  role: Ra quyết định can thiệp, de-escalation
+- id: drone_surveil
+  label: Surveillance Drone
+  label_vi: Drone Giám sát
+  authority: 2
+  role: Giám sát từ trên cao, đếm người, phát hiện vũ khí
+- id: negotiator
+  label: Negotiator
+  label_vi: Đàm phán viên
+  authority: 4
+  role: Liên lạc với đám đông, de-escalation
+- id: riot_unit
+  label: Crowd Control Unit
+  label_vi: Đội CSCĐ
+  authority: 3
+  role: Kiểm soát trật tự, ngăn bạo lực
+- id: intel
+  label: Intelligence
+  label_vi: Tình báo
+  authority: 3
+  role: Phân tích mạng xã hội, dự đoán điểm nóng
+scenarios:
+- id: CRW-001
+  name: Biểu tình 10.000 người — hòa bình ban đầu
+  category: peaceful
+  severity: moderate
+  trigger_min: 0
+- id: CRW-002
+  name: Leo thang bạo lực — ném đá, đốt xe
+  category: violent
+  severity: critical
+  trigger_min: 30
+- id: CRW-003
+  name: Đám đông tụ tập tự phát — flash mob
+  category: spontaneous
+  severity: high
+  trigger_min: 10
+- id: CRW-004
+  name: Giải tán đám đông — sau lệnh
+  category: dispersal
+  severity: high
+  trigger_min: 45
+kpi:
+  awareness:
+  - id: AWR-01
+    name: Đánh giá quy mô
+    unit: minutes
+    baseline: 30
+    target: 3
+  response:
+  - id: RSP-01
+    name: Phản ứng bạo lực
+    unit: minutes
+    baseline: 15
+    target: 3
+  deescalation:
+  - id: DES-01
+    name: Tỷ lệ giải quyết không bạo lực
+    unit: percent
+    baseline: 60
+    target: 85
+comparison_configurations:
+- id: MONITOR
+  name: Chỉ quan sát
+  sensors:
+  - CCTV
+  - Cảnh sát mặc thường
+- id: AERIAL
+  name: Drone giám sát
+  sensors:
+  - CCTV
+  - 2 drone RTR
+  - Cảnh sát
+- id: FULL
+  name: Tích hợp
+  sensors:
+  - Drone
+  - AI phân tích
+  - CSCĐ
+  - Đàm phán
+  - PA hệ thống

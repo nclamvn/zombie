@@ -1,0 +1,22 @@
+=== ỨNG PHÓ CHÁY RỪNG & TÒA NHÀ — OPERATIONAL PROFILE ===
+Rừng quốc gia Côn Đảo, 6.000 ha, mùa khô tháng 2-5, 2 trạm PCCC, 2 drone RTR HERA thermal.
+
+=== AGENTS ===
+- Chỉ huy PCCC (Fire Commander): Ra quyết định chữa cháy, phân bổ lực lượng, quyết định sơ tán
+- VH Drone (Drone Operator): Bay drone giám sát, thermal mapping, phát hiện điểm nóng
+- Trưởng Sơ tán (Evacuation Lead): Hướng dẫn sơ tán, kiểm tra tuyến thoát, đếm người
+- Đội Cấp nước (Water Supply Team): Quản lý nguồn nước, vòi rồng, xe bồn
+- Chuyên gia Lâm nghiệp (Forestry Expert): Dự đoán hướng lan, đề xuất đường cắt lửa
+- Đội Y tế (Medical Team): Sơ cứu, xử lý bỏng, ngạt khói
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: PCCC truyền thống, PCCC + drone giám sát, PCCC + drone + trực thăng
+
+=== SCENARIOS TO SIMULATE ===
+- FIRE-001: Cháy rừng mùa khô — lan nhanh [CRITICAL]
+- FIRE-002: Cháy chung cư cao tầng — 200 hộ [CRITICAL]
+- FIRE-003: Cháy kho công nghiệp — hóa chất [CRITICAL]
+- FIRE-004: Cháy chợ đêm — mật độ cao [HIGH]
+- FIRE-005: Phát hiện sớm — thermal anomaly [MODERATE]
+- FIRE-006: Sau cháy — đánh giá thiệt hại [MODERATE]

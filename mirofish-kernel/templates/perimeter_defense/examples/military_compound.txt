@@ -1,0 +1,20 @@
+=== BẢO VỆ CĂN CỨ / CƠ SỞ — OPERATIONAL PROFILE ===
+Khu quân sự, vành đai 5km, 12 camera, 4 drone RTR.
+
+=== AGENTS ===
+- Chỉ huy Căn cứ (Base Commander): Quyết định mức cảnh báo, triển khai lực lượng
+- Drone Tuần tra (Patrol Drone): Bay tuần tra vành đai tự động 24/7
+- Mạng Cảm biến (Sensor Network): Rung, hồng ngoại, từ trường phát hiện xâm nhập
+- Phản ứng Nhanh (QRF): Cơ động 3 phút đến bất kỳ điểm nào trên vành đai
+- Kiểm soát Cổng (Gate Control): Mở/đóng cổng, kiểm tra xe ra vào, chặn khẩn cấp
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Bảo vệ truyền thống, Cảm biến + drone, Tích hợp đầy đủ
+
+=== SCENARIOS TO SIMULATE ===
+- PRM-001: Xâm nhập vành đai — đêm [HIGH]
+- PRM-002: Xe lạ tiếp cận cổng — không rõ ý đồ [MODERATE]
+- PRM-003: Drone do thám trên căn cứ [CRITICAL]
+- PRM-004: Cắt hàng rào — nhóm 3 người [HIGH]
+- PRM-005: Bom thư / vật thể lạ tại cổng [CRITICAL]

@@ -1,0 +1,85 @@
+name: agriculture
+display_name: Nông nghiệp Chính xác
+display_name_en: Precision Agriculture
+version: 1.0.0
+domain: industrial
+description: Phun thuốc, đo bản đồ NDVI, phát hiện sâu bệnh, giám sát tưới tiêu.
+agents:
+- id: farm_mgr
+  label: Farm Manager
+  label_vi: Quản lý Nông trại
+  authority: 4
+  role: Quyết định phun/tưới, lên lịch mùa vụ
+- id: drone_spray
+  label: Spray Drone
+  label_vi: Drone Phun
+  authority: 2
+  role: Phun thuốc/phân bón chính xác theo bản đồ
+- id: drone_survey
+  label: Survey Drone
+  label_vi: Drone Khảo sát
+  authority: 2
+  role: Chụp multispectral, tạo bản đồ NDVI
+- id: agronomist
+  label: Agronomist
+  label_vi: Kỹ sư Nông nghiệp
+  authority: 3
+  role: Phân tích NDVI, chẩn đoán bệnh, đề xuất xử lý
+scenarios:
+- id: AGR-001
+  name: Phun thuốc 100 ha lúa — sâu cuốn lá
+  category: spraying
+  severity: moderate
+  trigger_min: 0
+- id: AGR-002
+  name: Phát hiện stress cây — vùng khô
+  category: monitoring
+  severity: moderate
+  trigger_min: 0
+- id: AGR-003
+  name: Dịch bệnh lan — cần phun khẩn cấp
+  category: disease
+  severity: high
+  trigger_min: 5
+- id: AGR-004
+  name: Đánh giá thiệt hại sau bão
+  category: assessment
+  severity: high
+  trigger_min: 0
+kpi:
+  efficiency:
+  - id: EFF-01
+    name: Ha phun/giờ
+    unit: ha/h
+    baseline: 2
+    target: 15
+  accuracy:
+  - id: ACC-01
+    name: Độ chính xác phun
+    unit: percent
+    baseline: 70
+    target: 95
+  cost:
+  - id: CST-01
+    name: Chi phí/ha
+    unit: VND/ha
+    baseline: 500000
+    target: 150000
+comparison_configurations:
+- id: MANUAL
+  name: Phun thủ công
+  sensors:
+  - Bình phun lưng
+  - Máy kéo
+- id: DRONE_SPRAY
+  name: Drone phun
+  sensors:
+  - 1 drone phun RTR HERA-A
+  - GPS RTK
+- id: PRECISION
+  name: Nông nghiệp chính xác
+  sensors:
+  - Drone phun
+  - Drone NDVI
+  - AI phân tích
+  - IoT đất

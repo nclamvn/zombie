@@ -1,0 +1,20 @@
+=== VẬN CHUYỂN & LOGISTICS — OPERATIONAL PROFILE ===
+Phú Quốc, giao hàng 12 đảo nhỏ, 5 drone RTR HERA-D.
+
+=== AGENTS ===
+- Điều phối (Dispatcher): Phân bổ đơn hàng, tối ưu tuyến bay, quản lý đội drone
+- Drone Giao hàng (Delivery Drone): Bay giao hàng, tránh vật cản, hạ cánh chính xác
+- Khách hàng (Customer): Xác nhận nhận hàng, phản hồi chất lượng
+- Bảo trì (Maintenance): Thay pin, kiểm tra drone, sạc
+- Quản lý Không lưu (UTM): Phê duyệt tuyến bay, tránh va chạm, vùng cấm
+
+=== EQUIPMENT ===
+RTR Drone fleet with 105 TOPS AI edge computing
+Configurations: Xe máy truyền thống, 1 drone giao hàng, Đội 10 drone + UTM
+
+=== SCENARIOS TO SIMULATE ===
+- DLV-001: Giao hàng đảo — 20km qua biển [MODERATE]
+- DLV-002: Giao thuốc khẩn cấp — vùng lũ [CRITICAL]
+- DLV-003: Multi-drop 10 điểm — tối ưu tuyến [MODERATE]
+- DLV-004: Thời tiết xấu — gió 40km/h [HIGH]
+- DLV-005: Drone hết pin giữa đường [HIGH]

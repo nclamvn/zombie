@@ -1,0 +1,83 @@
+name: mapping_survey
+display_name: Đo đạc & Bản đồ 3D
+display_name_en: Mapping & 3D Survey
+version: 1.0.0
+domain: industrial
+description: Khảo sát địa hình, tạo bản đồ 3D, đo thể tích, theo dõi tiến độ công trình.
+agents:
+- id: survey_lead
+  label: Survey Lead
+  label_vi: Trưởng Khảo sát
+  authority: 4
+  role: Lập kế hoạch bay, kiểm tra độ chính xác
+- id: drone_mapper
+  label: Mapping Drone
+  label_vi: Drone Bản đồ
+  authority: 2
+  role: Bay chụp ảnh overlap, LiDAR scan
+- id: gis_analyst
+  label: GIS Analyst
+  label_vi: Phân tích GIS
+  authority: 3
+  role: Xử lý point cloud, tạo DSM/DTM, đo thể tích
+- id: engineer
+  label: Project Engineer
+  label_vi: Kỹ sư Dự án
+  authority: 3
+  role: So sánh thiết kế vs thực tế, báo cáo tiến độ
+scenarios:
+- id: MAP-001
+  name: Khảo sát mỏ đá — đo thể tích
+  category: mining
+  severity: moderate
+  trigger_min: 0
+- id: MAP-002
+  name: Theo dõi tiến độ công trình — hàng tuần
+  category: construction
+  severity: moderate
+  trigger_min: 0
+- id: MAP-003
+  name: Bản đồ 3D khu đô thị mới
+  category: urban_planning
+  severity: moderate
+  trigger_min: 0
+- id: MAP-004
+  name: Đánh giá sạt lở — so sánh trước/sau
+  category: erosion
+  severity: high
+  trigger_min: 0
+kpi:
+  speed:
+  - id: SPD-01
+    name: Ha khảo sát/giờ
+    unit: ha/h
+    baseline: 5
+    target: 50
+  accuracy:
+  - id: ACC-01
+    name: Độ chính xác
+    unit: cm
+    baseline: 30
+    target: 2
+  output:
+  - id: OUT-01
+    name: Thời gian xuất bản đồ
+    unit: hours
+    baseline: 48
+    target: 4
+comparison_configurations:
+- id: MANUAL
+  name: Đo đạc truyền thống
+  sensors:
+  - Máy toàn đạc
+  - GPS RTK cầm tay
+- id: PHOTO
+  name: Drone chụp ảnh
+  sensors:
+  - 1 drone RTR + camera 48MP + GPS RTK
+- id: LIDAR
+  name: Drone LiDAR + ảnh
+  sensors:
+  - Drone LiDAR
+  - Drone camera
+  - GCP targets

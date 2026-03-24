@@ -1,0 +1,112 @@
+name: fire_response
+display_name: Ứng phó Cháy rừng & Tòa nhà
+display_name_en: Fire Emergency Response
+version: 1.0.0
+domain: emergency
+description: Mô phỏng phát hiện cháy, đánh giá lan truyền, hướng dẫn sơ tán, phối hợp PCCC, giám sát điểm nóng từ trên cao.
+agents:
+- id: fire_cmd
+  label: Fire Commander
+  label_vi: Chỉ huy PCCC
+  authority: 5
+  role: Ra quyết định chữa cháy, phân bổ lực lượng, quyết định sơ tán
+- id: drone_op
+  label: Drone Operator
+  label_vi: VH Drone
+  authority: 2
+  role: Bay drone giám sát, thermal mapping, phát hiện điểm nóng
+- id: evac_lead
+  label: Evacuation Lead
+  label_vi: Trưởng Sơ tán
+  authority: 3
+  role: Hướng dẫn sơ tán, kiểm tra tuyến thoát, đếm người
+- id: water_team
+  label: Water Supply Team
+  label_vi: Đội Cấp nước
+  authority: 2
+  role: Quản lý nguồn nước, vòi rồng, xe bồn
+- id: forestry
+  label: Forestry Expert
+  label_vi: Chuyên gia Lâm nghiệp
+  authority: 3
+  role: Dự đoán hướng lan, đề xuất đường cắt lửa
+- id: medical
+  label: Medical Team
+  label_vi: Đội Y tế
+  authority: 3
+  role: Sơ cứu, xử lý bỏng, ngạt khói
+scenarios:
+- id: FIRE-001
+  name: Cháy rừng mùa khô — lan nhanh
+  category: wildfire
+  severity: critical
+  trigger_min: 0
+- id: FIRE-002
+  name: Cháy chung cư cao tầng — 200 hộ
+  category: highrise
+  severity: critical
+  trigger_min: 0
+- id: FIRE-003
+  name: Cháy kho công nghiệp — hóa chất
+  category: industrial
+  severity: critical
+  trigger_min: 0
+- id: FIRE-004
+  name: Cháy chợ đêm — mật độ cao
+  category: market
+  severity: high
+  trigger_min: 5
+- id: FIRE-005
+  name: Phát hiện sớm — thermal anomaly
+  category: early_detection
+  severity: moderate
+  trigger_min: 0
+- id: FIRE-006
+  name: Sau cháy — đánh giá thiệt hại
+  category: post_fire
+  severity: moderate
+  trigger_min: 60
+kpi:
+  detection:
+  - id: DET-01
+    name: Thời gian phát hiện
+    unit: minutes
+    baseline: 15
+    target: 2
+  response:
+  - id: RSP-01
+    name: Thời gian PCCC đến hiện trường
+    unit: minutes
+    baseline: 12
+    target: 8
+  evacuation:
+  - id: EVA-01
+    name: Thời gian sơ tán hoàn tất
+    unit: minutes
+    baseline: 45
+    target: 20
+  damage:
+  - id: DMG-01
+    name: Diện tích cháy lan trước khi kiểm soát
+    unit: hectares
+    baseline: 50
+    target: 10
+comparison_configurations:
+- id: GROUND_ONLY
+  name: PCCC truyền thống
+  sensors:
+  - Xe cứu hỏa
+  - Vòi rồng
+  - Radio
+- id: DRONE_ASSIST
+  name: PCCC + drone giám sát
+  sensors:
+  - Xe cứu hỏa
+  - 1 drone thermal RTR
+  - Radio
+- id: FULL_AIR
+  name: PCCC + drone + trực thăng
+  sensors:
+  - Xe cứu hỏa
+  - 2 drone thermal
+  - Trực thăng chữa cháy

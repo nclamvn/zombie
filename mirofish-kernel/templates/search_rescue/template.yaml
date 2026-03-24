@@ -1,0 +1,155 @@
+name: search_rescue
+display_name: Tìm kiếm Cứu nạn (SAR)
+display_name_en: Search & Rescue
+version: 1.0.0
+domain: emergency
+description: 'Mô phỏng nhiệm vụ tìm kiếm cứu nạn: quét lưới khu vực, phát hiện nạn nhân bằng thermal/AI, thả vật tư, phối
+  hợp đội mặt đất, vận chuyển y tế.'
+agents:
+- id: sar_cmd
+  label: SAR Commander
+  label_vi: Chỉ huy SAR
+  authority: 5
+  role: Ra quyết định vùng tìm kiếm, phân công tổ, quản lý nguồn lực
+- id: drone_lead
+  label: Drone Team Lead
+  label_vi: Trưởng nhóm Drone
+  authority: 3
+  role: Điều phối drone tìm kiếm, quản lý pin, phân vùng quét
+- id: thermal_op
+  label: Thermal Operator
+  label_vi: VH Camera Nhiệt
+  authority: 2
+  role: Phân tích hình ảnh thermal, xác nhận tín hiệu người, loại bỏ false positive
+- id: ground_lead
+  label: Ground Team Lead
+  label_vi: Trưởng nhóm Mặt đất
+  authority: 3
+  role: Dẫn đội mặt đất đến vị trí, sơ cứu, cáng thương
+- id: medical_heli
+  label: MEDEVAC Pilot
+  label_vi: Phi công Cứu thương
+  authority: 3
+  role: Bay trực thăng cứu thương, chọn bãi đáp, vận chuyển nạn nhân
+- id: logistics
+  label: Logistics Officer
+  label_vi: Sĩ quan Hậu cần
+  authority: 2
+  role: Quản lý pin drone, nhiên liệu, vật tư y tế, thay ca
+- id: weather_mon
+  label: Weather Monitor
+  label_vi: Theo dõi Thời tiết
+  authority: 1
+  role: Cập nhật thời tiết, cảnh báo gió/mưa, đánh giá điều kiện bay
+- id: comms
+  label: Communications
+  label_vi: Truyền thông
+  authority: 2
+  role: Liên lạc radio, phối hợp liên ngành, báo cáo tiến độ
+scenarios:
+- id: SAR-001
+  name: Người mất tích trong rừng — 24 giờ
+  category: wilderness
+  severity: high
+  trigger_min: 0
+  description: 'Người đi rừng mất liên lạc 24h. Vị trí cuối cùng: tọa độ GPS từ điện thoại. Khu vực 5km², địa hình đồi núi,
+    rừng rậm.'
+- id: SAR-002
+  name: Sập nhà sau động đất — đa nạn nhân
+  category: urban_disaster
+  severity: critical
+  trigger_min: 0
+  description: 'Tòa nhà 5 tầng sập sau động đất 6.2. Ước tính 20-30 người bị mắc kẹt. Khu vực nguy hiểm: dư chấn, cấu trúc
+    không ổn định.'
+- id: SAR-003
+  name: Thuyền lật trên biển — 8 ngư dân
+  category: maritime
+  severity: critical
+  trigger_min: 0
+  description: 'Thuyền cá lật cách bờ 15km. 8 ngư dân, 3 mặc áo phao, 5 không rõ. Sóng cao 2m, dòng chảy 2 hải lý/giờ. Thời
+    gian sống sót: 4-6 giờ.'
+- id: SAR-004
+  name: Trẻ em lạc trong khu du lịch
+  category: missing_child
+  severity: high
+  trigger_min: 5
+  description: Trẻ 6 tuổi mất tích trong khu du lịch sinh thái 200 ha. Mặc áo đỏ. Mất tích 45 phút. Có suối và hồ trong khu
+    vực.
+- id: SAR-005
+  name: Lũ quét — cô lập nhiều hộ dân
+  category: flood_rescue
+  severity: critical
+  trigger_min: 0
+  description: Lũ quét cắt đứt 3 thôn, ~150 người cô lập. Mực nước dâng 0.5m/giờ. Cầu sập, đường bộ không tiếp cận được. Cần
+    đánh giá nhanh + thả vật tư.
+- id: SAR-006
+  name: Tai nạn leo núi — vách đá
+  category: mountain
+  severity: high
+  trigger_min: 10
+  description: 2 người leo núi mắc kẹt ở vách đá cao 800m. 1 người bị thương nặng (gãy chân). Không thể tự di chuyển. Trời
+    tối trong 3 giờ.
+kpi:
+  search:
+  - id: SRC-01
+    name: Diện tích quét / giờ
+    unit: km²/h
+    baseline: 0.5
+    target: 4.0
+  - id: SRC-02
+    name: Thời gian phát hiện nạn nhân
+    unit: minutes
+    baseline: 180
+    target: 25
+  - id: SRC-03
+    name: Tỷ lệ phát hiện (thermal)
+    unit: percent
+    baseline: 40
+    target: 85
+  rescue:
+  - id: RES-01
+    name: Thời gian từ phát hiện đến tiếp cận
+    unit: minutes
+    baseline: 60
+    target: 20
+  - id: RES-02
+    name: Thời gian thả vật tư khẩn cấp
+    unit: minutes
+    baseline: 90
+    target: 10
+  - id: RES-03
+    name: Số nạn nhân cứu được / giờ
+    unit: count/h
+    baseline: 2
+    target: 8
+  coordination:
+  - id: CRD-01
+    name: Thời gian phối hợp liên ngành
+    unit: minutes
+    baseline: 45
+    target: 15
+  - id: CRD-02
+    name: Độ chính xác tọa độ nạn nhân
+    unit: meters
+    baseline: 100
+    target: 5
+comparison_configurations:
+- id: MANUAL
+  name: Tìm kiếm thủ công — đội mặt đất
+  sensors:
+  - Ống nhòm
+  - Radio
+  - Chó nghiệp vụ
+- id: DRONE_BASIC
+  name: Drone camera thường
+  sensors:
+  - Đội mặt đất
+  - 1 drone camera 4K
+  - Radio
+- id: DRONE_FULL
+  name: Drone thermal + AI + airdrop
+  sensors:
+  - Đội mặt đất
+  - 2 drone thermal+AI
+  - 1 drone airdrop
+  - Trực thăng MEDEVAC

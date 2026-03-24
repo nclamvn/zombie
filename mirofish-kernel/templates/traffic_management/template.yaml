@@ -1,0 +1,96 @@
+name: traffic_management
+display_name: Giám sát Giao thông Đô thị
+display_name_en: Urban Traffic Management
+version: 1.0.0
+domain: public_safety
+description: 'Mô phỏng giám sát giao thông: phát hiện ùn tắc, điều phối xe khẩn cấp, tai nạn, sự kiện gây tắc nghẽn.'
+agents:
+- id: traffic_cmd
+  label: Traffic Command
+  label_vi: Trung tâm Giao thông
+  authority: 5
+  role: Điều phối tổng thể, quyết định đổi đèn/tuyến
+- id: drone_traffic
+  label: Drone Monitor
+  label_vi: Drone Giám sát
+  authority: 2
+  role: Bay giám sát nút giao, đo mật độ, phát hiện tai nạn
+- id: csgt
+  label: Traffic Police
+  label_vi: CSGT
+  authority: 3
+  role: Điều phối tại nút, xử lý vi phạm, hỗ trợ xe khẩn cấp
+- id: ambulance
+  label: Ambulance
+  label_vi: Xe Cấp cứu
+  authority: 3
+  role: Di chuyển đến hiện trường, cần đường ưu tiên
+- id: signal_ctrl
+  label: Signal Control
+  label_vi: Điều khiển Đèn
+  authority: 2
+  role: Đổi pha đèn, tạo làn ưu tiên, wave xanh
+scenarios:
+- id: TFC-001
+  name: Ùn tắc giờ cao điểm — 3 nút cùng lúc
+  category: congestion
+  severity: high
+  trigger_min: 0
+- id: TFC-002
+  name: Tai nạn giao thông — cần xe cứu thương
+  category: accident
+  severity: critical
+  trigger_min: 10
+- id: TFC-003
+  name: Đoàn xe VIP — cần làn ưu tiên
+  category: vip_escort
+  severity: moderate
+  trigger_min: 20
+- id: TFC-004
+  name: Ngập đường sau mưa — đổi tuyến
+  category: flood_reroute
+  severity: high
+  trigger_min: 15
+- id: TFC-005
+  name: Sự kiện thể thao — 50.000 người ra về
+  category: event_egress
+  severity: high
+  trigger_min: 0
+kpi:
+  detection:
+  - id: DET-01
+    name: Phát hiện ùn tắc
+    unit: minutes
+    baseline: 15
+    target: 2
+  clearance:
+  - id: CLR-01
+    name: Thời gian giải tỏa
+    unit: minutes
+    baseline: 45
+    target: 15
+  emergency:
+  - id: EMG-01
+    name: Thời gian xe cấp cứu đến
+    unit: minutes
+    baseline: 20
+    target: 8
+comparison_configurations:
+- id: CAMERA_ONLY
+  name: Camera cố định
+  sensors:
+  - Camera giao thông
+  - CSGT
+- id: DRONE_ASSIST
+  name: Camera + drone
+  sensors:
+  - Camera
+  - CSGT
+  - 1 drone RTR
+- id: AI_TRAFFIC
+  name: AI giao thông tích hợp
+  sensors:
+  - Camera
+  - Drone
+  - AI đèn tín hiệu
+  - GPS fleet

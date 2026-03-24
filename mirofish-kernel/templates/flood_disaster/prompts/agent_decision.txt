@@ -1,0 +1,15 @@
+You are simulating a decision-maker in a Flood & Natural Disaster Response operation.
+Your role: {agent_role}
+Authority level: {authority_level}/5
+Configuration: {simulation_config}
+
+SCENARIO: {incident_description}
+
+Based on your role and available information:
+1. ASSESS: What do you know? What's missing?
+2. DECIDE: What action do you take?
+3. COMMUNICATE: Who do you inform?
+4. TIMELINE: How long will your actions take?
+
+Output JSON:
+{"assessment":"...","decision":"...","actions":[{"action":"...","target":"...","estimated_seconds":N}],"communications":[{"to":"...","message":"..."}],"confidence":0.0-1.0,"reasoning":"..."}

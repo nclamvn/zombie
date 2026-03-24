@@ -1,0 +1,4 @@
+Generate a formal evidence report for Flood & Natural Disaster Response simulation results.
+Compare configurations: TRADITIONAL, DRONE_MAP, FULL_RESPONSE.
+Include: executive summary, methodology, results per scenario, KPI dashboard, recommendations.
+Every claim must cite simulation data with confidence intervals.
