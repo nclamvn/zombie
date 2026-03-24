@@ -458,8 +458,8 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
           <SimPanel title={L.drone} scId={scId} mode="DRONE" step={stepD} T={T} L={L}/>
         </div>
         <div style={{flex:1,display:"flex",flexDirection:"column",gap:1,minWidth:200,minHeight:0,overflow:"hidden"}}>
-          <Panel title={L.radioTraffic} accent={T.cyan} flex="2" T={T}>
-            <div ref={logRef} style={{padding:"4px 8px",overflowY:"auto",flex:1,fontSize:11,lineHeight:1.7,maxHeight:"100%"}}>
+          <Panel title={L.radioTraffic} accent={T.cyan} flex="1 1 0" T={T}>
+            <div ref={logRef} style={{padding:"4px 8px",overflowY:"auto",fontSize:11,lineHeight:1.7,position:"absolute",inset:0}}>
               {radioLog.map((e,i)=>{const agL=L.agents[e.a]?.l||e.a;const agM=AGENT_META.find(a=>a.id===e.a);const col=T===THEMES.dark?agM?.c_dk:agM?.c_lt;
                 return(<div key={i} style={{display:"flex",gap:6,opacity:i===radioLog.length-1?1:.4,transition:"opacity .4s"}}>
                   <span style={{color:T.dim,minWidth:36,textAlign:"right",fontSize:10}}>{fmt(e.d)}</span>
@@ -471,7 +471,7 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
               {radioLog.length===0&&<div style={{color:T.dim,textAlign:"center",marginTop:20,fontSize:13}}>{L.awaiting}</div>}
             </div>
           </Panel>
-          <Panel title={L.agentStatus} accent={T.amber} flex="1" T={T}>
+          <Panel title={L.agentStatus} accent={T.amber} T={T} style={{flexShrink:0,maxHeight:180}}>
             <div style={{padding:4,overflowY:"auto",flex:1}}>
               {AGENT_META.map(a=>{const agL=L.agents[a.id]?.l||a.id;const col=T===THEMES.dark?a.c_dk:a.c_lt;
                 const findLast=(arr,ag,step_)=>{for(let i=Math.min(step_,arr.length-1);i>=0;i--)if(CHAIN_AGENTS[scId][arr===chainsD?"drone":"base"][i]===ag)return{act:arr[i],p:(arr===chainsD?phD:phB)[i]};return null;};
@@ -484,7 +484,7 @@ export default function VOCCommandCenter({ embedded = false, defaultTheme = "lig
               })}
             </div>
           </Panel>
-          <Panel title={L.kpiDelta} accent={T.green} T={T} style={{minHeight:110}}>
+          <Panel title={L.kpiDelta} accent={T.green} T={T} style={{flexShrink:0,maxHeight:140}}>
             <div style={{padding:"6px 8px",display:"flex",flexDirection:"column",gap:3}}>
               {KPI.map(k=>(<div key={k.l} style={{display:"flex",alignItems:"center",gap:5}}>
                 <span style={{fontSize:10,color:T.dim,minWidth:65,fontWeight:600}}>{k.l}</span>
