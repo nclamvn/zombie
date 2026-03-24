@@ -230,6 +230,20 @@ export async function getAgentDecisions(projectId, scenarioId = null) {
   return apiCall("GET", `/api/projects/${projectId}/agent-decisions${qs}`);
 }
 
+// ─── Portal (TIP-20) ────────────────────────────────────────
+
+export async function listPortalModules() {
+  return apiCall("GET", "/api/portal/modules");
+}
+
+export async function runPortalMock(moduleId, runs = 50) {
+  return apiCall("POST", `/api/portal/modules/${moduleId}/run-mock?runs=${runs}`);
+}
+
+export async function getPortalResults(moduleId) {
+  return apiCall("GET", `/api/portal/modules/${moduleId}/results`);
+}
+
 // ─── Legacy step-by-step (kept for backward compat) ──────────
 
 export async function runPipelineSteps(name, requirement, text, onProgress) {

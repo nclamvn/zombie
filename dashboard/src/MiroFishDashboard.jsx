@@ -247,7 +247,7 @@ export default function MiroFishDashboard() {
     { role: "system", text: "RTR ReportAgent ready. Ask about simulation results, agent behavior, or predictions." },
   ]);
   const [chatLoading, setChatLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("portal");
   const [healthData, setHealthData] = useState(null);
   const [simSpeed, setSimSpeed] = useState(1);
   const [showInjectModal, setShowInjectModal] = useState(false);
@@ -586,6 +586,7 @@ export default function MiroFishDashboard() {
   }, [projectData]);
 
   const tabs = [
+    { id: "portal", label: "PORTAL" },
     { id: "overview", label: L.overview },
     { id: "agents", label: L.agentsTab },
     { id: "graph", label: L.kGraph },
@@ -651,7 +652,7 @@ export default function MiroFishDashboard() {
       )}
 
       {/* ═══ SIMULATION HEADER (hidden on FIFA tab when no project) ═══ */}
-      {(activeProjectId || activeTab !== "fifa") && <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+      {(activeProjectId || (activeTab !== "fifa" && activeTab !== "portal")) && <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "6px 12px", background: C.bg1, borderBottom: `1px solid ${C.border}`, flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ fontSize: 12, fontWeight: 600, color: C.text0 }}>{simName}</div>
@@ -712,9 +713,90 @@ export default function MiroFishDashboard() {
 
       {/* ═══ MAIN CONTENT ═══ */}
       <div style={{ flex: 1, display: "grid",
-        gridTemplateColumns: (activeTab === "agents" || activeTab === "fifa") ? "1fr" : "1fr 320px",
+        gridTemplateColumns: (activeTab === "agents" || activeTab === "fifa" || activeTab === "portal") ? "1fr" : "1fr 320px",
         gridTemplateRows: "1fr 1fr", minHeight: 0,
         gap: 1, padding: 1, minHeight: 0, overflow: "hidden" }}>
+
+        {/* ═══ PORTAL TAB ═══ */}
+        {activeTab === "portal" && (
+          <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", overflow: "auto", padding: 16, minHeight: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: C.text0, letterSpacing: 1 }}>RTR SIMULATOR PORTAL</div>
+                <div style={{ fontSize: 11, color: C.text2, marginTop: 2 }}>
+                  {langId === "vi" ? "17 modules mô phỏng · 87 kịch bản · 4 lĩnh vực" : "17 simulation modules · 87 scenarios · 4 domains"}
+                </div>
+              </div>
+            </div>
+            {[
+              { cat: "defense", label: langId === "vi" ? "QUỐC PHÒNG" : "DEFENSE", color: C.red, icon: "⚔" },
+              { cat: "public_safety", label: langId === "vi" ? "AN TOÀN CÔNG CỘNG" : "PUBLIC SAFETY", color: C.amber, icon: "🛡" },
+              { cat: "emergency", label: langId === "vi" ? "CỨU HỘ KHẨN CẤP" : "EMERGENCY RESPONSE", color: C.blue, icon: "🚨" },
+              { cat: "industrial", label: langId === "vi" ? "CÔNG NGHIỆP" : "INDUSTRIAL", color: C.green, icon: "⚙" },
+              { cat: "general", label: langId === "vi" ? "KHÁC" : "OTHER", color: C.text2, icon: "●" },
+            ].map(group => {
+              const PORTAL_MODULES = {
+                stadium_operations: { vi: "Sân vận động FIFA", en: "Stadium Ops (FIFA)", cat: "public_safety" },
+                counter_uas: { vi: "Chống Drone", en: "Counter-UAS", cat: "defense" },
+                isr_surveillance: { vi: "Trinh sát ISR", en: "ISR Surveillance", cat: "defense" },
+                swarm_tactics: { vi: "Bay đàn 200 drone", en: "Swarm Tactics", cat: "defense" },
+                border_patrol: { vi: "Tuần tra biên giới", en: "Border Patrol", cat: "defense" },
+                perimeter_defense: { vi: "Bảo vệ căn cứ", en: "Perimeter Defense", cat: "defense" },
+                concert_festival: { vi: "Concert / Lễ hội", en: "Concert & Festival", cat: "public_safety" },
+                traffic_management: { vi: "Giao thông TPHCM", en: "Traffic Management", cat: "public_safety" },
+                crowd_management: { vi: "Quản lý đám đông", en: "Crowd Management", cat: "public_safety" },
+                search_rescue: { vi: "Tìm kiếm cứu nạn", en: "Search & Rescue", cat: "emergency" },
+                fire_response: { vi: "Cháy rừng / Tòa nhà", en: "Fire Response", cat: "emergency" },
+                flood_disaster: { vi: "Lũ lụt thiên tai", en: "Flood & Disaster", cat: "emergency" },
+                hazmat_response: { vi: "Hóa chất phóng xạ", en: "HAZMAT Response", cat: "emergency" },
+                infrastructure_inspection: { vi: "Kiểm tra hạ tầng", en: "Infrastructure", cat: "industrial" },
+                agriculture: { vi: "Nông nghiệp 500ha", en: "Agriculture", cat: "industrial" },
+                mapping_survey: { vi: "Đo đạc 3D", en: "Mapping & Survey", cat: "industrial" },
+                delivery_logistics: { vi: "Logistics đảo", en: "Drone Delivery", cat: "industrial" },
+              };
+              const mods = Object.entries(PORTAL_MODULES).filter(([_, m]) => m.cat === group.cat);
+              if (mods.length === 0) return null;
+              return (
+                <div key={group.cat} style={{ marginBottom: 16 }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, color: group.color, letterSpacing: 2, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                    <span>{group.icon}</span> {group.label}
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
+                    {mods.map(([id, meta]) => {
+                      const isShipped = id === "stadium_operations";
+                      return (
+                        <div key={id} onClick={() => { if (isShipped) { setActiveTab("fifa"); } }}
+                          style={{ background: C.bg2, border: `1px solid ${isShipped ? group.color : C.border}`, borderRadius: 6,
+                            padding: "12px 14px", cursor: isShipped ? "pointer" : "default",
+                            borderLeft: `3px solid ${isShipped ? group.color : C.border}`, transition: "all 0.2s" }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                            <span style={{ fontSize: 12, fontWeight: 700, color: C.text0 }}>{meta[langId] || meta.en}</span>
+                            {isShipped && <span style={{ fontSize: 8, background: group.color + "20", color: group.color, padding: "1px 6px", borderRadius: 3, fontWeight: 700 }}>LIVE</span>}
+                          </div>
+                          <div style={{ fontSize: 9, color: C.text2 }}>{id}</div>
+                          {isShipped && (
+                            <div style={{ marginTop: 8, display: "flex", gap: 6, fontSize: 9 }}>
+                              <span style={{ color: C.green }}>12 scenarios</span>
+                              <span style={{ color: C.text2 }}>·</span>
+                              <span style={{ color: C.green }}>1,800 runs</span>
+                              <span style={{ color: C.text2 }}>·</span>
+                              <span style={{ color: C.green }}>102 LLM</span>
+                            </div>
+                          )}
+                          {!isShipped && (
+                            <div style={{ marginTop: 8, fontSize: 9, color: C.text2 }}>
+                              {langId === "vi" ? "Sẵn sàng — cần chạy mock" : "Ready — needs mock run"}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {activeTab === "overview" && <>
           {/* ── Metrics + Timeline ── */}

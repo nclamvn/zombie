@@ -1,0 +1,1413 @@
+{
+  "agriculture": {
+    "MANUAL": {
+      "detection_latency": {
+        "mean": 59.9,
+        "std": 6.6,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 175.7,
+        "std": 18.9,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 40.7,
+        "std": 6.5,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 119.6,
+        "std": 13.5,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 665.7,
+        "std": 104.5,
+        "n": 200
+      }
+    },
+    "DRONE_SPRAY": {
+      "detection_latency": {
+        "mean": 24.7,
+        "std": 2.9,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 27.9,
+        "std": 2.4,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 18.0,
+        "std": 3.1,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 119.7,
+        "std": 13.8,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 392.7,
+        "std": 79.6,
+        "n": 200
+      }
+    },
+    "PRECISION": {
+      "detection_latency": {
+        "mean": 24.8,
+        "std": 3.0,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 35.8,
+        "std": 8.0,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 18.0,
+        "std": 2.7,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 83.7,
+        "std": 10.0,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 325.1,
+        "std": 70.1,
+        "n": 200
+      }
+    }
+  },
+  "border_patrol": {
+    "FOOT": {
+      "detection_latency": {
+        "mean": 60.0,
+        "std": 6.6,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 175.0,
+        "std": 16.7,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 43.0,
+        "std": 8.2,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 120.1,
+        "std": 13.7,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 737.0,
+        "std": 156.1,
+        "n": 300
+      }
+    },
+    "DRONE": {
+      "detection_latency": {
+        "mean": 24.9,
+        "std": 2.9,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 27.8,
+        "std": 2.5,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 19.5,
+        "std": 3.7,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 120.9,
+        "std": 13.8,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 450.8,
+        "std": 118.6,
+        "n": 300
+      }
+    },
+    "INTEGRATED": {
+      "detection_latency": {
+        "mean": 24.8,
+        "std": 2.8,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 37.9,
+        "std": 7.5,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 19.4,
+        "std": 3.4,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 84.1,
+        "std": 9.7,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 370.9,
+        "std": 95.3,
+        "n": 300
+      }
+    }
+  },
+  "concert_festival": {
+    "BASIC": {
+      "detection_latency": {
+        "mean": 59.8,
+        "std": 7.1,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 174.4,
+        "std": 17.5,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 49.9,
+        "std": 7.6,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 119.5,
+        "std": 13.9,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 909.3,
+        "std": 140.9,
+        "n": 250
+      }
+    },
+    "DRONE": {
+      "detection_latency": {
+        "mean": 25.2,
+        "std": 2.7,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 28.0,
+        "std": 2.4,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 22.4,
+        "std": 3.2,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 120.3,
+        "std": 13.5,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 573.3,
+        "std": 102.0,
+        "n": 250
+      }
+    },
+    "SMART_EVENT": {
+      "detection_latency": {
+        "mean": 24.9,
+        "std": 3.0,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 43.2,
+        "std": 4.0,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 22.4,
+        "std": 3.3,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 84.2,
+        "std": 9.5,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 475.8,
+        "std": 79.7,
+        "n": 250
+      }
+    }
+  },
+  "counter_uas": {
+    "PASSIVE": {
+      "detection_latency": {
+        "mean": 59.4,
+        "std": 6.9,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 174.2,
+        "std": 17.9,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 48.3,
+        "std": 9.4,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 121.2,
+        "std": 13.9,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 855.8,
+        "std": 177.6,
+        "n": 300
+      }
+    },
+    "SOFT_KILL": {
+      "detection_latency": {
+        "mean": 25.0,
+        "std": 3.1,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 27.9,
+        "std": 2.5,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 21.2,
+        "std": 3.9,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 120.9,
+        "std": 13.1,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 531.4,
+        "std": 129.7,
+        "n": 300
+      }
+    },
+    "HARD_KILL": {
+      "detection_latency": {
+        "mean": 24.9,
+        "std": 2.8,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 40.4,
+        "std": 7.0,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 21.3,
+        "std": 4.0,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 84.2,
+        "std": 9.4,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 437.8,
+        "std": 107.8,
+        "n": 300
+      }
+    }
+  },
+  "crowd_management": {
+    "MONITOR": {
+      "detection_latency": {
+        "mean": 60.5,
+        "std": 6.6,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 172.8,
+        "std": 17.3,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 45.2,
+        "std": 8.5,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 119.8,
+        "std": 13.7,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 768.4,
+        "std": 170.1,
+        "n": 200
+      }
+    },
+    "AERIAL": {
+      "detection_latency": {
+        "mean": 25.1,
+        "std": 3.0,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 28.1,
+        "std": 2.5,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 20.1,
+        "std": 3.7,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 119.7,
+        "std": 14.1,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 471.6,
+        "std": 120.5,
+        "n": 200
+      }
+    },
+    "FULL": {
+      "detection_latency": {
+        "mean": 25.2,
+        "std": 2.7,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 39.3,
+        "std": 7.5,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 20.1,
+        "std": 3.9,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 82.6,
+        "std": 9.1,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 390.8,
+        "std": 102.9,
+        "n": 200
+      }
+    }
+  },
+  "delivery_logistics": {
+    "MOTORCYCLE": {
+      "detection_latency": {
+        "mean": 60.4,
+        "std": 7.0,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 175.0,
+        "std": 17.5,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 43.2,
+        "std": 8.7,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 120.1,
+        "std": 14.1,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 733.6,
+        "std": 166.9,
+        "n": 250
+      }
+    },
+    "SINGLE_DRONE": {
+      "detection_latency": {
+        "mean": 24.9,
+        "std": 2.8,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 27.9,
+        "std": 2.5,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 18.9,
+        "std": 3.5,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 120.0,
+        "std": 13.3,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 444.1,
+        "std": 126.1,
+        "n": 250
+      }
+    },
+    "FLEET": {
+      "detection_latency": {
+        "mean": 25.0,
+        "std": 2.9,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 36.9,
+        "std": 8.1,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 18.9,
+        "std": 3.7,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 83.8,
+        "std": 9.6,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 365.8,
+        "std": 108.2,
+        "n": 250
+      }
+    }
+  },
+  "fire_response": {
+    "GROUND_ONLY": {
+      "detection_latency": {
+        "mean": 60.0,
+        "std": 6.8,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 175.2,
+        "std": 17.9,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 46.7,
+        "std": 9.5,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 119.8,
+        "std": 13.4,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 815.8,
+        "std": 199.5,
+        "n": 300
+      }
+    },
+    "DRONE_ASSIST": {
+      "detection_latency": {
+        "mean": 23.0,
+        "std": 5.8,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 28.2,
+        "std": 2.4,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 20.8,
+        "std": 4.2,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 119.3,
+        "std": 14.5,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 504.5,
+        "std": 148.7,
+        "n": 300
+      }
+    },
+    "FULL_AIR": {
+      "detection_latency": {
+        "mean": 22.9,
+        "std": 5.6,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 38.2,
+        "std": 8.0,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 20.7,
+        "std": 4.3,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 84.8,
+        "std": 9.6,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 421.4,
+        "std": 128.6,
+        "n": 300
+      }
+    }
+  },
+  "flood_disaster": {
+    "TRADITIONAL": {
+      "detection_latency": {
+        "mean": 60.4,
+        "std": 6.9,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 175.5,
+        "std": 17.2,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 52.1,
+        "std": 7.3,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 119.2,
+        "std": 14.1,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 956.2,
+        "std": 120.8,
+        "n": 250
+      }
+    },
+    "DRONE_MAP": {
+      "detection_latency": {
+        "mean": 25.0,
+        "std": 2.8,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 27.9,
+        "std": 2.5,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 23.4,
+        "std": 3.0,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 119.3,
+        "std": 13.6,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 606.5,
+        "std": 88.6,
+        "n": 250
+      }
+    },
+    "FULL_RESPONSE": {
+      "detection_latency": {
+        "mean": 25.0,
+        "std": 2.8,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 42.7,
+        "std": 4.1,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 23.3,
+        "std": 3.2,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 84.4,
+        "std": 9.9,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 505.4,
+        "std": 69.6,
+        "n": 250
+      }
+    }
+  },
+  "hazmat_response": {
+    "GROUND": {
+      "detection_latency": {
+        "mean": 60.5,
+        "std": 7.0,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 177.4,
+        "std": 16.8,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 51.8,
+        "std": 7.3,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 118.8,
+        "std": 14.3,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 949.0,
+        "std": 125.8,
+        "n": 200
+      }
+    },
+    "DRONE_DETECT": {
+      "detection_latency": {
+        "mean": 24.7,
+        "std": 2.8,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 28.0,
+        "std": 2.3,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 22.8,
+        "std": 3.2,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 119.4,
+        "std": 13.9,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 601.8,
+        "std": 96.0,
+        "n": 200
+      }
+    },
+    "FULL_HAZMAT": {
+      "detection_latency": {
+        "mean": 25.2,
+        "std": 2.9,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 43.0,
+        "std": 4.2,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 22.8,
+        "std": 3.2,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 85.2,
+        "std": 9.6,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 499.6,
+        "std": 78.6,
+        "n": 200
+      }
+    }
+  },
+  "infrastructure_inspection": {
+    "MANUAL": {
+      "detection_latency": {
+        "mean": 60.1,
+        "std": 6.9,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 175.6,
+        "std": 17.8,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 46.5,
+        "std": 8.2,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 120.4,
+        "std": 14.2,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 819.7,
+        "std": 171.0,
+        "n": 250
+      }
+    },
+    "DRONE_PHOTO": {
+      "detection_latency": {
+        "mean": 25.2,
+        "std": 2.8,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 28.1,
+        "std": 2.5,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 21.0,
+        "std": 4.0,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 120.9,
+        "std": 13.3,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 512.5,
+        "std": 129.8,
+        "n": 250
+      }
+    },
+    "AI_INSPECT": {
+      "detection_latency": {
+        "mean": 24.9,
+        "std": 2.9,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 39.9,
+        "std": 7.0,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 20.7,
+        "std": 4.0,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 83.9,
+        "std": 10.0,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 420.4,
+        "std": 106.1,
+        "n": 250
+      }
+    }
+  },
+  "isr_surveillance": {
+    "SINGLE": {
+      "detection_latency": {
+        "mean": 60.3,
+        "std": 7.0,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 174.2,
+        "std": 18.1,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 40.5,
+        "std": 6.4,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 120.5,
+        "std": 14.5,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 669.2,
+        "std": 102.2,
+        "n": 300
+      }
+    },
+    "MULTI": {
+      "detection_latency": {
+        "mean": 24.8,
+        "std": 3.0,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 27.9,
+        "std": 2.4,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 17.8,
+        "std": 2.9,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 120.9,
+        "std": 13.4,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 394.4,
+        "std": 75.9,
+        "n": 300
+      }
+    },
+    "FULL_SPECTRUM": {
+      "detection_latency": {
+        "mean": 25.1,
+        "std": 3.0,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 35.4,
+        "std": 8.5,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 17.9,
+        "std": 2.9,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 84.2,
+        "std": 9.9,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 324.6,
+        "std": 69.2,
+        "n": 300
+      }
+    }
+  },
+  "mapping_survey": {
+    "MANUAL": {
+      "detection_latency": {
+        "mean": 60.6,
+        "std": 6.9,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 175.9,
+        "std": 17.3,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 37.9,
+        "std": 6.0,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 119.9,
+        "std": 14.2,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 620.9,
+        "std": 94.4,
+        "n": 200
+      }
+    },
+    "PHOTO": {
+      "detection_latency": {
+        "mean": 25.6,
+        "std": 3.0,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 28.1,
+        "std": 2.4,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 17.0,
+        "std": 2.7,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 120.6,
+        "std": 14.0,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 361.1,
+        "std": 65.5,
+        "n": 200
+      }
+    },
+    "LIDAR": {
+      "detection_latency": {
+        "mean": 25.0,
+        "std": 3.0,
+        "n": 200
+      },
+      "verification_time": {
+        "mean": 31.4,
+        "std": 7.2,
+        "n": 200
+      },
+      "decision_time": {
+        "mean": 17.0,
+        "std": 2.8,
+        "n": 200
+      },
+      "response_time": {
+        "mean": 85.3,
+        "std": 9.5,
+        "n": 200
+      },
+      "total_resolution": {
+        "mean": 294.2,
+        "std": 58.6,
+        "n": 200
+      }
+    }
+  },
+  "perimeter_defense": {
+    "GUARD": {
+      "detection_latency": {
+        "mean": 59.5,
+        "std": 7.1,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 175.6,
+        "std": 16.8,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 46.6,
+        "std": 8.0,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 120.1,
+        "std": 13.9,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 818.2,
+        "std": 175.6,
+        "n": 250
+      }
+    },
+    "SMART": {
+      "detection_latency": {
+        "mean": 25.2,
+        "std": 3.0,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 28.0,
+        "std": 2.5,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 20.7,
+        "std": 3.7,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 119.8,
+        "std": 14.5,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 507.6,
+        "std": 131.0,
+        "n": 250
+      }
+    },
+    "FORTRESS": {
+      "detection_latency": {
+        "mean": 25.0,
+        "std": 3.0,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 40.2,
+        "std": 7.3,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 20.5,
+        "std": 3.8,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 83.8,
+        "std": 10.1,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 422.9,
+        "std": 110.7,
+        "n": 250
+      }
+    }
+  },
+  "search_rescue": {
+    "MANUAL": {
+      "detection_latency": {
+        "mean": 59.9,
+        "std": 6.7,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 173.6,
+        "std": 18.1,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 48.9,
+        "std": 7.2,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 119.0,
+        "std": 13.6,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 881.5,
+        "std": 139.3,
+        "n": 300
+      }
+    },
+    "DRONE_BASIC": {
+      "detection_latency": {
+        "mean": 25.1,
+        "std": 2.9,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 27.7,
+        "std": 2.5,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 21.7,
+        "std": 3.4,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 121.7,
+        "std": 13.8,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 556.1,
+        "std": 107.5,
+        "n": 300
+      }
+    },
+    "DRONE_FULL": {
+      "detection_latency": {
+        "mean": 24.8,
+        "std": 2.9,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 43.1,
+        "std": 4.2,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 21.9,
+        "std": 3.2,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 83.5,
+        "std": 10.3,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 463.4,
+        "std": 84.0,
+        "n": 300
+      }
+    }
+  },
+  "stadium_operations": {
+    "BASELINE": {
+      "detection_latency": {
+        "mean": 60.3,
+        "std": 7.0,
+        "n": 600
+      },
+      "verification_time": {
+        "mean": 175.4,
+        "std": 17.5,
+        "n": 600
+      },
+      "decision_time": {
+        "mean": 45.7,
+        "std": 8.6,
+        "n": 600
+      },
+      "response_time": {
+        "mean": 121.1,
+        "std": 13.6,
+        "n": 600
+      },
+      "total_resolution": {
+        "mean": 799.8,
+        "std": 175.1,
+        "n": 600
+      }
+    },
+    "TETHERED": {
+      "detection_latency": {
+        "mean": 19.6,
+        "std": 6.7,
+        "n": 600
+      },
+      "verification_time": {
+        "mean": 27.9,
+        "std": 2.4,
+        "n": 600
+      },
+      "decision_time": {
+        "mean": 20.5,
+        "std": 3.9,
+        "n": 600
+      },
+      "response_time": {
+        "mean": 119.3,
+        "std": 13.8,
+        "n": 600
+      },
+      "total_resolution": {
+        "mean": 481.1,
+        "std": 129.6,
+        "n": 600
+      }
+    },
+    "FULL": {
+      "detection_latency": {
+        "mean": 19.5,
+        "std": 6.8,
+        "n": 600
+      },
+      "verification_time": {
+        "mean": 39.2,
+        "std": 7.7,
+        "n": 600
+      },
+      "decision_time": {
+        "mean": 20.2,
+        "std": 3.7,
+        "n": 600
+      },
+      "response_time": {
+        "mean": 84.4,
+        "std": 9.8,
+        "n": 600
+      },
+      "total_resolution": {
+        "mean": 399.8,
+        "std": 113.9,
+        "n": 600
+      }
+    }
+  },
+  "swarm_tactics": {
+    "SMALL": {
+      "detection_latency": {
+        "mean": 60.4,
+        "std": 6.8,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 175.5,
+        "std": 18.0,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 44.6,
+        "std": 8.7,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 122.1,
+        "std": 13.6,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 782.7,
+        "std": 188.2,
+        "n": 300
+      }
+    },
+    "MEDIUM": {
+      "detection_latency": {
+        "mean": 25.2,
+        "std": 2.9,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 28.0,
+        "std": 2.4,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 20.1,
+        "std": 3.9,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 120.0,
+        "std": 13.6,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 476.2,
+        "std": 138.0,
+        "n": 300
+      }
+    },
+    "LARGE": {
+      "detection_latency": {
+        "mean": 25.0,
+        "std": 2.9,
+        "n": 300
+      },
+      "verification_time": {
+        "mean": 38.0,
+        "std": 7.9,
+        "n": 300
+      },
+      "decision_time": {
+        "mean": 20.1,
+        "std": 4.0,
+        "n": 300
+      },
+      "response_time": {
+        "mean": 83.9,
+        "std": 10.0,
+        "n": 300
+      },
+      "total_resolution": {
+        "mean": 394.2,
+        "std": 115.5,
+        "n": 300
+      }
+    }
+  },
+  "traffic_management": {
+    "CAMERA_ONLY": {
+      "detection_latency": {
+        "mean": 59.9,
+        "std": 7.2,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 172.4,
+        "std": 18.2,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 44.7,
+        "std": 7.4,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 122.1,
+        "std": 13.2,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 772.0,
+        "std": 147.9,
+        "n": 250
+      }
+    },
+    "DRONE_ASSIST": {
+      "detection_latency": {
+        "mean": 25.2,
+        "std": 3.0,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 28.0,
+        "std": 2.5,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 19.8,
+        "std": 3.5,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 121.9,
+        "std": 13.8,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 472.5,
+        "std": 108.3,
+        "n": 250
+      }
+    },
+    "AI_TRAFFIC": {
+      "detection_latency": {
+        "mean": 25.3,
+        "std": 2.8,
+        "n": 250
+      },
+      "verification_time": {
+        "mean": 40.0,
+        "std": 7.1,
+        "n": 250
+      },
+      "decision_time": {
+        "mean": 19.9,
+        "std": 3.5,
+        "n": 250
+      },
+      "response_time": {
+        "mean": 84.2,
+        "std": 9.5,
+        "n": 250
+      },
+      "total_resolution": {
+        "mean": 390.1,
+        "std": 92.8,
+        "n": 250
+      }
+    }
+  }
+}

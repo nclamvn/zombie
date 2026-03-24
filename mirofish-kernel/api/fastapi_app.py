@@ -1620,6 +1620,87 @@ async def get_template(template_id: str):
 
 
 # ═══════════════════════════════════════════════════════════════
+# PORTAL (TIP-20)
+# ═══════════════════════════════════════════════════════════════
+
+# In-memory cache for portal mock results
+_portal_results: Dict[str, Dict[str, Any]] = {}
+
+
+@app.get("/api/portal/modules")
+async def list_portal_modules():
+    """List all portal modules with status."""
+    from templates.registry import TemplateRegistry
+    reg = TemplateRegistry()
+    modules = []
+    for t in reg.list_all():
+        tid = t["id"]
+        has_data = tid in _portal_results or tid in _comparison_results
+        modules.append({
+            "id": tid,
+            "name": t["name"],
+            "category": t.get("category", "general"),
+            "scenario_count": t.get("scenario_count", 0),
+            "comparison_config_count": t.get("comparison_config_count", 0),
+            "has_scenarios": t.get("has_scenarios", False),
+            "has_data": has_data,
+        })
+    return ApiResponse(data={"modules": modules, "total": len(modules)})
+
+
+@app.get("/api/portal/modules/{module_id}")
+async def get_portal_module(module_id: str):
+    """Get detailed info for a module."""
+    from templates.registry import TemplateRegistry
+    reg = TemplateRegistry()
+    t = reg.get(module_id)
+    if not t:
+        raise HTTPException(404, f"Module {module_id} not found")
+    data = t.to_dict()
+    data["ontology_prompt"] = t.ontology_prompt[:200] + "..." if len(t.ontology_prompt) > 200 else t.ontology_prompt
+    data["has_data"] = module_id in _portal_results
+    if module_id in _portal_results:
+        data["summary"] = _portal_results[module_id].get("summary")
+    return ApiResponse(data=data)
+
+
+@app.post("/api/portal/modules/{module_id}/run-mock")
+async def run_portal_mock(module_id: str, runs: int = 50):
+    """Run mock simulation for a module."""
+    try:
+        from templates.module_runner import ModuleRunner
+        runner = ModuleRunner(module_id)
+    except FileNotFoundError:
+        raise HTTPException(404, f"Module {module_id} not found")
+
+    results = runner.run_mock(runs_per_scenario=runs)
+    summary = runner.get_summary(results)
+    _portal_results[module_id] = {"raw": results, "summary": summary, "status": "completed"}
+
+    # Also store in comparison results format for FIFA tab compatibility
+    _comparison_results[module_id] = {
+        "raw": results,
+        "summary": _build_comparison_summary(results),
+        "status": "completed",
+    }
+
+    return ApiResponse(data={
+        "module_id": module_id,
+        "scenarios": len(runner.scenarios),
+        "total_runs": len(runner.scenarios) * len(runner.configs) * runs,
+        "summary": summary,
+    })
+
+
+@app.get("/api/portal/modules/{module_id}/results")
+async def get_portal_results(module_id: str):
+    """Get results for a module."""
+    if module_id not in _portal_results:
+        raise HTTPException(404, f"No results for {module_id}")
+    return ApiResponse(data=_portal_results[module_id])
+
+
+# ═══════════════════════════════════════════════════════════════
 # AUDIT (TIP-15)
 # ═══════════════════════════════════════════════════════════════
 
