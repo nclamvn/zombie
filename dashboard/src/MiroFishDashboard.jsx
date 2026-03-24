@@ -3,6 +3,7 @@ import * as api from "./api/client.js";
 import useSimulationWS from "./api/useSimulationWS.js";
 import StadiumSimGraph from "./StadiumSimGraph.jsx";
 import VOCCommandCenter from "./VOCCommandCenter.jsx";
+import ModuleSimView from "./ModuleSimView.jsx";
 import { THEMES, LANG } from "./theme.js";
 
 // Module-level theme refs — updated by main component each render
@@ -260,6 +261,7 @@ export default function MiroFishDashboard() {
   const [fifaView, setFifaView] = useState("command"); // "data" | "sim" | "command"
   const [portalModule, setPortalModule] = useState(null); // active module ID when viewing from portal
   const [portalModuleData, setPortalModuleData] = useState(null); // loaded module comparison data
+  const [portalDetailView, setPortalDetailView] = useState("sim"); // "data" | "sim" — default to sim for impact
   const chatEndRef = useRef(null);
 
   // ── Derived (must be before wsEnabled) ──
@@ -730,9 +732,28 @@ export default function MiroFishDashboard() {
                   style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 3, padding: "4px 12px", color: C.text1, fontSize: 10, cursor: "pointer", fontFamily: "inherit", marginBottom: 12 }}>
                   ← {langId === "vi" ? "Quay lại Portal" : "Back to Portal"}
                 </button>
-                <div style={{ fontSize: 18, fontWeight: 800, color: C.text0, marginBottom: 4 }}>{portalModule[langId] || portalModule.en}</div>
-                <div style={{ fontSize: 10, color: C.text2, marginBottom: 16 }}>{portalModule.id} · {portalModule.sc} {langId === "vi" ? "kịch bản" : "scenarios"} · {portalModule.runs} runs · -{portalModule.imp}%</div>
-                {portalModuleData ? (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 800, color: C.text0 }}>{portalModule[langId] || portalModule.en}</div>
+                    <div style={{ fontSize: 10, color: C.text2, marginTop: 2 }}>{portalModule.id} · {portalModule.sc} {langId === "vi" ? "kịch bản" : "scenarios"} · {portalModule.runs} runs · -{portalModule.imp}%</div>
+                  </div>
+                  <div style={{ display: "flex", gap: 0 }}>
+                    {[{ id: "sim", label: langId === "vi" ? "MÔ PHỎNG" : "SIMULATION" }, { id: "data", label: langId === "vi" ? "DỮ LIỆU" : "DATA" }].map(v => (
+                      <button key={v.id} onClick={() => setPortalDetailView(v.id)}
+                        style={{ padding: "4px 12px", background: "transparent", border: "none",
+                          borderBottom: portalDetailView === v.id ? `2px solid ${C.cyan}` : "2px solid transparent",
+                          color: portalDetailView === v.id ? C.cyan : C.text2, cursor: "pointer", fontFamily: "inherit",
+                          fontSize: 10, fontWeight: 700, letterSpacing: 1 }}>
+                        {v.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {portalDetailView === "sim" && portalModuleData ? (
+                  <div style={{ height: "calc(100vh - 220px)", minHeight: 400 }}>
+                    <ModuleSimView moduleData={portalModuleData} moduleMeta={portalModule} themeId={themeId} langId={langId} />
+                  </div>
+                ) : portalDetailView === "data" && portalModuleData ? (
                   <FifaComparisonTab
                     data={portalModuleData}
                     loading={false}
