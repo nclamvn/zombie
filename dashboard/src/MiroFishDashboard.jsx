@@ -317,7 +317,9 @@ export default function MiroFishDashboard() {
 
   // ── Load projects on mount + health polling (disabled in demo mode) ──
   useEffect(() => {
-    // Only poll if backend URL is reachable — skip in demo/static mode
+    // Demo mode: no backend polling. Enable by setting VITE_API_URL.
+    const hasBackend = !!import.meta.env.VITE_API_URL;
+    if (!hasBackend) return;
     const tryConnect = () => {
       api.checkHealth().then(r => {
         if (r.status === "ok") {
@@ -328,7 +330,7 @@ export default function MiroFishDashboard() {
       }).catch(() => {});
     };
     tryConnect();
-    const hInterval = setInterval(tryConnect, 120000); // 2 min, silent
+    const hInterval = setInterval(tryConnect, 120000);
     return () => clearInterval(hInterval);
   }, []);
 
