@@ -154,9 +154,9 @@ export default function ModuleSimView({ moduleData, moduleMeta, themeId = "light
       {/* KPI strip */}
       <div style={{ display: "flex", gap: 3, padding: "4px 8px", borderBottom: `1px solid ${T.border}`, flexShrink: 0 }}>
         <div style={{ flex: 1, fontSize: 9 }}><span style={{ color: T.text2 }}>{sc.name}</span></div>
-        <span style={{ fontSize: 10, color: T.text2 }}>{baseConfig}: <b style={{ color: T.red }}>{totalB.toFixed(0)}s</b></span>
+        <span style={{ fontSize: 10, color: T.text2 }}>{baseConfig}: <b style={{ color: T.red }}>{(totalB||0).toFixed(0)}s</b></span>
         <span style={{ color: T.text2 }}>→</span>
-        <span style={{ fontSize: 10, color: T.text2 }}>{droneConfig}: <b style={{ color: T.green }}>{totalD.toFixed(0)}s</b></span>
+        <span style={{ fontSize: 10, color: T.text2 }}>{droneConfig}: <b style={{ color: T.green }}>{(totalD||0).toFixed(0)}s</b></span>
         <span style={{ fontSize: 11, fontWeight: 800, color: T.green }}>-{imp}%</span>
       </div>
 
@@ -171,7 +171,7 @@ export default function ModuleSimView({ moduleData, moduleMeta, themeId = "light
           <div style={{ flex: 1, overflow: "auto", padding: "4px 8px" }}>
             {chainB.map((c, i) => (
               <div key={i} style={{ display: "flex", gap: 5, padding: "3px 0", opacity: i < stepB ? 0.4 : i === stepB ? 1 : 0.1, transition: "opacity 0.4s" }}>
-                <span style={{ color: T.text2, minWidth: 28, textAlign: "right", fontSize: 9 }}>{(c.delay).toFixed(0)}s</span>
+                <span style={{ color: T.text2, minWidth: 28, textAlign: "right", fontSize: 9 }}>{(c.delay||0).toFixed(0)}s</span>
                 <span style={{ width: 6, height: 6, borderRadius: 2, background: phaseColor(c.phase), marginTop: 4, flexShrink: 0, boxShadow: i === stepB ? `0 0 6px ${phaseColor(c.phase)}` : "none" }} />
                 <span style={{ color: AGENT_COLORS[c.agent] || T.text1, fontWeight: 700, fontSize: 9, minWidth: 40 }}>{c.agent}</span>
                 <span style={{ color: i === stepB ? T.text0 : T.text2, fontSize: 9 }}>{c.text}</span>
@@ -180,7 +180,7 @@ export default function ModuleSimView({ moduleData, moduleMeta, themeId = "light
           </div>
           <div style={{ padding: "4px 8px", borderTop: `1px solid ${T.border}`, fontSize: 10, flexShrink: 0, display: "flex", justifyContent: "space-between" }}>
             <span style={{ color: T.text2 }}>{curB ? phaseLabels[curB.phase] : "—"}</span>
-            <span style={{ color: T.red, fontWeight: 700 }}>{curB ? `${curB.delay.toFixed(0)}s` : "0s"}</span>
+            <span style={{ color: T.red, fontWeight: 700 }}>{curB ? `${(curB.delay||0).toFixed(0)}s` : "0s"}</span>
           </div>
         </div>
 
@@ -192,7 +192,7 @@ export default function ModuleSimView({ moduleData, moduleMeta, themeId = "light
           <div style={{ flex: 1, overflow: "auto", padding: "4px 8px" }}>
             {chainD.map((c, i) => (
               <div key={i} style={{ display: "flex", gap: 5, padding: "3px 0", opacity: i < stepD ? 0.4 : i === stepD ? 1 : 0.1, transition: "opacity 0.4s" }}>
-                <span style={{ color: T.text2, minWidth: 28, textAlign: "right", fontSize: 9 }}>{(c.delay).toFixed(0)}s</span>
+                <span style={{ color: T.text2, minWidth: 28, textAlign: "right", fontSize: 9 }}>{(c.delay||0).toFixed(0)}s</span>
                 <span style={{ width: 6, height: 6, borderRadius: 2, background: phaseColor(c.phase), marginTop: 4, flexShrink: 0, boxShadow: i === stepD ? `0 0 6px ${phaseColor(c.phase)}` : "none" }} />
                 <span style={{ color: AGENT_COLORS[c.agent] || T.text1, fontWeight: 700, fontSize: 9, minWidth: 40 }}>{c.agent}</span>
                 <span style={{ color: i === stepD ? T.text0 : T.text2, fontSize: 9 }}>{c.text}</span>
@@ -201,7 +201,7 @@ export default function ModuleSimView({ moduleData, moduleMeta, themeId = "light
           </div>
           <div style={{ padding: "4px 8px", borderTop: `1px solid ${T.border}`, fontSize: 10, flexShrink: 0, display: "flex", justifyContent: "space-between" }}>
             <span style={{ color: T.text2 }}>{curD ? phaseLabels[curD.phase] : "—"}</span>
-            <span style={{ color: T.green, fontWeight: 700 }}>{curD ? `${curD.delay.toFixed(0)}s` : "0s"}</span>
+            <span style={{ color: T.green, fontWeight: 700 }}>{curD ? `${(curD.delay||0).toFixed(0)}s` : "0s"}</span>
           </div>
         </div>
 
@@ -213,7 +213,7 @@ export default function ModuleSimView({ moduleData, moduleMeta, themeId = "light
           <div ref={logRef} style={{ flex: 1, overflow: "auto", padding: "4px 6px", position: "relative" }}>
             {radioLog.map((e, i) => (
               <div key={i} style={{ display: "flex", gap: 4, padding: "2px 0", opacity: i === radioLog.length - 1 ? 1 : 0.4, fontSize: 9 }}>
-                <span style={{ color: T.text2, minWidth: 20, textAlign: "right" }}>{e.delay.toFixed(0)}s</span>
+                <span style={{ color: T.text2, minWidth: 20, textAlign: "right" }}>{(e.delay||0).toFixed(0)}s</span>
                 <span style={{ width: 4, height: 4, borderRadius: 1, background: phaseColor(e.phase), marginTop: 4, flexShrink: 0 }} />
                 <span style={{ color: e.mode === "D" ? T.green : T.red, fontWeight: 600, minWidth: 14 }}>{e.mode === "D" ? "▲" : "▼"}</span>
                 <span style={{ color: e.mode === "D" ? T.text0 : T.text2 }}>{e.text}</span>

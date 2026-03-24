@@ -1391,9 +1391,9 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
                 <span style={{ fontSize: 22, fontWeight: 700, color: impColor }}>{imp > 0 ? "-" : "+"}{Math.abs(imp)}%</span>
               </div>
               <div style={{ fontSize: 10, color: C.text2, marginTop: 6, display: "flex", gap: 8 }}>
-                <span>{bm.toFixed(0)}s</span>
+                <span>{(bm||0).toFixed(0)}s</span>
                 <span style={{ color: C.text2 }}>→</span>
-                <span style={{ color: C.text1 }}>{cm.toFixed(0)}s</span>
+                <span style={{ color: C.text1 }}>{(cm||0).toFixed(0)}s</span>
               </div>
               <div style={{ fontSize: 9, color: C.text2, marginTop: 2 }}>
                 ±{compareKpi[kpiKey]?.std?.toFixed(0) || 0}s
@@ -1438,7 +1438,7 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
                     {sc.name}
                   </span>
                   <span><Badge color={catColor}>{catLabel}</Badge></span>
-                  {cfgTotals.map((t, i) => <span key={i} style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{t.toFixed(0)}s</span>)}
+                  {cfgTotals.map((t, i) => <span key={i} style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{(t||0).toFixed(0)}s</span>)}
                   <span style={{ fontSize: 10, fontWeight: 700, color: imp > 0 ? C.green : C.text2, textAlign: "right" }}>
                     {imp > 0 ? `-${imp}%` : `${imp}%`}
                   </span>
