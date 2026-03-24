@@ -736,23 +736,23 @@ export default function MiroFishDashboard() {
               { cat: "general", label: langId === "vi" ? "KHÁC" : "OTHER", color: C.text2, icon: "●" },
             ].map(group => {
               const PORTAL_MODULES = {
-                stadium_operations: { vi: "Sân vận động FIFA", en: "Stadium Ops (FIFA)", cat: "public_safety" },
-                counter_uas: { vi: "Chống Drone", en: "Counter-UAS", cat: "defense" },
-                isr_surveillance: { vi: "Trinh sát ISR", en: "ISR Surveillance", cat: "defense" },
-                swarm_tactics: { vi: "Bay đàn 200 drone", en: "Swarm Tactics", cat: "defense" },
-                border_patrol: { vi: "Tuần tra biên giới", en: "Border Patrol", cat: "defense" },
-                perimeter_defense: { vi: "Bảo vệ căn cứ", en: "Perimeter Defense", cat: "defense" },
-                concert_festival: { vi: "Concert / Lễ hội", en: "Concert & Festival", cat: "public_safety" },
-                traffic_management: { vi: "Giao thông TPHCM", en: "Traffic Management", cat: "public_safety" },
-                crowd_management: { vi: "Quản lý đám đông", en: "Crowd Management", cat: "public_safety" },
-                search_rescue: { vi: "Tìm kiếm cứu nạn", en: "Search & Rescue", cat: "emergency" },
-                fire_response: { vi: "Cháy rừng / Tòa nhà", en: "Fire Response", cat: "emergency" },
-                flood_disaster: { vi: "Lũ lụt thiên tai", en: "Flood & Disaster", cat: "emergency" },
-                hazmat_response: { vi: "Hóa chất phóng xạ", en: "HAZMAT Response", cat: "emergency" },
-                infrastructure_inspection: { vi: "Kiểm tra hạ tầng", en: "Infrastructure", cat: "industrial" },
-                agriculture: { vi: "Nông nghiệp 500ha", en: "Agriculture", cat: "industrial" },
-                mapping_survey: { vi: "Đo đạc 3D", en: "Mapping & Survey", cat: "industrial" },
-                delivery_logistics: { vi: "Logistics đảo", en: "Drone Delivery", cat: "industrial" },
+                stadium_operations: { vi: "Sân vận động FIFA", en: "Stadium Ops (FIFA)", cat: "public_safety", sc: 12, runs: 1800, imp: 50 },
+                counter_uas: { vi: "Chống Drone", en: "Counter-UAS", cat: "defense", sc: 6, runs: 900, imp: 49 },
+                isr_surveillance: { vi: "Trinh sát ISR", en: "ISR Surveillance", cat: "defense", sc: 6, runs: 900, imp: 51 },
+                swarm_tactics: { vi: "Bay đàn 200 drone", en: "Swarm Tactics", cat: "defense", sc: 6, runs: 900, imp: 49 },
+                border_patrol: { vi: "Tuần tra biên giới", en: "Border Patrol", cat: "defense", sc: 6, runs: 900, imp: 50 },
+                perimeter_defense: { vi: "Bảo vệ căn cứ", en: "Perimeter Defense", cat: "defense", sc: 5, runs: 750, imp: 49 },
+                concert_festival: { vi: "Concert / Lễ hội", en: "Concert & Festival", cat: "public_safety", sc: 5, runs: 750, imp: 48 },
+                traffic_management: { vi: "Giao thông TPHCM", en: "Traffic Management", cat: "public_safety", sc: 5, runs: 750, imp: 49 },
+                crowd_management: { vi: "Quản lý đám đông", en: "Crowd Management", cat: "public_safety", sc: 4, runs: 600, imp: 49 },
+                search_rescue: { vi: "Tìm kiếm cứu nạn", en: "Search & Rescue", cat: "emergency", sc: 6, runs: 900, imp: 47 },
+                fire_response: { vi: "Cháy rừng / Tòa nhà", en: "Fire Response", cat: "emergency", sc: 6, runs: 900, imp: 50 },
+                flood_disaster: { vi: "Lũ lụt thiên tai", en: "Flood & Disaster", cat: "emergency", sc: 5, runs: 750, imp: 48 },
+                hazmat_response: { vi: "Hóa chất phóng xạ", en: "HAZMAT Response", cat: "emergency", sc: 4, runs: 600, imp: 48 },
+                infrastructure_inspection: { vi: "Kiểm tra hạ tầng", en: "Infrastructure", cat: "industrial", sc: 5, runs: 750, imp: 49 },
+                agriculture: { vi: "Nông nghiệp 500ha", en: "Agriculture", cat: "industrial", sc: 4, runs: 600, imp: 51 },
+                mapping_survey: { vi: "Đo đạc 3D", en: "Mapping & Survey", cat: "industrial", sc: 4, runs: 600, imp: 53 },
+                delivery_logistics: { vi: "Logistics đảo", en: "Drone Delivery", cat: "industrial", sc: 5, runs: 750, imp: 50 },
               };
               const mods = Object.entries(PORTAL_MODULES).filter(([_, m]) => m.cat === group.cat);
               if (mods.length === 0) return null;
@@ -763,31 +763,34 @@ export default function MiroFishDashboard() {
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
                     {mods.map(([id, meta]) => {
-                      const isShipped = id === "stadium_operations";
+                      const isStadium = id === "stadium_operations";
+                      const dataFile = isStadium ? "/comparison.json" : `/data_${id}.json`;
                       return (
-                        <div key={id} onClick={() => { if (isShipped) { setActiveTab("fifa"); } }}
-                          style={{ background: C.bg2, border: `1px solid ${isShipped ? group.color : C.border}`, borderRadius: 6,
-                            padding: "12px 14px", cursor: isShipped ? "pointer" : "default",
-                            borderLeft: `3px solid ${isShipped ? group.color : C.border}`, transition: "all 0.2s" }}>
+                        <div key={id} onClick={async () => {
+                            // Load data for this module and switch to FIFA tab
+                            try {
+                              const res = await fetch(dataFile);
+                              if (res.ok) { const raw = await res.json(); await handleImportComparison(raw); }
+                            } catch {}
+                            setActiveTab("fifa"); setFifaView("data");
+                          }}
+                          style={{ background: C.bg2, border: `1px solid ${group.color}40`, borderRadius: 6,
+                            padding: "12px 14px", cursor: "pointer",
+                            borderLeft: `3px solid ${group.color}`, transition: "all 0.2s" }}>
                           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
                             <span style={{ fontSize: 12, fontWeight: 700, color: C.text0 }}>{meta[langId] || meta.en}</span>
-                            {isShipped && <span style={{ fontSize: 8, background: group.color + "20", color: group.color, padding: "1px 6px", borderRadius: 3, fontWeight: 700 }}>LIVE</span>}
+                            <span style={{ fontSize: 9, fontWeight: 700, color: C.green }}>-{meta.imp}%</span>
                           </div>
-                          <div style={{ fontSize: 9, color: C.text2 }}>{id}</div>
-                          {isShipped && (
-                            <div style={{ marginTop: 8, display: "flex", gap: 6, fontSize: 9 }}>
-                              <span style={{ color: C.green }}>12 scenarios</span>
-                              <span style={{ color: C.text2 }}>·</span>
-                              <span style={{ color: C.green }}>1,800 runs</span>
-                              <span style={{ color: C.text2 }}>·</span>
-                              <span style={{ color: C.green }}>102 LLM</span>
-                            </div>
-                          )}
-                          {!isShipped && (
-                            <div style={{ marginTop: 8, fontSize: 9, color: C.text2 }}>
-                              {langId === "vi" ? "Sẵn sàng — cần chạy mock" : "Ready — needs mock run"}
-                            </div>
-                          )}
+                          <div style={{ fontSize: 9, color: C.text2, marginBottom: 6 }}>{id}</div>
+                          <div style={{ display: "flex", gap: 6, fontSize: 9 }}>
+                            <span style={{ color: C.text1 }}>{meta.sc} {langId === "vi" ? "kịch bản" : "scenarios"}</span>
+                            <span style={{ color: C.text2 }}>·</span>
+                            <span style={{ color: C.text1 }}>{meta.runs.toLocaleString()} runs</span>
+                            {isStadium && <><span style={{ color: C.text2 }}>·</span><span style={{ color: C.green }}>102 LLM</span></>}
+                          </div>
+                          <div style={{ marginTop: 6, height: 3, background: C.border, borderRadius: 2, overflow: "hidden" }}>
+                            <div style={{ height: "100%", width: `${meta.imp}%`, background: group.color, borderRadius: 2 }} />
+                          </div>
                         </div>
                       );
                     })}
