@@ -766,7 +766,16 @@ export default function MiroFishDashboard() {
                     setExpandedScenario={setExpandedScenario}
                     onImport={() => {}}
                     onRunComparison={() => {}}
-                    onExportReport={() => {}}
+                    onExportReport={async () => {
+                      if (!portalModuleData) return;
+                      const { generateReport } = await import("./reportGenerator.js");
+                      const report = generateReport(portalModuleData, portalModule.id, langId === "vi" ? "both" : "en");
+                      const blob = new Blob([report], { type: "text/markdown" });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url; a.download = `report_${portalModule.id}_${new Date().toISOString().slice(0,10)}.md`;
+                      a.click(); URL.revokeObjectURL(url);
+                    }}
                     C={C} L={L}
                   />
                 ) : (
@@ -1229,15 +1238,14 @@ export default function MiroFishDashboard() {
                   onRunComparison={handleRunComparison}
                   C={C} L={L}
                   onExportReport={async () => {
-                    if (!activeProjectId) return;
-                    const r = await api.generateFifaReport(activeProjectId);
-                    if (r.status === "ok" && r.data?.report) {
-                      const blob = new Blob([r.data.report], { type: "text/markdown" });
-                      const url = URL.createObjectURL(blob);
-                      const a = document.createElement("a");
-                      a.href = url; a.download = `fifa_report_${activeProjectId.slice(0, 8)}.md`;
-                      a.click(); URL.revokeObjectURL(url);
-                    }
+                    if (!comparisonData) return;
+                    const { generateReport } = await import("./reportGenerator.js");
+                    const report = generateReport(comparisonData, "stadium_operations", langId === "vi" ? "both" : "en");
+                    const blob = new Blob([report], { type: "text/markdown" });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url; a.download = `report_stadium_${new Date().toISOString().slice(0,10)}.md`;
+                    a.click(); URL.revokeObjectURL(url);
                   }}
                 />
               ) : (
