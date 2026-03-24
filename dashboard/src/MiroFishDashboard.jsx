@@ -771,14 +771,14 @@ export default function MiroFishDashboard() {
                       const { generateReport, exportAsPDF } = await import("./reportGenerator.js");
                       const lang = langId === "vi" ? "both" : "en";
                       const report = generateReport(portalModuleData, portalModule.id, lang);
-                      // Download .md
+                      // Download .md first
                       const blob = new Blob([report], { type: "text/markdown" });
                       const url = URL.createObjectURL(blob);
                       const a = document.createElement("a");
                       a.href = url; a.download = `report_${portalModule.id}_${new Date().toISOString().slice(0,10)}.md`;
                       a.click(); URL.revokeObjectURL(url);
-                      // Open PDF print dialog
-                      exportAsPDF(report, `report_${portalModule.id}`);
+                      // Download .html after 500ms delay (avoid browser blocking 2nd download)
+                      setTimeout(() => exportAsPDF(report, `report_${portalModule.id}`), 500);
                     }}
                     C={C} L={L}
                   />
@@ -1252,8 +1252,8 @@ export default function MiroFishDashboard() {
                     const a = document.createElement("a");
                     a.href = url; a.download = `report_stadium_${new Date().toISOString().slice(0,10)}.md`;
                     a.click(); URL.revokeObjectURL(url);
-                    // Open PDF print dialog
-                    exportAsPDF(report, "report_stadium");
+                    // Download .html after delay
+                    setTimeout(() => exportAsPDF(report, "report_stadium"), 500);
                   }}
                 />
               ) : (
