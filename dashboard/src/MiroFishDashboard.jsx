@@ -258,6 +258,8 @@ export default function MiroFishDashboard() {
   const [expandedScenario, setExpandedScenario] = useState(null);
   const [comparisonLoading, setComparisonLoading] = useState(false);
   const [fifaView, setFifaView] = useState("command"); // "data" | "sim" | "command"
+  const [portalModule, setPortalModule] = useState(null); // active module ID when viewing from portal
+  const [portalModuleData, setPortalModuleData] = useState(null); // loaded module comparison data
   const chatEndRef = useRef(null);
 
   // ── Derived (must be before wsEnabled) ──
@@ -720,6 +722,39 @@ export default function MiroFishDashboard() {
         {/* ═══ PORTAL TAB ═══ */}
         {activeTab === "portal" && (
           <div style={{ gridColumn: "1 / -1", gridRow: "1 / -1", overflow: "auto", padding: 16, minHeight: 0 }}>
+
+            {/* ── Module Detail View ── */}
+            {portalModule && (
+              <div>
+                <button onClick={() => { setPortalModule(null); setPortalModuleData(null); }}
+                  style={{ background: C.bg2, border: `1px solid ${C.border}`, borderRadius: 3, padding: "4px 12px", color: C.text1, fontSize: 10, cursor: "pointer", fontFamily: "inherit", marginBottom: 12 }}>
+                  ← {langId === "vi" ? "Quay lại Portal" : "Back to Portal"}
+                </button>
+                <div style={{ fontSize: 18, fontWeight: 800, color: C.text0, marginBottom: 4 }}>{portalModule[langId] || portalModule.en}</div>
+                <div style={{ fontSize: 10, color: C.text2, marginBottom: 16 }}>{portalModule.id} · {portalModule.sc} {langId === "vi" ? "kịch bản" : "scenarios"} · {portalModule.runs} runs · -{portalModule.imp}%</div>
+                {portalModuleData ? (
+                  <FifaComparisonTab
+                    data={portalModuleData}
+                    loading={false}
+                    compareConfig={compareConfig}
+                    setCompareConfig={setCompareConfig}
+                    expandedScenario={expandedScenario}
+                    setExpandedScenario={setExpandedScenario}
+                    onImport={() => {}}
+                    onRunComparison={() => {}}
+                    onExportReport={() => {}}
+                    C={C} L={L}
+                  />
+                ) : (
+                  <div style={{ color: C.text2, textAlign: "center", padding: 40 }}>
+                    {langId === "vi" ? "Đang tải dữ liệu..." : "Loading data..."}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Portal Grid ── */}
+            {!portalModule && <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
               <div>
                 <div style={{ fontSize: 18, fontWeight: 800, color: C.text0, letterSpacing: 1 }}>RTR SIMULATOR PORTAL</div>
@@ -767,12 +802,42 @@ export default function MiroFishDashboard() {
                       const dataFile = isStadium ? "/comparison.json" : `/data_${id}.json`;
                       return (
                         <div key={id} onClick={async () => {
-                            // Load data for this module and switch to FIFA tab
-                            try {
-                              const res = await fetch(dataFile);
-                              if (res.ok) { const raw = await res.json(); await handleImportComparison(raw); }
-                            } catch {}
-                            setActiveTab("fifa"); setFifaView("data");
+                            if (isStadium) {
+                              setActiveTab("fifa"); setFifaView("command");
+                            } else {
+                              // Load this module's data and show detail view
+                              setPortalModule({ id, ...meta });
+                              setPortalModuleData(null);
+                              try {
+                                const res = await fetch(dataFile);
+                                if (res.ok) {
+                                  const raw = await res.json();
+                                  // Client-side aggregate
+                                  const scenarios = []; const masterKpi = {};
+                                  for (const [sid, sd] of Object.entries(raw)) {
+                                    const entry = { id: sid, name: sd.name || sid, category: sd.category || "general", configs: {} };
+                                    for (const [cid, runs] of Object.entries(sd.configs || {})) {
+                                      const kpiAgg = {};
+                                      if (runs.length > 0) {
+                                        for (const key of Object.keys(runs[0].kpi || {})) {
+                                          const vals = runs.map(r => r.kpi[key]).filter(v => v != null);
+                                          const n = vals.length, mean = vals.reduce((a,b) => a+b, 0) / n;
+                                          const std = Math.sqrt(vals.reduce((a,v) => a+(v-mean)**2, 0) / Math.max(n-1,1));
+                                          kpiAgg[key] = { mean: +mean.toFixed(1), std: +std.toFixed(1), n };
+                                          masterKpi[cid] = masterKpi[cid] || {}; masterKpi[cid][key] = masterKpi[cid][key] || [];
+                                          masterKpi[cid][key].push(...vals);
+                                        }
+                                      }
+                                      entry.configs[cid] = { runs: runs.length, kpi: kpiAgg };
+                                    }
+                                    scenarios.push(entry);
+                                  }
+                                  const ms = {}; for (const [cid, kpis] of Object.entries(masterKpi)) { ms[cid] = {}; for (const [k, vals] of Object.entries(kpis)) { const n=vals.length, mean=vals.reduce((a,b)=>a+b,0)/n; const std=Math.sqrt(vals.reduce((a,v)=>a+(v-mean)**2,0)/Math.max(n-1,1)); ms[cid][k]={mean:+mean.toFixed(1),std:+std.toFixed(1),n}; } }
+                                  const totalRuns = Object.values(raw).reduce((s, sd) => s + Object.values(sd.configs||{}).reduce((s2,r) => s2+r.length, 0), 0);
+                                  setPortalModuleData({ scenarios, master_kpi: ms, total_scenarios: scenarios.length, total_runs: totalRuns });
+                                }
+                              } catch {}
+                            }
                           }}
                           style={{ background: C.bg2, border: `1px solid ${group.color}40`, borderRadius: 6,
                             padding: "12px 14px", cursor: "pointer",
@@ -798,6 +863,7 @@ export default function MiroFishDashboard() {
                 </div>
               );
             })}
+            </>}
           </div>
         )}
 
