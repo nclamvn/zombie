@@ -83,7 +83,7 @@ export const LANG = {
     noComparisonDesc: "Import dữ liệu 1.800 lần chạy hoặc chạy so sánh mới.",
     importJson: "IMPORT JSON", runComparison: "CHẠY SO SÁNH",
     scenarioComparison: "SO SÁNH TÌNH HUỐNG", scenarios: "tình huống",
-    exportReport: "XUẤT BÁO CÁO FIFA", runs: "LẦN CHẠY",
+    exportReport: "XUẤT BÁO CÁO", runs: "LẦN CHẠY",
     kpiPhaseBreakdown: "PHÂN TÍCH GIAI ĐOẠN KPI",
     scenario: "TÌNH HUỐNG", category: "PHÂN LOẠI", improve: "CẢI THIỆN",
 
@@ -137,7 +137,7 @@ export const LANG = {
     noComparisonDesc: "Import pre-computed 1,800 runs data or run a new stadium comparison.",
     importJson: "IMPORT JSON", runComparison: "RUN COMPARISON",
     scenarioComparison: "SCENARIO COMPARISON", scenarios: "scenarios",
-    exportReport: "EXPORT FIFA REPORT", runs: "RUNS",
+    exportReport: "EXPORT REPORT", runs: "RUNS",
     kpiPhaseBreakdown: "KPI PHASE BREAKDOWN",
     scenario: "SCENARIO", category: "CATEGORY", improve: "IMPROVE",
 

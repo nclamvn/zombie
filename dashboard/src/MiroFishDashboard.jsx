@@ -1312,8 +1312,12 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
   }
 
   const masterKpi = data.master_kpi || {};
-  const baselineKpi = masterKpi.BASELINE || {};
-  const compareKpi = masterKpi[compareConfig] || {};
+  const allConfigs = Object.keys(masterKpi);
+  const firstCfg = allConfigs[0] || "BASELINE";
+  const lastCfg = allConfigs[allConfigs.length - 1] || "FULL";
+  const effectiveCompare = allConfigs.includes(compareConfig) ? compareConfig : lastCfg;
+  const baselineKpi = masterKpi[firstCfg] || {};
+  const compareKpi = masterKpi[effectiveCompare] || {};
   const scenarios = data.scenarios || [];
 
   // Compute improvement for a KPI
@@ -1330,13 +1334,13 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
       {/* ── Section D: Config Selector + Controls ── */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", gap: 4 }}>
-          {["TETHERED", "FULL"].map(cfg => (
+          {allConfigs.slice(1).map(cfg => (
             <button key={cfg} onClick={() => setCompareConfig(cfg)}
-              style={{ padding: "5px 14px", background: compareConfig === cfg ? C.amber + "22" : "transparent",
-                border: `1px solid ${compareConfig === cfg ? C.amber : C.border}`, borderRadius: 2,
-                color: compareConfig === cfg ? C.amber : C.text2, fontFamily: "inherit", fontSize: 10,
+              style={{ padding: "5px 14px", background: effectiveCompare === cfg ? C.amber + "22" : "transparent",
+                border: `1px solid ${effectiveCompare === cfg ? C.amber : C.border}`, borderRadius: 2,
+                color: effectiveCompare === cfg ? C.amber : C.text2, fontFamily: "inherit", fontSize: 10,
                 fontWeight: 600, cursor: "pointer", letterSpacing: 1 }}>
-              BASELINE vs {cfg}
+              {firstCfg} vs {cfg}
             </button>
           ))}
         </div>
@@ -1382,30 +1386,30 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
       <div style={{ background: C.bg1, border: `1px solid ${C.border}`, borderRadius: 3, overflow: "hidden", flex: 1, minHeight: 0 }}>
         <div style={{ padding: "8px 12px", borderBottom: `1px solid ${C.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: C.text0, letterSpacing: 1 }}>{L.scenarioComparison}</span>
-          <span style={{ fontSize: 9, color: C.text2 }}>{scenarios.length} scenarios · BASELINE vs {compareConfig}</span>
+          <span style={{ fontSize: 9, color: C.text2 }}>{scenarios.length} scenarios · {firstCfg} vs {effectiveCompare}</span>
         </div>
         <div style={{ overflowY: "auto", maxHeight: 380 }}>
           {/* Header */}
-          <div style={{ display: "grid", gridTemplateColumns: "200px 80px repeat(3, 90px) 80px", gap: 0,
+          <div style={{ display: "grid", gridTemplateColumns: `200px 80px repeat(${allConfigs.length}, 90px) 80px`, gap: 0,
             padding: "6px 12px", borderBottom: `1px solid ${C.border}`, fontSize: 9, color: C.text2, letterSpacing: 1, position: "sticky", top: 0, background: C.bg2, zIndex: 1 }}>
-            <span>SCENARIO</span><span>CATEGORY</span><span style={{ textAlign: "right" }}>BASELINE</span>
-            <span style={{ textAlign: "right" }}>TETHERED</span><span style={{ textAlign: "right" }}>FULL</span>
-            <span style={{ textAlign: "right" }}>IMPROVE</span>
+            <span>{L.scenario}</span><span>{L.category}</span>
+            {allConfigs.map(c => <span key={c} style={{ textAlign: "right" }}>{c}</span>)}
+            <span style={{ textAlign: "right" }}>{L.improve}</span>
           </div>
           {/* Rows */}
           {scenarios.map(sc => {
             const catColor = CAT_COLORS[sc.category] || C.text2;
             const catLabel = L[sc.category] || sc.category?.toUpperCase();
-            const bTotal = sc.configs?.BASELINE?.kpi?.total_resolution?.mean || 0;
-            const tTotal = sc.configs?.TETHERED?.kpi?.total_resolution?.mean || 0;
-            const fTotal = sc.configs?.FULL?.kpi?.total_resolution?.mean || 0;
-            const imp = bTotal > 0 ? Math.round((1 - fTotal / bTotal) * 100) : 0;
+            const cfgTotals = allConfigs.map(c => sc.configs?.[c]?.kpi?.total_resolution?.mean || 0);
+            const bTotal = cfgTotals[0] || 0;
+            const lastTotal = cfgTotals[cfgTotals.length - 1] || 0;
+            const imp = bTotal > 0 ? Math.round((1 - lastTotal / bTotal) * 100) : 0;
             const isExpanded = expandedScenario === sc.id;
 
             return (
               <div key={sc.id}>
                 <div onClick={() => setExpandedScenario(isExpanded ? null : sc.id)}
-                  style={{ display: "grid", gridTemplateColumns: "200px 80px repeat(3, 90px) 80px", gap: 0,
+                  style={{ display: "grid", gridTemplateColumns: `200px 80px repeat(${allConfigs.length}, 90px) 80px`, gap: 0,
                     padding: "8px 12px", borderBottom: `1px solid ${C.border}`, cursor: "pointer",
                     background: isExpanded ? C.bg2 : "transparent", transition: "background 0.15s" }}>
                   <span style={{ fontSize: 10, color: C.text0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -1413,9 +1417,7 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
                     {sc.name}
                   </span>
                   <span><Badge color={catColor}>{catLabel}</Badge></span>
-                  <span style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{bTotal.toFixed(0)}s</span>
-                  <span style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{tTotal.toFixed(0)}s</span>
-                  <span style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{fTotal.toFixed(0)}s</span>
+                  {cfgTotals.map((t, i) => <span key={i} style={{ fontSize: 10, color: C.text1, textAlign: "right" }}>{t.toFixed(0)}s</span>)}
                   <span style={{ fontSize: 10, fontWeight: 700, color: imp > 0 ? C.green : C.text2, textAlign: "right" }}>
                     {imp > 0 ? `-${imp}%` : `${imp}%`}
                   </span>
@@ -1425,7 +1427,7 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
                   <div style={{ padding: "12px 16px", background: C.bg0, borderBottom: `1px solid ${C.border}` }}>
                     <div style={{ fontSize: 9, color: C.text2, letterSpacing: 1, marginBottom: 8 }}>DECISION CHAIN — T0 → T6</div>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-                      {["BASELINE", "TETHERED", "FULL"].map(cfgId => {
+                      {allConfigs.map(cfgId => {
                         const cfgKpi = sc.configs?.[cfgId]?.kpi || {};
                         const cfgColor = cfgId === "BASELINE" ? C.text2 : cfgId === "TETHERED" ? C.amber : C.green;
                         return (
@@ -1434,7 +1436,7 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
                             {KPI_ORDER.map(kk => {
                               const val = cfgKpi[kk]?.mean || 0;
                               const std = cfgKpi[kk]?.std || 0;
-                              const maxVal = sc.configs?.BASELINE?.kpi?.[kk]?.mean || 1;
+                              const maxVal = sc.configs?.[firstCfg]?.kpi?.[kk]?.mean || 1;
                               const pct = Math.min((val / maxVal) * 100, 100);
                               return (
                                 <div key={kk} style={{ marginBottom: 6 }}>
@@ -1462,7 +1464,7 @@ function FifaComparisonTab({ data, loading, compareConfig, setCompareConfig, exp
 
       {/* ── Section C: KPI Phase Breakdown Bars ── */}
       <div style={{ background: C.bg1, border: `1px solid ${C.border}`, borderRadius: 3, padding: 14 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: C.text0, letterSpacing: 1, marginBottom: 12 }}>{L.kpiPhaseBreakdown} — BASELINE vs {compareConfig}</div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: C.text0, letterSpacing: 1, marginBottom: 12 }}>{L.kpiPhaseBreakdown} — {firstCfg} vs {effectiveCompare}</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {KPI_ORDER.slice(0, 4).map(kpiKey => {
             const bm = baselineKpi[kpiKey]?.mean || 1;
