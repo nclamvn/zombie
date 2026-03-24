@@ -768,13 +768,17 @@ export default function MiroFishDashboard() {
                     onRunComparison={() => {}}
                     onExportReport={async () => {
                       if (!portalModuleData) return;
-                      const { generateReport } = await import("./reportGenerator.js");
-                      const report = generateReport(portalModuleData, portalModule.id, langId === "vi" ? "both" : "en");
+                      const { generateReport, exportAsPDF } = await import("./reportGenerator.js");
+                      const lang = langId === "vi" ? "both" : "en";
+                      const report = generateReport(portalModuleData, portalModule.id, lang);
+                      // Download .md
                       const blob = new Blob([report], { type: "text/markdown" });
                       const url = URL.createObjectURL(blob);
                       const a = document.createElement("a");
                       a.href = url; a.download = `report_${portalModule.id}_${new Date().toISOString().slice(0,10)}.md`;
                       a.click(); URL.revokeObjectURL(url);
+                      // Open PDF print dialog
+                      exportAsPDF(report, `report_${portalModule.id}`);
                     }}
                     C={C} L={L}
                   />
@@ -1239,13 +1243,17 @@ export default function MiroFishDashboard() {
                   C={C} L={L}
                   onExportReport={async () => {
                     if (!comparisonData) return;
-                    const { generateReport } = await import("./reportGenerator.js");
-                    const report = generateReport(comparisonData, "stadium_operations", langId === "vi" ? "both" : "en");
+                    const { generateReport, exportAsPDF } = await import("./reportGenerator.js");
+                    const lang = langId === "vi" ? "both" : "en";
+                    const report = generateReport(comparisonData, "stadium_operations", lang);
+                    // Download .md
                     const blob = new Blob([report], { type: "text/markdown" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement("a");
                     a.href = url; a.download = `report_stadium_${new Date().toISOString().slice(0,10)}.md`;
                     a.click(); URL.revokeObjectURL(url);
+                    // Open PDF print dialog
+                    exportAsPDF(report, "report_stadium");
                   }}
                 />
               ) : (

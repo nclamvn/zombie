@@ -212,3 +212,79 @@ export function generateReport(comparisonData, moduleId, lang = "both") {
 
   return parts.join("");
 }
+
+/**
+ * Convert markdown to styled HTML and trigger browser Print → Save as PDF.
+ * No external dependencies — uses browser native print API.
+ */
+export function exportAsPDF(markdown, filename = "report") {
+  // Simple markdown → HTML conversion
+  let html = markdown
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
+    .replace(/^---$/gm, '<hr/>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br/>');
+
+  // Convert markdown tables to HTML tables
+  html = html.replace(/<p>\|(.+)\|<br\/>\|[-| ]+\|<br\/>((?:\|.+\|<br\/>)+)<\/p>/g, (_, header, rows) => {
+    const ths = header.split('|').filter(c => c.trim()).map(c => `<th>${c.trim()}</th>`).join('');
+    const trs = rows.split('<br/>').filter(r => r.trim()).map(row => {
+      const tds = row.split('|').filter(c => c.trim()).map(c => `<td>${c.trim()}</td>`).join('');
+      return `<tr>${tds}</tr>`;
+    }).join('');
+    return `<table><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table>`;
+  });
+
+  // Wrap lists
+  html = html.replace(/(<li>.+?<\/li>(?:<br\/>)?)+/g, m => `<ul>${m.replace(/<br\/>/g, '')}</ul>`);
+
+  const styledHtml = `<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8"/>
+<title>${filename}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; font-size: 11pt; line-height: 1.6; color: #1f2328; padding: 40px 50px; max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 22pt; font-weight: 800; color: #0969da; margin: 24px 0 8px; border-bottom: 3px solid #0969da; padding-bottom: 8px; }
+  h2 { font-size: 14pt; font-weight: 700; color: #1f2328; margin: 20px 0 8px; border-bottom: 1px solid #d0d7de; padding-bottom: 4px; }
+  h3 { font-size: 12pt; font-weight: 700; color: #424a53; margin: 16px 0 6px; }
+  p { margin: 6px 0; }
+  strong { font-weight: 700; color: #0969da; }
+  blockquote { border-left: 3px solid #0969da; padding: 8px 16px; margin: 8px 0; background: #f0f6ff; color: #424a53; font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10pt; }
+  th { background: #f0f2f5; border: 1px solid #d0d7de; padding: 6px 10px; text-align: left; font-weight: 700; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.5px; }
+  td { border: 1px solid #d0d7de; padding: 5px 10px; }
+  tr:nth-child(even) { background: #f7f8fa; }
+  ul { margin: 6px 0 6px 20px; }
+  li { margin: 3px 0; }
+  hr { border: none; border-top: 2px solid #d0d7de; margin: 30px 0; }
+  em { color: #656d76; }
+  @media print {
+    body { padding: 20px 30px; }
+    h1 { page-break-before: auto; }
+    table { page-break-inside: avoid; }
+    hr { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+<p>${html}</p>
+</body></html>`;
+
+  // Open in new window and trigger print
+  const w = window.open('', '_blank', 'width=900,height=700');
+  w.document.write(styledHtml);
+  w.document.close();
+  // Wait for fonts to load, then print
+  setTimeout(() => {
+    w.print();
+  }, 500);
+}
