@@ -315,19 +315,20 @@ export default function MiroFishDashboard() {
     }
   }, [ws.events.length]);
 
-  // ── Load projects on mount + health polling (silent when no backend) ──
+  // ── Load projects on mount + health polling (disabled in demo mode) ──
   useEffect(() => {
-    loadProjects();
-    const pollHealth = () => {
+    // Only poll if backend URL is reachable — skip in demo/static mode
+    const tryConnect = () => {
       api.checkHealth().then(r => {
         if (r.status === "ok") {
           setConnected(true);
           setHealthData(r.data?.checks ? r.data : r);
+          loadProjects();
         }
       }).catch(() => {});
     };
-    pollHealth();
-    const hInterval = setInterval(pollHealth, 60000); // 60s instead of 30s
+    tryConnect();
+    const hInterval = setInterval(tryConnect, 120000); // 2 min, silent
     return () => clearInterval(hInterval);
   }, []);
 
@@ -364,16 +365,16 @@ export default function MiroFishDashboard() {
 
   // ── Data loaders ──
   async function loadProjects() {
-    const r = await api.listProjects();
-    if (r.status === "ok" && r.data?.projects) {
-      setProjects(r.data.projects);
-      setConnected(true);
-      if (!activeProjectId && r.data.projects.length > 0) {
-        selectProject(r.data.projects[0].project_id);
+    try {
+      const r = await api.listProjects();
+      if (r.status === "ok" && r.data?.projects) {
+        setProjects(r.data.projects);
+        setConnected(true);
+        if (!activeProjectId && r.data.projects.length > 0) {
+          selectProject(r.data.projects[0].project_id);
+        }
       }
-    } else {
-      setConnected(false);
-    }
+    } catch {} // silent in demo mode
   }
 
   async function selectProject(id) {
